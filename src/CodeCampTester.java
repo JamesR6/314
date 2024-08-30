@@ -7,12 +7,12 @@ import java.util.Random;
 
 /*
  * Student information for assignment: 
- * Name: 
- * email address: 
- * UTEID: 
- * Section 5 digit ID: 
- * Grader name: 
- * Number of slip days used on this assignment:
+ * Name: James Reeves
+ * email address: jpascualsr06@gmail.com
+ * UTEID: jsr3699
+ * Section 5 digit ID: 50259
+ * Grader name: Unknown
+ * Number of slip days used on this assignment: 0
  */
 
 /*

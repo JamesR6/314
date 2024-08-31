@@ -245,7 +245,7 @@ public class CodeCampTester {
         } else {
             System.out.println(" ***** FAILED ***** test 14, isPermutation");
         }
-        
+
         // test 15, mostVowels
         String[] arrayOfStrings = { "aaaaaaa", "aieou" };
         int expectedResult = 0;
@@ -417,6 +417,8 @@ public class CodeCampTester {
             System.out.println("***** FAILED ***** test 29, shared birthdays. "
                     + "Expected at least 1 pair. Value returned: " + pairs);
         }
+
+        // written experiment -----------------------------------------------------------------------
         
         // test 30, queensAreASafe
         char[][] board = { { '.', '.', '.' }, 

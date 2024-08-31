@@ -62,10 +62,33 @@
              throw new IllegalArgumentException("Violation of precondition: " +
                      "isPermutation. neither parameter may equal null.");
          }
- 
-         /* CS314 STUDENTS: INSERT YOUR CODE HERE AND DELETE THIS COMMENT.*/
- 
+
+         //check for different array lengths: automatically impossible
+         if(aData.length != bData.length){
+            return false;
+         }
+         //loop through aData
+         int index = 0;
+         while(index < aData.length){
+            int aCount = 0;
+            int bCount = 0;
+            //check for # of occurences of each value
+            for(int a = 0; a < aData.length; a++){
+                if(aData[index] == aData[a]){
+                    aCount++;
+                }
+                if(bData[index] == bData[a]){
+                    bCount++;
+                }
+            }
+            //if any of these differ the answer must be false regardless of order
+            if(aCount!=bCount){
+                return false;
+            }
+            index++;
+         }
          return true;
+ 
      }
  
  
@@ -94,11 +117,36 @@
                      "mostVowels. parameter may not equal null and must contain " +
                      "at least one none null value.");
          }
- 
-         /* CS314 STUDENTS: INSERT YOUR CODE HERE AND DELETE THIS COMMENT.*/
-         //  You can use all methods from the String class and native arrays.
- 
-         return -1;
+         
+        
+        String vowels = "AaEeIiOoUu";
+        int longestIndex = 0;
+        int longestOccurence = -1;
+        //loop through arrayOfStrings
+        for(int index = 0; index < arrayOfStrings.length; index++){
+            String current = arrayOfStrings[index];
+            //check for null strings
+            if(current != null){
+                int searcher = 0;
+                int currentLongest = 0;
+                //loop through each individual string looking for the longest vowel series in just that string
+                for(int c = 0; c < current.length(); c++){
+                    if(vowels.contains(current.substring(c, c+1))){
+                        searcher++;
+                    }
+                    else if(searcher > currentLongest){
+                        currentLongest = searcher;
+                        searcher = 0;
+                    }
+                }
+                //if that string contained a new longest occurence, update the index and length of that occurence
+                if(currentLongest > longestOccurence){
+                    longestOccurence = currentLongest;
+                    longestIndex = index;
+                }
+            }
+        }
+        return longestIndex;
      }
  
  
@@ -123,10 +171,24 @@
                      "numPeople: " + numPeople +
                      ", numDaysInYear: " + numDaysInYear);
          }
- 
-         /* CS314 STUDENTS: INSERT YOUR CODE HERE AND DELETE THIS COMMENT.*/
- 
-         return -1;
+         
+
+         int matches = 0;
+         //make an array to keep track of the peoples birthdays and fill with random birthdays
+         int[] birthdays = new int[numPeople];
+         for(int i = 0; i < birthdays.length; i++){
+            birthdays[i] = (int)(Math.random()*numDaysInYear);
+         }
+
+         //find people that are matching with no vice versa repeats
+         for(int a = 0; a < birthdays.length; a++){
+            for(int b = a+1; b < birthdays.length; b++){
+                if(birthdays[a] == birthdays[b]){
+                    matches++;
+                }
+            }
+         }
+         return matches;
      }
  
  

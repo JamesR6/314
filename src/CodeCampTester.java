@@ -149,8 +149,8 @@ public class CodeCampTester {
         
         // test 2, hamming distance
         h1 = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-        h2 = new int[] { -6, -6, -6, -6, -6, -6, -6, -6, -6, -6 };
-        expected = 10;
+        h2 = new int[] { 0, 1, 2, 4, 5, 0, 0, 0, 9, 10 };
+        expected = 6;
         actual = CodeCamp.hammingDistance(h1, h2);
         System.out.println(newline + "Test 2 hamming distance: expected value: " + expected
                 + ", actual value: " + actual);
@@ -161,8 +161,8 @@ public class CodeCampTester {
         }
         
         // test 3, isPermutation
-        int[] a = { 1, 2, 3 };
-        int[] b = { 2, 1, 3 };
+        int[] a = { 1, 2, 3, 460360, 9, 8, 7 };
+        int[] b = { 2, 1, 3, 460360, 8, 7, 9 };
         boolean expectedBool = true;
         boolean actualBool = CodeCamp.isPermutation(a, b);
         System.out.println(newline + "test 3 isPermutation: expected value: " + expectedBool
@@ -174,6 +174,7 @@ public class CodeCampTester {
         }
         
         // test 4, is Permutation
+        a = new int[] { 0 };
         b = new int[] { 2, 1, 3, 3 };
         expectedBool = false;
         actualBool = CodeCamp.isPermutation(a, b);
@@ -186,7 +187,7 @@ public class CodeCampTester {
         }
 
         // test 5, mostVowels
-        String[] arrayOfStrings = { "aaaaaaa", "aieou" };
+        String[] arrayOfStrings = { "aaaaaa", "aieou", "aaaaaa", "aAaaaa", "oompaloompa" };
         int expectedResult = 0;
         int actualResult = CodeCamp.mostVowels(arrayOfStrings);
         System.out.println(newline + "test 5 mostVowels: expected result: " + expectedResult
@@ -198,9 +199,9 @@ public class CodeCampTester {
         }
         
         // test 6, mostVowels
-        arrayOfStrings = new String[] { "Staying", null, "", "moo", "SEqUOIA NAtIOnAl FOrEst",
-                "!!!!>>+_)(*&^%$#@!>)))???\\///\n\n/n" };
-        expectedResult = 4;
+        arrayOfStrings = new String[] { "apple bottom jeans", "vsCodeRocks", "IHopeImDoingThisRight", 
+                                        "aeiouAeIoU", "!!!!>>+_)(*&^%$#@!>)))???\\///\n\n/n" };
+        expectedResult = 3;
         actualResult = CodeCamp.mostVowels(arrayOfStrings);
         System.out.println(newline + "test 6 mostVowels: expected result: " + expectedResult
                 + ", actual result: " + actualResult);

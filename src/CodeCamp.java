@@ -110,10 +110,12 @@
                 for (int c = 0; c < current.length(); c++) {
                     if (vowels.contains(current.substring(c, c+1))) {
                         searcher++;
-                    }
-                    else if (searcher > currentLongest) {
+                    } else if (searcher > currentLongest) {
                         currentLongest = searcher;
                         searcher = 0;
+                    }
+                    if (c == current.length() - 1 && searcher > currentLongest) {
+                        currentLongest = searcher;
                     }
                 }
                 if (currentLongest > longestOccurence) {

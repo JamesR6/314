@@ -23,6 +23,7 @@
      * takes two int arrays and returns how many indexes do not contain
      * the same value
      * pre : aData != null, bData != null, aData.length = bData.length
+     *       throws IllegalArgumentException if preconditions are violated
      * post : returns the number of indexes that don't match
      */
     public static int hammingDistance(int[] aData, int[] bData) {
@@ -47,6 +48,7 @@
      * Takes two int arrays as parameters and determines if they contain the 
      * same values regardless of order
      * pre : aData != null, bData != null
+     *       throws IllegalArgumentException if preconditions are violated
      * post : returns true if both arrays contain the same values, false otherwise
      */
     public static boolean isPermutation(int[] aData, int[] bData) {
@@ -84,6 +86,7 @@
      * Takes an array of strings and returns the index of the string
      * that contains the longest 'string' of vowels.
      * pre : arrayOfStrings != null, arrayOfStrings.length != 0, atLeastOneNonNull(arrayOfStrings) = true
+     *       throws IllegalArgumentException if preconditions are violated
      * post : 
      */
     public static int mostVowels(String[] arrayOfStrings) {
@@ -121,7 +124,14 @@
         }
         return longestIndex;
     }
- 
+    
+    /*
+     * Takes a number of people and number of days in a theoretical year
+     * and returns the amount of birthday pairs in that experiment.
+     * pre : numPeople > 0, numDaysInYear > 0
+     *       throws IllegalArgumentException if preconditions are violated
+     * post : returns the amount of birthday pairs
+     */
     public static int sharedBirthdays(int numPeople, int numDaysInYear) {
         // check preconditions
         if (numPeople <= 0 || numDaysInYear <= 0) {
@@ -147,6 +157,15 @@
         return matches;
     }
 
+    /*
+     * Given a chess board (2d char array) with only queens 'q' and
+     * empty spaces '.', returns true if no queen can attack another
+     * and false otherwise
+     * pre : board != null, board.length != 0, isSquare(board) = true,
+     *       onlyContains(board, validChars) = true
+     *       throws IllegalArgumentException if preconditions are violated
+     * post : returns true if all queens are safe, false otherwise
+     */
     public static boolean queensAreSafe(char[][] board) {
         char[] validChars = {'q', '.'};
         // check preconditions
@@ -173,6 +192,10 @@
         return true;
     }
 
+    /*
+     * helper method for queensAreSafe. A recursive method checking all 8
+     * directions on the board given the starting location and direction to look
+     */
     private static int recur(char[][] board, int x, int y, int dir, boolean first) {
         if (x < board.length && x >= 0 && y < board[0].length && y >=0) {
             if (board[x][y] == 'q' && !first) {
@@ -202,6 +225,14 @@
         return 0;
     }
  
+    /*
+     * Given a 2d array of ints, returns the highest sum of a 
+     * rectangular plot.
+     * pre : city != null, city.length != 0; city[0].length != 0,
+     *       isRectangular(city) = true
+     *       throws IllegalArgumentException if preconditions are violated
+     * post : returns the value of the most valuable rectangular plot
+     */
     public static int getValueOfMostValuablePlot(int[][] city) {
         // check preconditions
         if (city == null || city.length == 0 || city[0].length == 0

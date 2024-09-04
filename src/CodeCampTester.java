@@ -248,9 +248,9 @@ public class CodeCampTester {
 
         // test 10, queensAreASafe
         board = new char[][] { { '.', '.', '.', 'q' },
-                { '.', '.', '.', '.' },
-                { 'q', '.', '.', '.' },
-                { '.', '.', 'q', '.' } };
+                                { '.', '.', '.', '.' },
+                                { 'q', '.', '.', '.' },
+                                { '.', '.', 'q', '.' } };
         expectedBool = true;
         actualBool = CodeCamp.queensAreSafe(board);
         System.out.println(newline + "test 10 queensAreSafe: expected value: " + expectedBool

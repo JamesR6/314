@@ -181,11 +181,7 @@
         for (int row = 0; row < board.length; row++) {
             for (int col = 0; col < board[0].length; col++) {
                 if (board[row][col] == 'q') {
-                    int hits = 0;
-                    for (int direction = 1; direction <= 8; direction++) {
-                        hits += recur(board, row, col, direction, true);
-                    }
-                    if (hits > 0) {
+                    if (!thisQueenIsSafe(board, row, col)) {
                         return false;
                     }
                 }
@@ -195,38 +191,33 @@
     }
 
     /*
-     * helper method for queensAreSafe. A recursive method checking all 8
-     * directions on the board given the starting location and direction to look
+     * private helper method for queensAreSafe. Returns false if the queen at
+     * 'x' 'y' is in danger, true otherwise.
      */
-    private static int recur(char[][] board, int x, int y, int dir, boolean first) {
-        if (x < board.length && x >= 0 && y < board[0].length && y >=0) {
-            if (board[x][y] == 'q' && !first) {
-                return 1;
-            } else {
-                first = false;
-                switch(dir) {
-                    case 1:
-                        return recur(board, x, y-1, 1, first);
-                    case 2:
-                        return recur(board, x+1, y-1, 2, first);
-                    case 3:
-                        return recur(board, x+1, y, 3, first);
-                    case 4:
-                        return recur(board, x+1, y+1, 4, first);
-                    case 5:
-                        return recur(board, x, y+1, 5, first);
-                    case 6:
-                        return recur(board, x-1, y+1, 6, first);
-                    case 7:
-                        return recur(board, x-1, y, 7, first);
-                    case 8:
-                        return recur(board, x-1, y-1, 8, first);
+    private static boolean thisQueenIsSafe(char[][] board, int x, int y){
+        final int xAnchor = x;
+        final int yAnchor = y;
+        for (int a = -1; a <= 1; a++) {
+            for (int b = -1; b <= 1; b++) {
+                boolean first = true;
+                while (x >= 0 && x < board.length && y >= 0 && y < board[0].length){
+                    if (a == 0 && b == 0){
+                        break;
+                    }
+                    if (board[x][y] == 'q' && !first){
+                        return false;
+                    }
+                    first = false;
+                    x += a;
+                    y += b;
                 }
+                x = xAnchor;
+                y = yAnchor;
             }
         }
-        return 0;
+        return true;
     }
- 
+
     /*
      * Given a 2d array of ints, returns the highest sum of a 
      * rectangular plot.

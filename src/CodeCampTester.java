@@ -129,14 +129,14 @@ public class CodeCampTester {
 
         // System.out.println(CodeCamp.millionTests());
         // for(int people = 2; people <= 100; people++){
-        //     System.out.println(CodeCamp.birthdayExperiment(people));
+        // System.out.println(CodeCamp.birthdayExperiment(people));
         // }
 
         final String newline = System.getProperty("line.separator");
 
         // test 1, hamming distance
-        int[] h1 = { 1,2,3,2345,66,49,22,4,3,2,1 };
-        int[] h2 = { 1,2,3,0,2345,66,22,4,3,2,1 };
+        int[] h1 = { 1, 2, 3, 2345, 66, 49, 22, 4, 3, 2, 1 };
+        int[] h2 = { 1, 2, 3, 0, 2345, 66, 22, 4, 3, 2, 1 };
         int expected = 3;
         int actual = CodeCamp.hammingDistance(h1, h2);
         System.out.println("Test 1 hamming distance: expected value: " + expected
@@ -146,7 +146,7 @@ public class CodeCampTester {
         } else {
             System.out.println(" ***** FAILED ***** test 1, hamming distance");
         }
-        
+
         // test 2, hamming distance
         h1 = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         h2 = new int[] { 0, 1, 2, 4, 5, 0, 0, 0, 9, 10 };
@@ -159,7 +159,7 @@ public class CodeCampTester {
         } else {
             System.out.println(" ***** FAILED ***** test 2, hamming distance");
         }
-        
+
         // test 3, isPermutation
         int[] a = { 1, 2, 3, 460360, 9, 8, 7 };
         int[] b = { 2, 1, 3, 460360, 8, 7, 9 };
@@ -172,7 +172,7 @@ public class CodeCampTester {
         } else {
             System.out.println(" ***** FAILED ***** test 3, isPermutation");
         }
-        
+
         // test 4, is Permutation
         a = new int[] { 0 };
         b = new int[] { 2, 1, 3, 3 };
@@ -197,10 +197,10 @@ public class CodeCampTester {
         } else {
             System.out.println("***** FAILED ***** test 5, mostVowels");
         }
-        
+
         // test 6, mostVowels
-        arrayOfStrings = new String[] { "apple bottom jeans", "vsCodeRocks", "IHopeImDoingThisRight", 
-                                        "aeiouAeIoU", "!!!!>>+_)(*&^%$#@!>)))???\\///\n\n/n" };
+        arrayOfStrings = new String[] { "apple bottom jeans", "vsCodeRocks", "IHopeImDoingThisRight",
+                "aeiouAeIoU", "!!!!>>+_)(*&^%$#@!>)))???\\///\n\n/n" };
         expectedResult = 3;
         actualResult = CodeCamp.mostVowels(arrayOfStrings);
         System.out.println(newline + "test 6 mostVowels: expected result: " + expectedResult
@@ -210,10 +210,9 @@ public class CodeCampTester {
         } else {
             System.out.println("***** FAILED ***** test 6, mostVowels");
         }
-        
-        
-        // test 7, sharedBirthdays, simple test
-        int pairs = CodeCamp.sharedBirthdays(1, 365);
+
+        // test 7, sharedBirthdays
+        int pairs = CodeCamp.sharedBirthdays(1, 1000);
         System.out.println(newline + "test 7 shared birthdays: expected: 0, actual: " + pairs);
         int expectedShared = 0;
         if (pairs == expectedShared) {
@@ -221,9 +220,9 @@ public class CodeCampTester {
         } else {
             System.out.println("***** FAILED ***** test 7, shared birthdays");
         }
-        
+
         // test 8, sharedBirthdays, simple test
-        pairs = CodeCamp.sharedBirthdays(366, 365);
+        pairs = CodeCamp.sharedBirthdays(1000, 20);
         System.out.println(newline + "test 8 shared birthdays: expected: "
                 + "a value of 1 or more, actual: " + pairs);
         if (pairs > 0) {
@@ -232,13 +231,12 @@ public class CodeCampTester {
             System.out.println("***** FAILED ***** test 8, shared birthdays");
         }
 
-        
         // test 9, queensAreASafe
-        char[][] board = { { '.', '.', '.' }, 
-                           { 'q', '.', '.' }, 
-                           { '.', '.', 'q' } };
+        char[][] board = { { 'q', 'q', 'q' },
+                { 'q', '.', 'q' },
+                { 'q', 'q', 'q' } };
 
-        expectedBool = true;
+        expectedBool = false;
         actualBool = CodeCamp.queensAreSafe(board);
         System.out.println(newline + "test 9 queensAreSafe: expected value: " + expectedBool
                 + ", actual value: " + actualBool);
@@ -247,13 +245,13 @@ public class CodeCampTester {
         } else {
             System.out.println(" ***** FAILED ***** test 9, queensAreSafe");
         }
-        
+
         // test 10, queensAreASafe
-        board = new char[][] { { '.', '.', '.', 'q' }, 
-                               { '.', '.', '.', '.' },
-                               { '.', '.', '.', '.' }, 
-                               { 'q', '.', '.', '.' } };
-        expectedBool = false;
+        board = new char[][] { { '.', '.', '.', 'q' },
+                { '.', '.', '.', '.' },
+                { 'q', '.', '.', '.' },
+                { '.', '.', 'q', '.' } };
+        expectedBool = true;
         actualBool = CodeCamp.queensAreSafe(board);
         System.out.println(newline + "test 10 queensAreSafe: expected value: " + expectedBool
                 + ", actual value: " + actualBool);
@@ -262,17 +260,16 @@ public class CodeCampTester {
         } else {
             System.out.println(" ***** FAILED ***** test 10, queensAreSafe");
         }
-        
-        
-        // test 11, getValueOfMostValuablePlot
-        int[][] city = { { 0, -2, -7, 0, -1 }, 
-                         { 9, 2, -6, 2, 0 }, 
-                         { -4, 1, -4, 1, 0 },
-                         { -1, 8, 0, -2, 1 }, 
-                         { -10, 1, 1, -5, -6 }, 
-                         { -15, -1, 1, 5, 4 } };
 
-        expected = 15;
+        // test 11, getValueOfMostValuablePlot
+        int[][] city = { { 1, 0, 0, 0, 0, 1 },
+                { 0, 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0, 0 },
+                { 1, 0, 0, 0, 0, 1 } };
+
+        expected = 4;
         actual = CodeCamp.getValueOfMostValuablePlot(city);
         System.out.println(newline + "test 11 getValueOfMostValuablePlot: expected value: "
                 + expected + ", actual value: " + actual);
@@ -281,11 +278,16 @@ public class CodeCampTester {
         } else {
             System.out.println(" ***** FAILED ***** test 11, getValueOfMostValuablePlot");
         }
-        
+
         // test 12, getValueOfMostValuablePlot
-        city[4][1] = 6;
-        expected = 17;
-        actual = CodeCamp.getValueOfMostValuablePlot(city);
+        int[][] city2 = { { 0, -100, -100, -100, -100, 200 },
+                { -100, -100, -100, -100, -100, -100 },
+                { -100, -100, -100, -100, -100, -100 },
+                { -100, -100, -100, -100, -100, -100 },
+                { -100, -100, -100, -100, -100, -100 },
+                { 100, -100, -100, -100, -100, 50 } };
+        expected = 200;
+        actual = CodeCamp.getValueOfMostValuablePlot(city2);
         System.out.println(newline + "test 12 getValueOfMostValuablePlot: expected value: "
                 + expected + ", actual value: " + actual);
         if (expected == actual) {

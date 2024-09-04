@@ -18,7 +18,13 @@
  import java.util.Random;
 
  public class CodeCamp {
- 
+    
+    /*
+     * takes two int arrays and returns how many indexes do not contain
+     * the same value
+     * pre : aData != null, bData != null, aData.length = bData.length
+     * post : returns the number of indexes that don't match
+     */
     public static int hammingDistance(int[] aData, int[] bData) {
         // check preconditions
         if (aData == null || bData == null || aData.length != bData.length) {
@@ -35,9 +41,15 @@
         }
         return count;
         
-     }
+    }
 
-     public static boolean isPermutation(int[] aData, int[] bData) {
+    /*
+     * Takes two int arrays as parameters and determines if they contain the 
+     * same values regardless of order
+     * pre : aData != null, bData != null
+     * post : returns true if both arrays contain the same values, false otherwise
+     */
+    public static boolean isPermutation(int[] aData, int[] bData) {
         // check preconditions
         if (aData == null || bData == null) {
             throw new IllegalArgumentException("Violation of precondition: " +
@@ -66,9 +78,15 @@
         }
         return true;
  
-     }
+    }
  
-     public static int mostVowels(String[] arrayOfStrings) {
+    /*
+     * Takes an array of strings and returns the index of the string
+     * that contains the longest 'string' of vowels.
+     * pre : arrayOfStrings != null, arrayOfStrings.length != 0, atLeastOneNonNull(arrayOfStrings) = true
+     * post : 
+     */
+    public static int mostVowels(String[] arrayOfStrings) {
         // check preconditions
         if (arrayOfStrings == null || arrayOfStrings.length == 0
                  || !atLeastOneNonNull(arrayOfStrings)) {
@@ -102,9 +120,9 @@
             }
         }
         return longestIndex;
-     }
+    }
  
-     public static int sharedBirthdays(int numPeople, int numDaysInYear) {
+    public static int sharedBirthdays(int numPeople, int numDaysInYear) {
         // check preconditions
         if (numPeople <= 0 || numDaysInYear <= 0) {
             throw new IllegalArgumentException("Violation of precondition: " +
@@ -127,9 +145,9 @@
             }
         }
         return matches;
-     }
+    }
 
-     public static boolean queensAreSafe(char[][] board) {
+    public static boolean queensAreSafe(char[][] board) {
         char[] validChars = {'q', '.'};
         // check preconditions
         if (board == null || board.length == 0 || !isSquare(board)
@@ -153,9 +171,9 @@
             }
         }
         return true;
-     }
+    }
 
-     private static int recur(char[][] board, int x, int y, int dir, boolean first) {
+    private static int recur(char[][] board, int x, int y, int dir, boolean first) {
         if (x < board.length && x >= 0 && y < board[0].length && y >=0) {
             if (board[x][y] == 'q' && !first) {
                 return 1;
@@ -182,9 +200,9 @@
             }
         }
         return 0;
-     }
+    }
  
-     public static int getValueOfMostValuablePlot(int[][] city) {
+    public static int getValueOfMostValuablePlot(int[][] city) {
         // check preconditions
         if (city == null || city.length == 0 || city[0].length == 0
                 || !isRectangular(city) ) {
@@ -213,33 +231,47 @@
             }
         }
         return largest;
-     }
+    }
  
      //Experiments -------
 
-     public static double millionTests() {
+    /*
+     * Takes no paremeters and returns the average amount
+     * of shared birthdays 182 people would have from one
+     * million tests
+     */
+    public static double millionTests() {
         double total = 0;
-        //run 1 million tests with the given 182 people and standard year. Count how many total shared birthdays in ALL of the tests
         final int runs = 1000000;
         for (int run = 0; run < runs; run++) {
             total += sharedBirthdays(182, 365);
         }
         //return the average
         return (total/runs);
-     }
+    }
 
-     public static String birthdayExperiment(int people) {
+    /*
+     * Takes an integer "people" and determines how many 'rooms'
+     * of that many people would have at least one birthday pair
+     * out of 50,000 tests.
+     * pre : people >= 2
+     * post : returns a formatted string of the rate of birthday pairs
+     */
+    public static String birthdayExperiment(int people) {
+        if(people < 2){
+            return("Insufficient amount of people");
+        }
         int oneOrMore = 0;
-        //run 50000 tests of *people* people and count how many times someone shared a birthday
         final int runs = 50000;
         for (int run = 0; run < runs; run++) {
             if (sharedBirthdays(people, 365) >= 1) {
                 oneOrMore++;
             }
         }
-        //return full table row including the percent of the 50000 tests that had at least one shared birthday
         return ("Num people: " + people + ", number of experiments with one or more shared birthday: " + oneOrMore + ", percentage: " + ((double)oneOrMore/runs));
-     }
+    }
+
+    //End Experiments --------
  
  
      /*

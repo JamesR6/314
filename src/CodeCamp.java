@@ -11,7 +11,7 @@
  *  email address: jpascualsr06@gmail.com
  *  UTEID: jsr3699
  *  Section 5 digit ID: 50259
- *  Grader name: Unknown
+ *  Grader name: Eliza Bidwell
  *  Number of slip days used on this assignment: 0
  */
 

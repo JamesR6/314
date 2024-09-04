@@ -218,9 +218,51 @@
                      "and may only contain 'q's and '.'s");
          }
  
-         /* CS314 STUDENTS: INSERT YOUR CODE HERE AND DELETE THIS COMMENT.*/
- 
-         return false;
+         
+         for(int x = 0; x < board.length; x++){
+            for(int y = 0; y < board[0].length; y++){
+                if(board[x][y] == 'q'){
+                    int hits = 0;
+                    for(int direction = 1; direction <= 8; direction++){
+                        hits += recur(board, x, y, direction, true);
+                    }
+                    if (hits > 0){
+                        return false;
+                    }
+                }
+            }
+         }
+         return true;
+     }
+
+     private static int recur(char[][] board, int x, int y, int dir, boolean first){
+        if(x < board.length && x >= 0 && y < board[0].length && y >=0){
+            if(board[x][y] == 'q' && !first){
+                return 1;
+            }
+            else{
+                first = false;
+                switch(dir){
+                    case 1:
+                        return recur(board, x, y-1, 1, first);
+                    case 2:
+                        return recur(board, x+1, y-1, 2, first);
+                    case 3:
+                        return recur(board, x+1, y, 3, first);
+                    case 4:
+                        return recur(board, x+1, y+1, 4, first);
+                    case 5:
+                        return recur(board, x, y+1, 5, first);
+                    case 6:
+                        return recur(board, x-1, y+1, 6, first);
+                    case 7:
+                        return recur(board, x-1, y, 7, first);
+                    case 8:
+                        return recur(board, x-1, y-1, 8, first);
+                }
+            }
+        }
+        return 0;
      }
  
  
@@ -246,15 +288,53 @@
                      " must value at least one row and at least" +
                      " one column, and must be rectangular.");
          }
- 
-         /* CS314 STUDENTS: INSERT YOUR CODE HERE AND DELETE THIS COMMENT.*/
- 
-         return -1;
+         
+         int largest = Integer.MIN_VALUE;
+         //generate every UPPER LEFT (Start) coordinate
+         for(int startX = 0; startX < city.length; startX++){
+            for(int startY = 0; startY < city[0].length; startY++){
+                //for each of these coordinates, generate every possible BOTTOM RIGHT (end) coordinate
+                for(int endX = startX; endX < city.length; endX++){
+                    for(int endY = startY; endY < city[0].length; endY++){
+                        //find sum of this plot from start to end
+                        int sum = 0;
+                        for(int addX = startX; addX <= endX; addX++){
+                            for(int addY = startY; addY <= endY; addY++){
+                                sum += city[addX][addY];
+                            }
+                        }
+                        //if this plot is more valuable than the previous most valuable plot, change the value of most valuable
+                        if(sum > largest){
+                            largest = sum;
+                        }
+                    }
+                }
+            }
+         }
+        return largest;
      }
  
  
      // !!!!! ***** !!!!! ***** !!!!! ****** !!!!! ****** !!!!! ****** !!!!!!
      // CS314 STUDENTS: Put your birthday problem experiment code here:
+     public static double millionTests(){
+        double preFinal = 0;
+        for(int run = 0; run < 1000000; run++){
+            preFinal += sharedBirthdays(182, 365);
+        }
+        return (preFinal/1000000);
+     }
+
+     public static String birthdayExperiment(int people){
+        //one or more = OOM
+        int OOM = 0;
+        for(int run = 0; run < 50000; run++){
+            if(sharedBirthdays(people, 365) >= 1){
+                OOM++;
+            }
+        }
+        return ("Num people: " + people + ", number of experiments with one or more shared birthday: " + OOM + ", percentage: " + ((double)OOM/50000));
+     }
  
  
      /*

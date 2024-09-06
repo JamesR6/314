@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 // CodeCamp.java - CS314 Assignment 1 - Tester class
 
@@ -297,17 +294,4 @@ public class CodeCampTester {
         }
 
     } // end of main method
-
-    // pre: list != null
-    private static int[] intListToArray(List<Integer> list) {
-        if (list == null) {
-            throw new IllegalArgumentException("list parameter may not be null.");
-        }
-        int[] result = new int[list.size()];
-        int arrayIndex = 0;
-        for (int x : list) {
-            result[arrayIndex++] = x;
-        }
-        return result;
-    }
 }

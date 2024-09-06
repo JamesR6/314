@@ -15,7 +15,6 @@
  *  Number of slip days used on this assignment: 0
  */
 
- import java.util.Random;
 
  public class CodeCamp {
     
@@ -236,7 +235,7 @@
                     " one column, and must be rectangular.");
         }
          
-        int largest = Integer.MIN_VALUE;
+        int largest = city[0][0];
         for (int startX = 0; startX < city.length; startX++) {
             for (int startY = 0; startY < city[0].length; startY++) {
                 for (int endX = startX; endX < city.length; endX++) {

@@ -33,6 +33,7 @@ public class MathMatrixTester {
 
         //test 1, specify size and values constructor
         MathMatrix mat1 = new MathMatrix(2, 3, -1);
+        System.out.println(mat1.toString());
         e1 = new int[][] {{-1, -1, -1}, {-1, -1, -1}};
         printTestResult( get2DArray(mat1), e1, 1,
                 "Constructor with size and initial val specified.");
@@ -141,6 +142,8 @@ public class MathMatrixTester {
 
 
     }
+
+    // ---------------------------------------------------------------------------------------
 
     // method that sums elements of mat, may overflow int!
     // pre: mat != null

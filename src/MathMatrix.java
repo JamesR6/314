@@ -20,6 +20,7 @@ import java.util.Arrays;
 public class MathMatrix {
 
     // instance variable
+    private int[][] nums;
 
     /**
      * create a MathMatrix with cells equal to the values in mat.
@@ -30,7 +31,16 @@ public class MathMatrix {
      * mat is a rectangular matrix
      */
     public MathMatrix(int[][] mat) {
-
+        if (mat == null || mat.length == 0 || mat[0].length == 0) {
+            throw new IllegalArgumentException("Violation of precondition: " +
+                    "MathMatrix: mat can not be null. Neither dimension may have 0 length");
+        }
+        nums = new int[mat.length][mat[0].length]; 
+        for (int y = 0; y < mat.length; y++) {
+            for (int x = 0; x < mat[0].length; x++) {
+                nums[y][x] = mat[y][x];
+            }
+        }
     }
 
 
@@ -46,7 +56,16 @@ public class MathMatrix {
      * @param initialVal all cells of this Matrix are set to initialVal
      */
     public MathMatrix(int numRows, int numCols, int initialVal) {
-
+        if (numRows <= 0 || numCols <= 0) {
+            throw new IllegalArgumentException("Violation of precondition: " +
+                    "MathMatrix: Neither dimension may have 0 or negative length");
+        }
+        nums = new int[numRows][numCols];
+        for (int y = 0; y < numRows; y++) {
+            for (int x = 0; x < numCols; x++) {
+                nums[y][x] = initialVal;
+            }
+        }
     }
 
     /**
@@ -54,7 +73,7 @@ public class MathMatrix {
      * @return the number of rows in this MathMatrix
      */
     public int getNumRows() {
-        return 0;
+        return nums.length;
     }
 
 
@@ -63,7 +82,7 @@ public class MathMatrix {
      * @return the number of columns in this MathMatrix
      */
     public int getNumColumns(){
-        return 0;
+        return nums[0].length;
     }
 
 
@@ -75,7 +94,11 @@ public class MathMatrix {
      * @return the value at the specified position
      */
     public int getVal(int row, int col) {
-        return 0;
+        if (row < 0 || col < 0 || row >= getNumRows() || col >= getNumColumns()) {
+            throw new IllegalArgumentException("Violation of precondition: " +
+                    "getVal: row and col must be inside MathMatrix bounds");
+        }
+        return nums[row][col];
     }
 
 
@@ -92,7 +115,19 @@ public class MathMatrix {
      * in this MathMatrix.
      */
     public MathMatrix add(MathMatrix rightHandSide){
-        return null;
+        if (rightHandSide == null || rightHandSide.getNumRows() != getNumRows() ||
+            rightHandSide.getNumColumns() != getNumColumns()) {
+                throw new IllegalArgumentException("Violation of precondition: " +
+                    "add: rightHandSize must not be null and must have the same dimensions " + 
+                    "as the other MathMatrix");
+            }
+        int[][] fin = new int[nums.length][nums[0].length];
+        for (int y = 0; y < getNumRows(); y++){
+            for (int x = 0; x < getNumColumns(); x++){
+                fin[y][x] = (nums[y][x] + rightHandSide.getVal(y, x));
+            }
+        }
+        return (new MathMatrix(fin));
     }
 
 
@@ -109,7 +144,19 @@ public class MathMatrix {
      * the number of columns in this MathMatrix.
      */
     public MathMatrix subtract(MathMatrix rightHandSide){
-        return null;
+        if (rightHandSide == null || rightHandSide.getNumRows() != getNumRows() ||
+            rightHandSide.getNumColumns() != getNumColumns()) {
+                throw new IllegalArgumentException("Violation of precondition: " +
+                    "subtract: rightHandSize must not be null and must have the same dimensions " + 
+                    "as the other MathMatrix");
+            }
+        int[][] fin = new int[nums.length][nums[0].length];
+        for (int y = 0; y < getNumRows(); y++){
+            for (int x = 0; x < getNumColumns(); x++){
+                fin[y][x] = (nums[y][x] - rightHandSide.getVal(y, x));
+            }
+        }
+        return (new MathMatrix(fin));
     }
 
 
@@ -125,7 +172,20 @@ public class MathMatrix {
      * of columns in rightHandSide.
      */
     public MathMatrix multiply(MathMatrix rightHandSide){
-        return null;
+        if (rightHandSide == null || rightHandSide.getNumRows() != getNumColumns()) {
+                throw new IllegalArgumentException("Violation of precondition: " +
+                    "multiply: rightHandSize must not be null and must have the same number " + 
+                    "of rows as the LEFT matrix has columns");
+            }
+        int[][] fin = new int[getNumRows()][rightHandSide.getNumColumns()];
+        for (int y = 0; y < fin.length; y++) {
+            for (int x = 0; x < fin[0].length; x++) {
+                for (int tracer = 0; tracer < getNumColumns(); tracer++) {
+                    fin[y][x] += (getVal(y, tracer) * rightHandSide.getVal(tracer, x));
+                }
+            }
+        }
+        return (new MathMatrix(fin));
     }
 
 
@@ -144,7 +204,13 @@ public class MathMatrix {
      * values in the result multiplied by factor.
      */
     public MathMatrix getScaledMatrix(int factor) {
-        return null;
+        int[][] fin = new int[nums.length][nums[0].length];
+        for (int y = 0; y < fin.length; y++) {
+            for (int x = 0; x < fin[0].length; x++){
+                fin[y][x] = nums[y][x] * factor;
+            }
+        }
+        return (new MathMatrix(fin));
     }
 
 
@@ -194,7 +260,56 @@ public class MathMatrix {
      * Spacing based on longest element in this Matrix.
      */
     public String toString() {
-        return "";
+        int spacer = longestNumber() + 1;
+        StringBuilder fin = new StringBuilder("");
+        for (int y = 0; y < nums.length; y++) {
+            fin.append("|");
+            for (int x = 0; x < nums[0].length; x++) {
+                for (int spaces = 0; spaces < amountOfSpace(nums[y][x], spacer); spaces++) {
+                    fin.append(" ");
+                }
+                fin.append(nums[y][x]);
+            }
+            
+            fin.append("|\n");
+        }
+        return fin.toString();
+    }
+
+    private int amountOfSpace(int num, int spacer){
+        int len = 0;
+        if (num <= 0) {
+            len = 1;
+        }
+        while (num != 0) {
+            num /= 10;
+            len++;
+        }
+        return spacer - len;
+    }
+
+    private int longestNumber(){
+        if (nums.length == 0 || nums[0].length == 0) {
+            return 0;
+        }
+
+        int largest = nums[0][0];
+        for (int y = 0; y < nums.length; y++) {
+            for (int x = 0; x < nums[0].length; x++) {
+                if (nums[y][x] > largest) {
+                    largest = nums[y][x];
+                }
+            }
+        }
+        int len = 0;
+        if (largest <= 0) {
+            len = 1;
+        }
+        while (largest != 0) {
+            largest /= 10;
+            len++;
+        }
+        return len;
     }
 
 

@@ -2,10 +2,10 @@ import java.util.Random;
 
 /*  Student information for assignment:
  *
- *  UTEID:
- *  email address:
- *  Grader name:
- *  Number of slip days I am using:
+ *  UTEID: jsr3699
+ *  email address: jpascualsr06@gmail.com
+ *  Grader name: Eliza
+ *  Number of slip days I am using: 0
  */
 
 

@@ -4,13 +4,13 @@ import java.util.Arrays;
 
 /*  Student information for assignment:
 *
-*  On my honor, <NAME>, this programming assignment is my own work
+*  On my honor, James Reeves, this programming assignment is my own work
 *  and I have not provided this code to any other student.
 *
-*  UTEID:
-*  email address:
-*  Unique section number:
-*  Number of slip days I am using:
+*  UTEID: jsr3699
+*  email address: jpascualsr06@gmail.com
+*  Unique section number: 50259
+*  Number of slip days I am using: 0
 */
 
 /**
@@ -30,6 +30,7 @@ public class MathMatrix {
      * @param  mat  mat !=null, mat.length > 0, mat[0].length > 0,
      * mat is a rectangular matrix
      */
+    // TODO
     public MathMatrix(int[][] mat) {
         if (mat == null || mat.length == 0 || mat[0].length == 0) {
             throw new IllegalArgumentException("Violation of precondition: " +

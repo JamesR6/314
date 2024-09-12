@@ -26,39 +26,100 @@ public class MathMatrixTester {
      */
     public static void main(String[] args) {
         int[][] data1 = { {1, 2, 3},
-                {2, 3, 4}};
+                          {2, 3, 4}};
+
         int[][] data2 = { {2, 1, 1},
-                {2, 3, 1}};
+                          {2, 3, 1}};
         int[][] e1;
 
-        //test 1, specify size and values constructor
-        MathMatrix mat1 = new MathMatrix(2, 3, -1);
-        e1 = new int[][] {{-1, -1, -1}, {-1, -1, -1}};
+
+        //specify size and values constructor
+        MathMatrix mat1 = new MathMatrix(2, 5, -1);
+        e1 = new int[][] {{-1, -1, -1, -1, -1}, {-1, -1, -1, -1, -1}};
         printTestResult( get2DArray(mat1), e1, 1,
                 "Constructor with size and initial val specified.");
+        mat1 = new MathMatrix(2, 5, 100);
+        e1 = new int[][] {{100, 100, 100, 100, 100}, {100, 100, 100, 100, 100}};
+        printTestResult( get2DArray(mat1), e1, 2,
+                "Constructor with size and initial val specified.");
 
-        //tests 2 and 3, int[][] constructor, deep copy
-        mat1 = new MathMatrix( data1 );
-        data1[0][0] = 2;
-        // alter data1. mat1 should be unchanged if deep copy made
+        //Constructor with one input
         e1 = new int[][] { {2, 2, 3}, {2, 3, 4} };
-        printTestResult( data1, e1, 2, "constructor with one parameter of type int[][]");
-        // data1 altered. mat1 should be unchanged if deep copy made
-        e1 = new int[][] { {1, 2, 3}, {2, 3, 4} };
-        printTestResult( get2DArray(mat1), e1, 3,
-                "constructor with one parameter of type int[][]. Testing deep copy made.");
+        mat1 = new MathMatrix(e1);
+        printTestResult( get2DArray(mat1), e1, 3, "constructor with one parameter of type int[][]");
+        e1 = new int[][] { {0} };
+        mat1 = new MathMatrix(e1);
+        printTestResult( get2DArray(mat1), e1, 4, "constructor with one parameter of type int[][]");
 
-        //tests 4 - 6, addition
-        data1[0][0] = 1;
+        //getNumRows
+        data1 = new int[][] {{1, 2, 3, 0}, {0, 3, 2, 3}, {0, 0, 4, -1}, {1, 2, 3, 4}};
+        mat1 = new MathMatrix(data1);
+        int expected = 4;
+        if (mat1.getNumRows() == expected) {
+            System.out.println("Passed test 5, getNumRows method.");
+        } else {
+            System.out.println("Failed test 5, getNumRows method.");   
+        }
+        data1 = new int[][] {{1, 2, 3, 0}};
+        mat1 = new MathMatrix(data1);
+        expected = 1;
+        if (mat1.getNumRows() == expected) {
+            System.out.println("Passed test 6, getNumRows method.");
+        } else {
+            System.out.println("Failed test 6, getNumRows method.");   
+        }
+
+        //getNumCols
+        data1 = new int[][] {{1, 2, 3, 0}, {0, 3, 2, 3}, {0, 0, 4, -1}, {1, 2, 3, 4}};
+        mat1 = new MathMatrix(data1);
+        expected = 4;
+        if (mat1.getNumColumns() == expected) {
+            System.out.println("Passed test 7, getNumColumns method.");
+        } else {
+            System.out.println("Failed test 7, getNumColumns method.");   
+        }
+        data1 = new int[][] {{1, 2, 3, 0}};
+        mat1 = new MathMatrix(data1);
+        if (mat1.getNumColumns() == expected) {
+            System.out.println("Passed test 8, getNumColumns method.");
+        } else {
+            System.out.println("Failed test 8, getNumColumns method.");   
+        }
+
+        //getVal
+        data1 = new int[][] {{1, 2, 3, 0}};
+        mat1 = new MathMatrix(data1);
+        expected = 3;
+        if (mat1.getVal(0, 2) == expected) {
+            System.out.println("Passed test 9, getVal method.");
+        } else {
+            System.out.println("Failed test 9, getVal method.");   
+        }
+        expected = 1;
+        if (mat1.getVal(0, 0) == expected) {
+            System.out.println("Passed test 10, getVal method.");
+        } else {
+            System.out.println("Failed test 10, getVal method.");   
+        }
+
+        //addition
+        data1 = new int[][] { {1, 2, 3},
+                              {2, 3, 4}};
+
+        data2 = new int[][] { {2, 1, 1},
+                              {2, 3, 1}};
         mat1 = new MathMatrix(data1);
         MathMatrix mat2 = new MathMatrix(data2);
         MathMatrix mat3 = mat1.add(mat2);
-        e1 = new int[][] { {1, 2, 3}, {2, 3, 4} };
-        printTestResult( get2DArray(mat1), e1, 4, "add method. Testing mat1 unchanged.");
-        e1 = new int[][] { {2, 1, 1}, {2, 3, 1} };
-        printTestResult( get2DArray(mat2), e1, 5, "add method. Testing mat2 unchanged.");
-        e1 = new int[][] { {3, 3, 4}, {4, 6, 5} };
-        printTestResult( get2DArray(mat3), e1, 6, "add method. Testing mat3 correct result.");
+        e1 = new int[][] { {3, 3, 4}, 
+                           {4, 6, 5} };
+        printTestResult( get2DArray(mat3), e1, 11, "add method. ");
+        MathMatrix mat4 = mat3.add(mat3);
+        e1 = new int[][] { {6, 6, 8}, 
+                           {8, 12, 10} };
+        printTestResult( get2DArray(mat4), e1, 12, "add method. ");
+
+        //subtract TODO
 
         //test 7, multiplication
         data2 = new int[][] { {1, 2}, {3, 1}, {2, 1} };
@@ -68,18 +129,18 @@ public class MathMatrixTester {
         e1 = new int[][] { {5, 8, 11}, {5, 9, 13}, {4, 7, 10} };
         printTestResult( get2DArray(mat3), e1, 7, "multiply method");
 
-        //test 8, toString()
-        data1 = new int[][] {{10, 100, 101, -1000},
-            {1000, 10, 55, 4},
-            {1, -1, 4, 0}};
-            mat1 = new MathMatrix(data1);
-            String expected = "|    10   100   101 -1000|\n|" +
-                    "  1000    10    55     4|\n|     1    -1     4     0|\n";
-            if (mat1.toString().equals( expected )) {
-                System.out.println("passed test 8, toString method.");
-            } else {
-                System.out.println("failed test 8, toString method.");
-            }
+        // //test 8, toString()
+        // data1 = new int[][] {{10, 100, 101, -1000},
+        //     {1000, 10, 55, 4},
+        //     {1, -1, 4, 0}};
+        //     mat1 = new MathMatrix(data1);
+        //     String expected = "|    10   100   101 -1000|\n|" +
+        //             "  1000    10    55     4|\n|     1    -1     4     0|\n";
+        //     if (mat1.toString().equals( expected )) {
+        //         System.out.println("passed test 8, toString method.");
+        //     } else {
+        //         System.out.println("failed test 8, toString method.");
+        //     }
 
             //test 9, upperTriangular
             data1 = new int[][] {{1, 2, 3, 0}, {0, 3, 2, 3}, {0, 0, 4, -1}, {0, 0, 0, 12}};

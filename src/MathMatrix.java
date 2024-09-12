@@ -31,7 +31,7 @@ public class MathMatrix {
      * mat is a rectangular matrix
      */
     public MathMatrix(int[][] mat) {
-        if (mat == null || mat.length == 0 || mat[0].length == 0) {
+        if (mat == null || mat.length == 0 || mat[0].length == 0 || !rectangularMatrix(mat)) {
             throw new IllegalArgumentException("Violation of precondition: " +
                     "MathMatrix: mat can not be null. Neither dimension may have 0 length");
         }
@@ -266,6 +266,14 @@ public class MathMatrix {
             }
         }
         return true;
+
+
+
+
+
+
+
+        
     }
 
 

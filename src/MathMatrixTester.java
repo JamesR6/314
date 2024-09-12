@@ -119,87 +119,82 @@ public class MathMatrixTester {
                            {8, 12, 10} };
         printTestResult( get2DArray(mat4), e1, 12, "add method. ");
 
-        //subtract TODO
+        //subtract
+        e1 = new int[][] { {5, 4, 5}, 
+                           {6, 9, 6} };
+        mat3 = mat4.subtract(mat1);
+        printTestResult( get2DArray(mat3), e1, 13, "subtract method. ");
+        mat3 = mat3.subtract(mat3);
+        MathMatrix mat5 = new MathMatrix(2, 3, 0);
+        printTestResult( get2DArray(mat3), get2DArray(mat5), 14, "subtract method. ");
 
-        //test 7, multiplication
-        data2 = new int[][] { {1, 2}, {3, 1}, {2, 1} };
-        mat2 = new MathMatrix(data2);
-        mat1 = new MathMatrix(data1);
-        mat3 = mat2.multiply(mat1);
-        e1 = new int[][] { {5, 8, 11}, {5, 9, 13}, {4, 7, 10} };
-        printTestResult( get2DArray(mat3), e1, 7, "multiply method");
+        //Multiply
+        data1 = new int[][] { {1, 2, 3},
+                              {2, 3, 4} };
+        data2 = new int[][] { {2, 1, 1},
+                              {2, 3, 1},
+                              {4, 9, 6} };
+        int[][] result = new int[][] { {18, 34, 21},
+                                       {26, 47, 29} };               
+        MathMatrix mult1 = new MathMatrix(data1);
+        MathMatrix mult2 = new MathMatrix(data2);
+        MathMatrix mult3 = mult1.multiply(mult2);
+        printTestResult( get2DArray(mult3), result, 15, "multiply method. ");
+        MathMatrix mult4 = new MathMatrix(3, 3, 0);
+        MathMatrix mult5 = mult1.multiply(mult4);
+        int[][] data3 = new int[][] { {0, 0, 0},
+                                      {0, 0, 0} };
+        printTestResult( get2DArray(mult5), data3, 16, "multiply method. ");
 
-        // //test 8, toString()
-        // data1 = new int[][] {{10, 100, 101, -1000},
-        //     {1000, 10, 55, 4},
-        //     {1, -1, 4, 0}};
-        //     mat1 = new MathMatrix(data1);
-        //     String expected = "|    10   100   101 -1000|\n|" +
-        //             "  1000    10    55     4|\n|     1    -1     4     0|\n";
-        //     if (mat1.toString().equals( expected )) {
-        //         System.out.println("passed test 8, toString method.");
-        //     } else {
-        //         System.out.println("failed test 8, toString method.");
-        //     }
+        //scaled
+        MathMatrix scale1 = mult3.getScaledMatrix(100);
+        result = new int[][] { {1800, 3400, 2100},
+                                {2600, 4700, 2900} };
+        printTestResult( get2DArray(scale1), result, 17, "getScaledMatrix method. ");
+        scale1 = scale1.getScaledMatrix(-1);
+        result = new int[][] { {-1800, -3400, -2100},
+                                {-2600, -4700, -2900} };
+        printTestResult( get2DArray(scale1), result, 18, "getScaledMatrix method. ");
 
-            //test 9, upperTriangular
-            data1 = new int[][] {{1, 2, 3, 0}, {0, 3, 2, 3}, {0, 0, 4, -1}, {0, 0, 0, 12}};
-            mat1 = new MathMatrix(data1);
-            if (mat1.isUpperTriangular()) {
-                System.out.println("Passed test 9, upperTriangular method.");
-            } else {
-                System.out.println("Failed test 9, upperTriangular method.");
-            }
+        //toString
+        MathMatrix toS = new MathMatrix(result);
+        String answer = "| -1800 -3400 -2100|\n" +
+                        "| -2600 -4700 -2900|\n";
+        if (toS.toString().equals(answer)) {
+            System.out.println("passed test 19, toString method.");
+        } else {
+            System.out.println("failed test 19, toString method.");
+        }
+        result = new int[][] { {0, -1, 0},
+                                {1, 4, 9} };
+        toS = new MathMatrix(result);
+        answer = "|  0 -1  0|\n" +
+                 "|  1  4  9|\n";
+        if (toS.toString().equals(answer)) {
+            System.out.println("passed test 20, toString method.");
+        } else {
+            System.out.println("failed test 20, toString method.");
+        }
 
-            //test 10, upperTriangular
-            data1 = new int[][] {{1, 2, 3, 0}, {0, 3, 2, 3}, {0, 0, 4, -1}, {1, 2, 3, 4}};
-            mat1 = new MathMatrix(data1);
-            if (!mat1.isUpperTriangular()) {
-                System.out.println("Passed test 10, upperTriangular method.");
-            } else {
-                System.out.println("Failed test 10, upperTriangular method.");   
-            }
-
-            // test 11 - 14, mutliply stress test (possible to get Answer by Accident)
-            Random randNumGen = new Random(6201919);
-            final int MAGIC_SUM = -1190513360;
-            final int ROWS1 = 1000;
-            final int COLS1 = 500;
-            final int ROWS2 = 500;
-            final int COLS2 = 750;
-            final int LIMIT = 1000;
-            mat1 = createMat(randNumGen, ROWS1, COLS1, LIMIT);
-            mat2 = createMat(randNumGen, ROWS2, COLS2, LIMIT);
-            Stopwatch st = new Stopwatch();
-            mat3 = mat1.multiply(mat2);
-
-            if (mat3.getNumRows() == ROWS1) {
-                System.out.println("Passed test 11, multiply stess test numRows.");
-            } else {
-                System.out.println("Failed test 11, multiply stess test numRows");
-            }
-
-            if (mat3.getNumColumns() == COLS2) {
-                System.out.println("Passed test 12, multiply stess test numCols.");
-            } else {
-                System.out.println("Failed test 12, multiply stess test numCols");
-            }
-
-            if (sumVals(mat3) == MAGIC_SUM) {
-                System.out.println("Passed test 13, stress test, sum of values in result.");
-            } else {
-                System.out.println("Failed test 13, stress test, sum of values in result.");
-            }
-
-            final int MAGIC_STRING_LENGTH = 6753000;
-            if (mat3.toString().length() == MAGIC_STRING_LENGTH) {
-                System.out.println("Passed test 14, stress test, length of toString result.");
-            } else {
-                System.out.println("Failed test 14, stress test, length of toString result.");
-            } 
-            // CS314 Students. When ready delete the above tests 
-            // and add your 22 tests here.
-
+        //isUpperTriangle
+        MathMatrix tri1 = new MathMatrix(1 ,1 , 1);
+        if (tri1.isUpperTriangular()) {
+            System.out.println("passed test 21, isUpperTriangle method.");
+        } else {
+            System.out.println("failed test 21, isUpperTriangle method.");
+        }
+        result = new int[][] { {1, 1, 1, 1, 1},
+                               {0, 1, 1, 1, 1},
+                               {0, 0, 1, 1, 1},
+                               {0, 0, 0, 1, 1},
+                               {0, 0, 0, 0, 1}, };
+        toS = new MathMatrix(result);
+        if (toS.isUpperTriangular()) {
+            System.out.println("passed test 22, isUpperTriangle method.");
+        } else {
+            System.out.println("failed test 22, isUpperTriangle method.");
+        }
+           
 
     }
 

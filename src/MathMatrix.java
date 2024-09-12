@@ -254,8 +254,18 @@ public class MathMatrix {
         MathMatrix otherMathMatrix = (MathMatrix) rightHandSide;
         // Now we can access the private instance variables of otherMathMatrix
         // and / or call MathMatrix methods on otherMathMatrix.
-
-        return true; // CS314 students, alter as necessary
+        
+        if (this.getNumColumns() != otherMathMatrix.getNumColumns() || this.getNumRows() != otherMathMatrix.getNumRows()) {
+            return false;
+        }
+        for (int y = 0; y < this.getNumRows(); y++) {
+            for (int x = 0; x < this.getNumColumns(); x++) {
+                if (this.getVal(y, x) != otherMathMatrix.getVal(y, x)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 

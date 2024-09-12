@@ -33,7 +33,6 @@ public class MathMatrixTester {
 
         //test 1, specify size and values constructor
         MathMatrix mat1 = new MathMatrix(2, 3, -1);
-        System.out.println(mat1.toString());
         e1 = new int[][] {{-1, -1, -1}, {-1, -1, -1}};
         printTestResult( get2DArray(mat1), e1, 1,
                 "Constructor with size and initial val specified.");
@@ -77,7 +76,7 @@ public class MathMatrixTester {
             String expected = "|    10   100   101 -1000|\n|" +
                     "  1000    10    55     4|\n|     1    -1     4     0|\n";
             if (mat1.toString().equals( expected )) {
-                System.out.println("passed test 8, oString method.");
+                System.out.println("passed test 8, toString method.");
             } else {
                 System.out.println("failed test 8, toString method.");
             }

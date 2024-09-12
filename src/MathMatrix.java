@@ -30,7 +30,6 @@ public class MathMatrix {
      * @param  mat  mat !=null, mat.length > 0, mat[0].length > 0,
      * mat is a rectangular matrix
      */
-    // TODO
     public MathMatrix(int[][] mat) {
         if (mat == null || mat.length == 0 || mat[0].length == 0) {
             throw new IllegalArgumentException("Violation of precondition: " +
@@ -222,7 +221,13 @@ public class MathMatrix {
      * @return a transpose of this MathMatrix
      */
     public MathMatrix getTranspose() {
-        return null;
+        int[][] fin = new int[nums[0].length][nums.length];
+        for (int y = 0; y < nums.length; y++) {
+            for (int x = 0; x < nums[0].length; x++) {
+                fin[x][y] = nums[y][x];
+            }
+        }
+        return new MathMatrix(fin);
     }
 
 
@@ -278,14 +283,7 @@ public class MathMatrix {
     }
 
     private int amountOfSpace(int num, int spacer){
-        int len = 0;
-        if (num <= 0) {
-            len = 1;
-        }
-        while (num != 0) {
-            num /= 10;
-            len++;
-        }
+        int len = ("" + num).length();
         return spacer - len;
     }
 
@@ -294,23 +292,16 @@ public class MathMatrix {
             return 0;
         }
 
-        int largest = nums[0][0];
+        int largest = 0;
         for (int y = 0; y < nums.length; y++) {
             for (int x = 0; x < nums[0].length; x++) {
-                if (nums[y][x] > largest) {
-                    largest = nums[y][x];
+                int len = ("" + nums[y][x]).length();
+                if (len > largest) {
+                    largest = len;
                 }
             }
         }
-        int len = 0;
-        if (largest <= 0) {
-            len = 1;
-        }
-        while (largest != 0) {
-            largest /= 10;
-            len++;
-        }
-        return len;
+        return largest;
     }
 
 
@@ -324,7 +315,19 @@ public class MathMatrix {
      * <tt>false</tt> otherwise.
      */
     public boolean isUpperTriangular(){
-        return false;
+        if (getNumRows() != getNumColumns()) {
+            throw new IllegalArgumentException("Violation of precondition: " +
+                    "isUpperTriangular: must be a square matrix");
+        }
+
+        for (int y = 0; y < nums.length; y++) {
+            for (int x = 0; x < y; x++) {
+                if (nums[y][x] != 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**

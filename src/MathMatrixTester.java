@@ -242,12 +242,11 @@ public class MathMatrixTester {
 
         // START EXPERIMENTS
         Random randNumGen = new Random(6201919);
-        final int MAGIC_SUM = -1190513360;
         final int LIMIT = 1000;
         int N = 1000;
         mat1 = createMat(randNumGen, N, N, LIMIT);
         mat2 = createMat(randNumGen, N, N, LIMIT);
-        Stopwatch st = new Stopwatch();
+        //Stopwatch st = new Stopwatch();
 
         // Expiriment 1
         // int TESTS = 1000;
@@ -320,24 +319,6 @@ public class MathMatrixTester {
 
     }
 
-    // ---------------------------------------------------------------------------------------
-
-    // method that sums elements of mat, may overflow int!
-    // pre: mat != null
-    private static int sumVals(MathMatrix mat) {
-        if (mat == null) {
-            throw new IllegalArgumentException("mat may not be null");
-        }
-        int result = 0;
-        final int ROWS = mat.getNumRows();
-        final int COLS = mat.getNumColumns();
-        for (int r = 0; r < ROWS; r++) {
-            for (int c = 0; c < COLS; c++) {
-                result += mat.getVal(r, c); // likely to overflow, but can still do simple check
-            }
-        }
-        return result;
-    }
 
     // create a matrix with random values
     // pre: rows > 0, cols > 0, randNumGen != null

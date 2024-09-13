@@ -180,6 +180,8 @@ public class MathMatrix {
         int[][] fin = new int[getNumRows()][rightHandSide.getNumColumns()];
         for (int y = 0; y < fin.length; y++) {
             for (int x = 0; x < fin[0].length; x++) {
+                //tracer refers to the index of the pair of numbers being multiplied
+                //which applies to the column of *this* and the row of rightHandSide
                 for (int tracer = 0; tracer < getNumColumns(); tracer++) {
                     fin[y][x] += (getVal(y, tracer) * rightHandSide.getVal(tracer, x));
                 }
@@ -247,7 +249,7 @@ public class MathMatrix {
          * MathMatrix objects.
          */
 
-        if (rightHandSide == null || this.getClass() != rightHandSide.getClass()) {
+        if (rightHandSide == null || getClass() != rightHandSide.getClass()) {
             return false;
         }
         // We know rightHandSide refers to a non-null MathMatrix object, safe to cast.
@@ -255,25 +257,17 @@ public class MathMatrix {
         // Now we can access the private instance variables of otherMathMatrix
         // and / or call MathMatrix methods on otherMathMatrix.
         
-        if (this.getNumColumns() != otherMathMatrix.getNumColumns() || this.getNumRows() != otherMathMatrix.getNumRows()) {
+        if (getNumColumns() != otherMathMatrix.getNumColumns() || getNumRows() != otherMathMatrix.getNumRows()) {
             return false;
         }
-        for (int y = 0; y < this.getNumRows(); y++) {
-            for (int x = 0; x < this.getNumColumns(); x++) {
-                if (this.getVal(y, x) != otherMathMatrix.getVal(y, x)) {
+        for (int y = 0; y < getNumRows(); y++) {
+            for (int x = 0; x < getNumColumns(); x++) {
+                if (getVal(y, x) != otherMathMatrix.getVal(y, x)) {
                     return false;
                 }
             }
         }
-        return true;
-
-
-
-
-
-
-
-        
+        return true;   
     }
 
 
@@ -289,22 +283,23 @@ public class MathMatrix {
         for (int y = 0; y < nums.length; y++) {
             fin.append("|");
             for (int x = 0; x < nums[0].length; x++) {
+                //appends spaces based on the longest int
                 for (int spaces = 0; spaces < amountOfSpace(nums[y][x], spacer); spaces++) {
                     fin.append(" ");
                 }
                 fin.append(nums[y][x]);
             }
-            
             fin.append("|\n");
         }
         return fin.toString();
     }
 
+    //returns the amount of space needed for a specific num
     private int amountOfSpace(int num, int spacer){
         int len = ("" + num).length();
         return spacer - len;
     }
-
+    //returns the length of the longest number in *this*
     private int longestNumber(){
         if (nums.length == 0 || nums[0].length == 0) {
             return 0;
@@ -313,6 +308,7 @@ public class MathMatrix {
         int largest = 0;
         for (int y = 0; y < nums.length; y++) {
             for (int x = 0; x < nums[0].length; x++) {
+                //changes the int to a string
                 int len = ("" + nums[y][x]).length();
                 if (len > largest) {
                     largest = len;
@@ -339,6 +335,7 @@ public class MathMatrix {
         }
 
         for (int y = 0; y < nums.length; y++) {
+            //x ends before y to check for zeroes in the bottom left triangle
             for (int x = 0; x < y; x++) {
                 if (nums[y][x] != 0) {
                     return false;

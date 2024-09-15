@@ -1,3 +1,5 @@
+package AS2;
+
 /**
  A class to measure time elapsed.
 */

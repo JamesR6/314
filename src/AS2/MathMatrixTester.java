@@ -1,3 +1,5 @@
+package AS2;
+
 import java.util.Random;
 
 /*  Student information for assignment:

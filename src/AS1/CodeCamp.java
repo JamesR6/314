@@ -1,3 +1,5 @@
+package AS1;
+
 //  CodeCamp.java - CS314 Assignment 1
 
 /*  Student information for assignment:

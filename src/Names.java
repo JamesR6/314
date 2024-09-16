@@ -30,7 +30,7 @@ public class Names {
      * and positioned at the start of the data source.
      */
     public Names(Scanner sc) {
-        System.out.println()
+        
     }
 
     private boolean passes(String line, int decades) {

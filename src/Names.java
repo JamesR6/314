@@ -1,11 +1,11 @@
 /*  Student information for assignment:
 *
-*  On my honor, <NAME>, this programming assignment is my own work
+*  On my honor, James Reeves, this programming assignment is my own work
 *  and I have not provided this code to any other student.
 *
-*  UTEID:
-*  email address:
-*  Number of slip days I am using:
+*  UTEID: jsr3699
+*  email address: jpascualsr06@gmail.com
+*  Number of slip days I am using: 0
 */
 
 import java.util.ArrayList;
@@ -30,7 +30,21 @@ public class Names {
      * and positioned at the start of the data source.
      */
     public Names(Scanner sc) {
+        System.out.println()
+    }
 
+    private boolean passes(String line, int decades) {
+        String[] splitLine = line.split(" ");
+        if (splitLine.length != decades + 1) {
+            return false;
+        }
+        boolean hasRank = false;
+        for (int i = 0; i < splitLine.length; i++) {
+            if (splitLine[i] != "0") {
+                hasRank = true;
+            }
+        }
+        return hasRank;
     }
 
    /**

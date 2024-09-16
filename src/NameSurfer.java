@@ -3,13 +3,13 @@
  * name. You are stating, on your honor you did not copy any other code on this
  * assignment and have not provided your code to anyone.
  *
- * On my honor, <NAME>, this programming assignment is my own work
+ * On my honor, James Reeves, this programming assignment is my own work
  * and I have not provided this code
  * to any other student.
  *
- * UTEID:
- * email address:
- * Number of slip days I am using:
+ * UTEID: jsr3699
+ * email address: jpascualsr06@gmail.com
+ * Number of slip days I am using: 0
  */
 
 import java.io.File;

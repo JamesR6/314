@@ -5,7 +5,7 @@ public class NameRecord implements Comparable<NameRecord>{
     //instance variables
     private String name;
     private int base;
-    ArrayList<Integer> ranks;
+    ArrayList<Integer> ranks = new ArrayList<Integer>();
 
     @Override
     public int compareTo(NameRecord o) {

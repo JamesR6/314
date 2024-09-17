@@ -13,10 +13,12 @@ public class NameRecord implements Comparable<NameRecord>{
     }
 
     //constructor
-    public NameRecord(String name, int base, ArrayList<Integer> ranks) {
+    public NameRecord(String name, int base, String[] ranks) {
         this.name = name;
         this.base = base;
-        this.ranks.addAll(ranks);
+        for (int i = 0; i < ranks.length; i++) {
+            this.ranks.add(Integer.parseInt(ranks[i]));
+        }
     }
 
     //getName

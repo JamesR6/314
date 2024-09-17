@@ -70,9 +70,15 @@ public class Names {
      *         criteria returns an empty list.
      */
     public ArrayList<NameRecord> getMatches(String partialName) {
-
+        ArrayList<NameRecord> result = new ArrayList<NameRecord>();
+        for (int i = 0; i < names.size(); i++) {
+            if (names.get(i).getName().toLowerCase().contains(partialName.toLowerCase())) {
+                result.add(names.get(i));
+            }
+        }
+        return result;
     }
-
+    
     /**
      * Returns an ArrayList of Strings of names that have been ranked in the
      * top 1000 or better for every decade. The Strings must be in sorted
@@ -84,7 +90,22 @@ public class Names {
      *         criteria returns an empty list.
      */
     public ArrayList<String> rankedEveryDecade() {
+        ArrayList<String> result = new ArrayList<String>();
+        for (int i = 0; i < names.size(); i++) {
+            if (alwaysRanked(names.get(i))) {
+                result.add(names.get(i).getName());
+            }
+        }
+        return result;
+    }
 
+    private boolean alwaysRanked(NameRecord nr) {
+        for (int i = 0; i < nr.getDecades(); i++) {
+            if (nr.getGivenDecade(i) == 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -98,7 +119,13 @@ public class Names {
      *         criteria returns an empty list.
      */
     public ArrayList<String> rankedOnlyOneDecade() {
-
+        ArrayList<String> result = new ArrayList<String>();
+        for (int i = 0; i < names.size(); i++) {
+            if (names.get(i).rankedOnce()) {
+                result.add(names.get(i).getName());
+            }
+        }
+        return result;
     }
 
     /**
@@ -112,7 +139,13 @@ public class Names {
      *         criteria returns an empty list.
      */
     public ArrayList<String> alwaysMorePopular() {
-
+        ArrayList<String> result = new ArrayList<String>();
+        for (int i = 0; i < names.size(); i++) {
+            if (names.get(i).increasing()) {
+                result.add(names.get(i).getName());
+            }
+        }
+        return result;
     }
 
     /**
@@ -126,7 +159,13 @@ public class Names {
      *         criteria returns an empty list.
      */
     public ArrayList<String> alwaysLessPopular() {
-
+        ArrayList<String> result = new ArrayList<String>();
+        for (int i = 0; i < names.size(); i++) {
+            if (names.get(i).decreasing()) {
+                result.add(names.get(i).getName());
+            }
+        }
+        return result;
     }
 
     /**

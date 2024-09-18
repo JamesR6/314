@@ -191,6 +191,16 @@ public class Names {
         return null;
     }
 
+    /**
+     * Returns an ArrayList of Strings of names that left the top thousand then
+     * came back any number of years later. The Strings must be in sorted order based
+     * on the name of the NameRecords.
+     * 
+     * @return A list of the names that have resurfaced after leaving the
+     *         top thousand. The list is in sorted ascending
+     *         order. If there are no NameRecords that meet this
+     *         criteria returns an empty list.
+     */
     public ArrayList<String> resurfaced() {
         ArrayList<String> result = new ArrayList<String>();
         for (int i = 0; i < names.size(); i++) {

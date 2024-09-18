@@ -20,6 +20,9 @@ import java.util.ArrayList;
 public class NameSurfer {
 
     // CS314 students, explain your menu option 7 here:
+    //My option 7 returns a list of names that left the top thousand BUT came
+    //back a number of years later. In other words, the names that 'disappeared'
+    //but came back.
 
     // CS314 students, Explain your interesting search / trend here:
 

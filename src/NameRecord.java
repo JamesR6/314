@@ -43,13 +43,13 @@ public class NameRecord implements Comparable<NameRecord>{
 
     //getBestDecade
     public int getBestDecade() {
-        int largest = 0;
+        int best = 0;
         for (int i = 0; i < ranks.size(); i++) {
-            if (ranks.get(i) > largest) {
-                largest = ranks.get(i);
+            if (ranks.get(i) < best) {
+                best = ranks.get(i);
             }
         }
-        return (10 * ranks.indexOf(largest)) + base;
+        return (10 * ranks.indexOf(best)) + base;
     }
 
     //TopThousand

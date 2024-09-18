@@ -142,6 +142,11 @@ public class NameSurfer {
         return sc;
     }
 
+    /*
+     * Display the names that had at least one gap year (resurfaced after disappearing)
+     * pre: n != null
+     * post: print out names that have left the top thousand then came back
+     */
     private static void resurfaces(Names namesDatabase) {
         if (namesDatabase == null) {
             throw new IllegalArgumentException("The parameter namesDatabase cannot be null");
@@ -256,6 +261,9 @@ public class NameSurfer {
         String name = getString(keyboard, "Enter part of a name: ");
         ArrayList<NameRecord> people = namesDatabase.getMatches(name);
         System.out.println("\nThere are " + people.size() + " matches for " + name + ".");
+        if (people.size() == 0) {
+            return;
+        }
         System.out.println("\nThe matches with their highest ranking decade are:");
         for (int i = 0; i < people.size(); i++) {
             System.out.println(people.get(i).getName() + " " + people.get(i).getBestDecade());
@@ -335,8 +343,8 @@ public class NameSurfer {
                 + "in every decade.");
         System.out.println("Enter 6 to display all names that are less popular "
                 + "in every decade.");
-        System.out.println("Enter 7 to <replace with description of "
-                + "your method / search>.");
+        System.out.println("Enter 7 to display all names that reappeared after"
+                + " leaving the top thousand.");
         System.out.println("Enter 8 to quit.");
         System.out.println();
     }

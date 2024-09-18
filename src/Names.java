@@ -47,7 +47,16 @@ public class Names {
         Collections.sort(names);
     }
 
+    /*
+     * given an array of strings representing the ranks of a person and
+     * the expected number of decades, returns if the ranks are not all 
+     * zero and match the expected number of decades
+     * pre: ranks != null
+     */
     private boolean passes(String[] ranks, int decades) {
+        if (ranks == null) {
+            throw new IllegalArgumentException("ranks can not be null");
+        }
         if (ranks.length != decades) {
             return false;
         }

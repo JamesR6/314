@@ -7,9 +7,9 @@
  * and I have not provided this code
  * to any other student.
  *
- * UTEID:
- * email address:
- * Number of slip days I am using:
+ * UTEID: jsr3699
+ * email address: jpascualsr06@gmail.com
+ * Number of slip days I am using: 0
  */
 
 import java.io.File;
@@ -20,13 +20,20 @@ import java.util.ArrayList;
 public class NameSurfer {
 
     // CS314 students, explain your menu option 7 here:
-    //My option 7 returns a list of names that left the top thousand BUT came
-    //back a number of years later. In other words, the names that 'disappeared'
-    //but came back.
+    /*
+     * my menu option 7 calls a method 'resurfaces()' that prints the 
+     * results of a method in Names.java, 'resurfaced()'
+     */
 
     // CS314 students, Explain your interesting search / trend here:
+    /*
+     * My interesting search looks for names that existed in the top
+     * thousand, left the top thousand, then came back. In other words,
+     * names that 'disappeared' then 'reappeared'.
+     */
 
     // CS314 students, add test code for NameRecord class here:
+    //TODO
 
     // One of the basic data files given on the assignment.
     // Alter this to try different data files.
@@ -319,6 +326,11 @@ public class NameSurfer {
         return s.nextInt();
     }
 
+    /*
+     * Returns the value entered from the keyboard s
+     * pre: s != null and is connected to System.in
+     * post: return the string typed in by the user
+     */
     private static String getString(Scanner s, String prompt) {
         if (s == null) {
             throw new IllegalArgumentException("The parameter s cannot be null");

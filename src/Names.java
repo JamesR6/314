@@ -184,10 +184,37 @@ public class Names {
             throw new IllegalArgumentException("The parameter name cannot be null");
         }
         for (int i = 0; i < names.size(); i++) {
-            if (names.get(i).getName().equals(name)) {
+            if (names.get(i).getName().toLowerCase().equals(name.toLowerCase())) {
                 return names.get(i);
             }
         }
         return null;
+    }
+
+    public ArrayList<String> resurfaced() {
+        ArrayList<String> result = new ArrayList<String>();
+        for (int i = 0; i < names.size(); i++) {
+            if (isResurfaced(names.get(i))) {
+                result.add(names.get(i).getName());
+            }
+        }
+        return result;
+    }
+
+    private boolean isResurfaced(NameRecord nr) {
+        boolean started = false;
+        boolean disapp = false;
+        for (int i = 0; i < nr.getDecades(); i++) {
+            if (nr.getGivenDecade(i) != 0 && started == false) {
+                started = true;
+            }
+            if (started == true && nr.getGivenDecade(i) == 0) {
+                disapp = true;
+            }
+            if (started && disapp && nr.getGivenDecade(i) != 0) {
+                return true;
+            }
+        }
+        return false;
     }
 }

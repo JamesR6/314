@@ -49,7 +49,7 @@ public class NameRecord implements Comparable<NameRecord>{
                 largest = ranks.get(i);
             }
         }
-        return ranks.indexOf(largest);
+        return (10 * ranks.indexOf(largest)) + base;
     }
 
     //TopThousand

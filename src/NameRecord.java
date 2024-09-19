@@ -7,13 +7,30 @@ public class NameRecord implements Comparable<NameRecord>{
     private int base;
     ArrayList<Integer> ranks = new ArrayList<Integer>();
 
+    /*
+     * overrides compareTo
+     * compares this NameRecord to another based on the name they are keeping track of
+     * pre: other != null
+     * post: returns 1 if this.name is alphabetically before other, -1
+     * if other comes first, and 0 otherwise.
+     */
     @Override
-    public int compareTo(NameRecord o) {
-        return name.compareTo(o.getName());
+    public int compareTo(NameRecord other) {
+        if (other == null) {
+            throw new IllegalArgumentException("o can not be null");
+        }
+        return name.compareTo(other.getName());
     }
 
-    //constructor
+    /*
+     * Create a new NameRecord, converting string[] ranks into an arrayList
+     * pre: ranks != null
+     * post: initiates a new NameRecord with the given parameters
+     */
     public NameRecord(String name, int base, String[] ranks) {
+        if (ranks == null) {
+            throw new IllegalArgumentException("ranks can not be null");
+        }
         this.name = name;
         this.base = base;
         for (int i = 0; i < ranks.length; i++) {
@@ -21,27 +38,50 @@ public class NameRecord implements Comparable<NameRecord>{
         }
     }
 
-    //getName
+    /*
+     * returns the name of the NameRecord
+     * pre: None
+     * post: returns the name of the NameRecord
+     */
     public String getName() {
         return name;
     }
 
-    //getBase
+    /*
+     * returns the base decade of the NameRecord
+     * pre: None
+     * post: returns the base decade in year format
+     */
     public int getBase() {
         return base;
     }
 
-    //getDecades
+    /*
+     * returns the amount of decades recorded in this NameRecord
+     * pre: none;
+     * post: returns the amount of recorded decades
+     */
     public int getDecades() {
         return ranks.size();
     }
 
-    //getGivenDecade
+    /*
+     * returns the rank of this name at the given index, decade
+     * pre: decade >= 0, decade < ranks.size()
+     * post: returns the rank of the given decade
+     */
     public int getGivenDecade(int decade) {
+        if (decade < 0 || decade >= ranks.size()) {
+            throw new IllegalArgumentException("decade must be within bounds");
+        }
         return ranks.get(decade);
     }
 
-    //getBestDecade
+    /*
+     * returns the decade that this name had the highest ranking
+     * pre: None
+     * post: returns in year format the decade that this name ranked the highest
+     */
     public int getBestDecade() {
         int best = 0;
         for (int i = 0; i < ranks.size(); i++) {
@@ -52,7 +92,11 @@ public class NameRecord implements Comparable<NameRecord>{
         return (10 * ranks.indexOf(best)) + base;
     }
 
-    //TopThousand
+    /*
+     * returns the number of decades this name has been in the top thousand
+     * pre: None
+     * post: returns an int of how many decades this name ranked
+     */
     public int topThousand() {
         int count = 0;
         for (int i = 0; i < ranks.size(); i++) {
@@ -63,7 +107,11 @@ public class NameRecord implements Comparable<NameRecord>{
         return count;
     }
 
-    //alwaysPopular
+    /*
+     * returns if this NameRecord ranked in every decade
+     * pre: None
+     * post: returns true if this name is always ranked, false otherwise
+     */
     public boolean alwaysPopular() {
         for (int i = 0; i < ranks.size(); i++) {
             if (ranks.get(i) == 0) {
@@ -73,7 +121,11 @@ public class NameRecord implements Comparable<NameRecord>{
         return true;
     }
 
-    //rankedOnce
+    /*
+     * returns if this name only ranked in a single decade
+     * pre: None
+     * post: returns true if this name ranked exactly once, false otherwise
+     */
     public boolean rankedOnce() {
         int count = 0;
         for (int i = 0; i < ranks.size(); i++) {
@@ -84,7 +136,11 @@ public class NameRecord implements Comparable<NameRecord>{
         return (count == 1);
     }
 
-    //morePopular
+    /*
+     * returns if this name has been getting more popular every single year
+     * pre: None
+     * post: returns true if this name's rank has been monotinically getting better, false otherwise
+     */
     public boolean increasing() {
         for (int i = 0; i < ranks.size() - 1; i++) {
             if (betterOrWorse(ranks.get(i), ranks.get(i+1)) < 1) {
@@ -94,7 +150,11 @@ public class NameRecord implements Comparable<NameRecord>{
         return true;
     }
 
-    //lessPopular
+    /*
+     * returns if this name has been getting less popular every single year
+     * pre: None
+     * post: returns true if this name's rank has been monotinically getting worse, false otherwise
+     */
     public boolean decreasing() {
         for (int i = 0; i < ranks.size() - 1; i++) {
             if (betterOrWorse(ranks.get(i), ranks.get(i+1)) > -1) {
@@ -104,6 +164,11 @@ public class NameRecord implements Comparable<NameRecord>{
         return true;
     }
 
+    /*
+     * returns if first is a better or worse rank than second
+     * pre: none
+     * post: returns 1 if first is better, -1 if second is better, 0 otherwise
+     */
     private int betterOrWorse(int first, int second) {
         if (first == 0) {
             first = 1001;
@@ -120,7 +185,11 @@ public class NameRecord implements Comparable<NameRecord>{
         return 0;
     }
 
-    //toString
+    /*
+     * overrides toString
+     * returns a string with the name, decades, and corresponding ranks of this NameRecord.
+     * Each decade is on a separate line.
+     */
     public String toString() {
         StringBuilder result = new StringBuilder(name + "\n");
         for (int i = 0; i < ranks.size(); i++) {

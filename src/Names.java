@@ -35,6 +35,9 @@ public class Names {
      *           and positioned at the start of the data source.
      */
     public Names(Scanner sc) {
+        if (sc == null) {
+            throw new IllegalArgumentException("sc can not be null");
+        }
         int base = Integer.parseInt(sc.nextLine());
         int decades = Integer.parseInt(sc.nextLine());
         while( sc.hasNextLine() ){
@@ -108,6 +111,11 @@ public class Names {
         return result;
     }
 
+    /*
+     * Returns if NameRecord nr is ranked top thousand every decade
+     * @return A boolean true if nr is ranked every decade and false 
+     * otherwise
+     */
     private boolean alwaysRanked(NameRecord nr) {
         for (int i = 0; i < nr.getDecades(); i++) {
             if (nr.getGivenDecade(i) == 0) {

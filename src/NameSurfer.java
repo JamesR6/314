@@ -30,7 +30,10 @@ public class NameSurfer {
     //TODO
 
     // CS314 students, add test code for NameRecord class here:
-    //TODO
+    String jakeRawData = "Jake 262 312 323 479 484 630 751 453 225 117 97";
+    int baseDecade = 1900;
+    String[] jakeRanks = jakeRawData.substring(5, jakeRawData.length()).split(" ");
+    NameRecord jakeRecord = new NameRecord("Jake", baseDecade, jakeRanks);
 
     // One of the basic data files given on the assignment.
     // Alter this to try different data files.

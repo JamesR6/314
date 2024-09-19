@@ -21,16 +21,13 @@ public class NameSurfer {
 
     // CS314 students, explain your menu option 7 here:
     /*
-     * my menu option 7 calls a method 'resurfaces()' that prints the 
-     * results of a method in Names.java, 'resurfaced()'
-     */
-
-    // CS314 students, Explain your interesting search / trend here:
-    /*
      * My interesting search looks for names that existed in the top
      * thousand, left the top thousand, then came back. In other words,
      * names that 'disappeared' then 'reappeared'.
      */
+
+    // CS314 students, Explain your interesting search / trend here:
+    //TODO
 
     // CS314 students, add test code for NameRecord class here:
     //TODO

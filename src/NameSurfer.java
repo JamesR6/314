@@ -27,10 +27,33 @@ public class NameSurfer {
      */
 
     // CS314 students, Explain your interesting search / trend here:
-    // TODO
+    /*
+     * Originally I intended on looking for proof of a common etymology
+     * principle that humans like to shorten words or phrases and often even
+     * drop the original in favor of efficiency. (Ex: "When in Rome", "Hippo", and
+     * "Speak of the devil" are all shorthand for their original phrases that some
+     * might not even know). What I ended up finding was that babies being legally
+     * named
+     * a nickname (a shorter version of an originally longer name) was actually more
+     * common
+     * in the early 1900s compared to more recent decades. I think this could be
+     * for a number of reasong including a resurfacing of wanting traditional names
+     * or
+     * changes in cultural formality. I am curious to see how this data would look
+     * if
+     * it were on a much bigger timescale, maybe even back to when the names
+     * originally
+     * showed up.
+     * Beth 592 425 373 359 254 133 69 116 192 705 0
+     * Mike 182 139 188 203 82 82 49 217 476 583 595
+     * Jess 243 268 406 511 505 486 544 521 545 992 0
+     * Matt 456 534 788 1000 729 414 292 372 651 0 0
+     * Sam 58 69 99 131 168 236 278 380 467 408 466
+     * Will 162 275 353 368 455 559 590 528 573 616 509
+     * Pat 524 452 443 177 157 367 326 892 0 0 0
+     */
 
     // CS314 students, add test code for NameRecord class here:
-
     public static void testing() {
         Names names = new Names(getFileScannerForNames("names.txt"));
         NameRecord Allison = names.getName("Allison");
@@ -136,21 +159,75 @@ public class NameSurfer {
         // topThousand Tests
         int TTExpected = 10;
         if (Allison.topThousand() == TTExpected) {
-            System.out.println("Passed test 15: getBestDecade");
+            System.out.println("Passed test 15: topThousand");
         } else {
-            System.out.println("failed test 15: getBestDecade");
+            System.out.println("failed test 15: topThousand");
         }
         TTExpected = 4;
         if (S1.topThousand() == TTExpected) {
-            System.out.println("Passed test 16: getBestDecade");
+            System.out.println("Passed test 16: topThousand");
         } else {
-            System.out.println("failed test 16: getBestDecade");
+            System.out.println("failed test 16: topThousand");
         }
 
         // alwaysPopular Tests
+        boolean APExpected = false;
+        if (Allison.alwaysPopular() == APExpected) {
+            System.out.println("Passed test 17: alwaysPopular");
+        } else {
+            System.out.println("failed test 17: alwaysPopular");
+        }
+        APExpected = true;
+        if (S2.alwaysPopular() == APExpected) {
+            System.out.println("Passed test 18: alwaysPopular");
+        } else {
+            System.out.println("failed test 18: alwaysPopular");
+        }
+
         // rankedOnce Tests
+        NameRecord Almeta = names.getName("Almeta");
+        boolean ROExpected = false;
+        if (Allison.rankedOnce() == ROExpected) {
+            System.out.println("Passed test 19: rankedOnce");
+        } else {
+            System.out.println("failed test 19: rankedOnce");
+        }
+        ROExpected = true;
+        if (Almeta.rankedOnce() == ROExpected) {
+            System.out.println("Passed test 20: rankedOnce");
+        } else {
+            System.out.println("failed test 20: rankedOnce");
+        }
+
         // increasing Tests
+        NameRecord Luis = names.getName("Luis");
+        boolean IExpected = false;
+        if (Allison.increasing() == IExpected) {
+            System.out.println("Passed test 21: increasing");
+        } else {
+            System.out.println("failed test 21: increasing");
+        }
+        IExpected = true;
+        if (Luis.increasing() == IExpected) {
+            System.out.println("Passed test 22: increasing");
+        } else {
+            System.out.println("failed test 22: increasing");
+        }
+
         // decreasing Tests
+        boolean DExpected = false;
+        if (Allison.decreasing() == DExpected) {
+            System.out.println("Passed test 23: decreasing");
+        } else {
+            System.out.println("failed test 23: decreasing");
+        }
+        DExpected = true;
+        if (S2.decreasing() == DExpected) {
+            System.out.println("Passed test 24: decreasing");
+        } else {
+            System.out.println("failed test 24: decreasing");
+        }
+
         // toString Tests
 
     }
@@ -209,7 +286,7 @@ public class NameSurfer {
     // main method. Driver for the whole program
     public static void main(String[] args) {
         // Delete the following line in the final version of your program.
-        testing();
+        // testing();
         Scanner fileScanner = getFileScannerForNames(NAME_FILE);
         Names namesDatabase = new Names(fileScanner);
         fileScanner.close();

@@ -19,8 +19,8 @@ import java.util.Collections;
  */
 public class Names {
 
-    //Instance variable
-    private ArrayList<NameRecord> names = new ArrayList<NameRecord>(); 
+    // Instance variable
+    private ArrayList<NameRecord> names = new ArrayList<NameRecord>();
 
     /**
      * Construct a new Names object based on the data source the Scanner
@@ -40,7 +40,7 @@ public class Names {
         }
         int base = Integer.parseInt(sc.nextLine());
         int decades = Integer.parseInt(sc.nextLine());
-        while( sc.hasNextLine() ){
+        while (sc.hasNextLine()) {
             String name = sc.next();
             String[] strRanks = sc.nextLine().substring(1).split(" ");
             if (passes(strRanks, decades)) {
@@ -52,7 +52,7 @@ public class Names {
 
     /*
      * given an array of strings representing the ranks of a person and
-     * the expected number of decades, returns if the ranks are not all 
+     * the expected number of decades, returns if the ranks are not all
      * zero and match the expected number of decades
      * pre: ranks != null
      */
@@ -90,7 +90,7 @@ public class Names {
         }
         return result;
     }
-    
+
     /**
      * Returns an ArrayList of Strings of names that have been ranked in the
      * top 1000 or better for every decade. The Strings must be in sorted
@@ -113,7 +113,8 @@ public class Names {
 
     /*
      * Returns if NameRecord nr is ranked top thousand every decade
-     * @return A boolean true if nr is ranked every decade and false 
+     * 
+     * @return A boolean true if nr is ranked every decade and false
      * otherwise
      */
     private boolean alwaysRanked(NameRecord nr) {
@@ -210,7 +211,8 @@ public class Names {
 
     /**
      * Returns an ArrayList of Strings of names that left the top thousand then
-     * came back any number of years later. The Strings must be in sorted order based
+     * came back any number of years later. The Strings must be in sorted order
+     * based
      * on the name of the NameRecords.
      * 
      * @return A list of the names that have resurfaced after leaving the

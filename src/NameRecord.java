@@ -1,15 +1,16 @@
 import java.util.ArrayList;
 
-public class NameRecord implements Comparable<NameRecord>{
-    
-    //instance variables
+public class NameRecord implements Comparable<NameRecord> {
+
+    // instance variables
     private String name;
     private int base;
     ArrayList<Integer> ranks = new ArrayList<Integer>();
 
     /*
      * overrides compareTo
-     * compares this NameRecord to another based on the name they are keeping track of
+     * compares this NameRecord to another based on the name they are keeping track
+     * of
      * pre: other != null
      * post: returns 1 if this.name is alphabetically before other, -1
      * if other comes first, and 0 otherwise.
@@ -83,8 +84,8 @@ public class NameRecord implements Comparable<NameRecord>{
      * post: returns in year format the decade that this name ranked the highest
      */
     public int getBestDecade() {
+        // initialized as 1001 so any rank is better than the initial value
         int indexTracker = 0;
-        //initialized as 1001 so any rank is better than the initial value
         int best = 1001;
         for (int i = 0; i < ranks.size(); i++) {
             if (ranks.get(i) < best && ranks.get(i) != 0) {
@@ -92,7 +93,7 @@ public class NameRecord implements Comparable<NameRecord>{
                 indexTracker = i;
             }
         }
-        return (10 * ranks.indexOf(best)) + base;
+        return (10 * indexTracker) + base;
     }
 
     /*
@@ -142,11 +143,12 @@ public class NameRecord implements Comparable<NameRecord>{
     /*
      * returns if this name has been getting more popular every single year
      * pre: None
-     * post: returns true if this name's rank has been monotinically getting better, false otherwise
+     * post: returns true if this name's rank has been monotinically getting better,
+     * false otherwise
      */
     public boolean increasing() {
         for (int i = 0; i < ranks.size() - 1; i++) {
-            if (betterOrWorse(ranks.get(i), ranks.get(i+1)) < 1) {
+            if (betterOrWorse(ranks.get(i), ranks.get(i + 1)) < 1) {
                 return false;
             }
         }
@@ -156,11 +158,12 @@ public class NameRecord implements Comparable<NameRecord>{
     /*
      * returns if this name has been getting less popular every single year
      * pre: None
-     * post: returns true if this name's rank has been monotinically getting worse, false otherwise
+     * post: returns true if this name's rank has been monotinically getting worse,
+     * false otherwise
      */
     public boolean decreasing() {
         for (int i = 0; i < ranks.size() - 1; i++) {
-            if (betterOrWorse(ranks.get(i), ranks.get(i+1)) > -1) {
+            if (betterOrWorse(ranks.get(i), ranks.get(i + 1)) > -1) {
                 return false;
             }
         }
@@ -190,13 +193,14 @@ public class NameRecord implements Comparable<NameRecord>{
 
     /*
      * overrides toString
-     * returns a string with the name, decades, and corresponding ranks of this NameRecord.
+     * returns a string with the name, decades, and corresponding ranks of this
+     * NameRecord.
      * Each decade is on a separate line.
      */
     public String toString() {
         StringBuilder result = new StringBuilder(name + "\n");
         for (int i = 0; i < ranks.size(); i++) {
-            result.append((base + (i*10)) + ": " + ranks.get(i) + "\n");
+            result.append((base + (i * 10)) + ": " + ranks.get(i) + "\n");
         }
         return result.toString();
     }

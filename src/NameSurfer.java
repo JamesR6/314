@@ -27,13 +27,133 @@ public class NameSurfer {
      */
 
     // CS314 students, Explain your interesting search / trend here:
-    //TODO
+    // TODO
 
     // CS314 students, add test code for NameRecord class here:
-    String jakeRawData = "Jake 262 312 323 479 484 630 751 453 225 117 97";
-    int baseDecade = 1900;
-    String[] jakeRanks = jakeRawData.substring(5, jakeRawData.length()).split(" ");
-    NameRecord jakeRecord = new NameRecord("Jake", baseDecade, jakeRanks);
+
+    public static void testing() {
+        Names names = new Names(getFileScannerForNames("names.txt"));
+        NameRecord Allison = names.getName("Allison");
+        NameRecord Daniel = names.getName("Daniel");
+
+        // compareTo Tests
+        boolean CTExpected = true;
+        if (Allison.equals(Allison) == CTExpected) {
+            System.out.println("Passed test 1: compareTo");
+        } else {
+            System.out.println("failed test 1: compareTo");
+        }
+        CTExpected = false;
+        if (Allison.equals(Daniel) == CTExpected) {
+            System.out.println("Passed test 2: compareTo");
+        } else {
+            System.out.println("failed test 2: compareTo");
+        }
+
+        // Constructor Tests
+        String[] Sample1 = { "30", "0", "5", "999", "6" };
+        String[] Sample2 = { "1", "2", "3", "400", "500" };
+        int base = 1800;
+        NameRecord S1 = new NameRecord("sample1", base, Sample1);
+        NameRecord S2 = new NameRecord("sample2", base, Sample2);
+        // no errors confirms a successful construction of namerecords
+        System.out.println("Passed test 3: constructor");
+        System.out.println("Passed test 4: constructor");
+        // confirmations tested later in "toString Tests"
+
+        // getName Tests
+        String GNExpected = "Daniel";
+        if (Daniel.getName().equals(GNExpected)) {
+            System.out.println("Passed test 5: getName");
+        } else {
+            System.out.println("failed test 5: getName");
+        }
+        GNExpected = "Allison";
+        if (Allison.getName().equals(GNExpected)) {
+            System.out.println("Passed test 6: getName");
+        } else {
+            System.out.println("failed test 6: getName");
+        }
+
+        // getBase Tests
+        int GBExpected = 1800;
+        if (S1.getBase() == GBExpected) {
+            System.out.println("Passed test 7: getBase");
+        } else {
+            System.out.println("failed test 7: getBase");
+        }
+        GBExpected = 1900;
+        if (Allison.getBase() == GBExpected) {
+            System.out.println("Passed test 8: getBase");
+        } else {
+            System.out.println("failed test 8: getBase");
+        }
+
+        // getDecades Tests
+        int GDExpected = 5;
+        if (S1.getDecades() == GDExpected) {
+            System.out.println("Passed test 9: getDecades");
+        } else {
+            System.out.println("failed test 9: getDecades");
+        }
+        GDExpected = 11;
+        if (Allison.getDecades() == GDExpected) {
+            System.out.println("Passed test 10: getDecades");
+        } else {
+            System.out.println("failed test 10: getDecades");
+        }
+
+        // getGivenDecades Tests
+        int GGDExpected = 867;
+        int year = 0;
+        if (Allison.getGivenDecade(year) == GGDExpected) {
+            System.out.println("Passed test 11: getGivenDecade");
+        } else {
+            System.out.println("failed test 11: getGivenDecade");
+        }
+        GGDExpected = 44;
+        year = 10;
+        if (Allison.getGivenDecade(year) == GGDExpected) {
+            System.out.println("Passed test 12: getGivenDecade");
+        } else {
+            System.out.println("failed test 12: getGivenDecade");
+        }
+
+        // getBestDecade Tests
+        int GBDExpected = 1990;
+        if (Allison.getBestDecade() == GBDExpected) {
+            System.out.println("Passed test 13: getBestDecade");
+        } else {
+            System.out.println("failed test 13: getBestDecade");
+        }
+        GBDExpected = 1820;
+        if (S1.getBestDecade() == GBDExpected) {
+            System.out.println("Passed test 14: getBestDecade");
+        } else {
+            System.out.println("failed test 14: getBestDecade");
+        }
+
+        // topThousand Tests
+        int GBDExpected = 1990;
+        if (Allison.getBestDecade() == GBDExpected) {
+            System.out.println("Passed test 13: getBestDecade");
+        } else {
+            System.out.println("failed test 13: getBestDecade");
+        }
+        GBDExpected = 1820;
+        if (S1.getBestDecade() == GBDExpected) {
+            System.out.println("Passed test 14: getBestDecade");
+        } else {
+            System.out.println("failed test 14: getBestDecade");
+        }
+
+        // alwaysPopular Tests
+        // rankedOnce Tests
+        // increasing Tests
+        // decreasing Tests
+        // toString Tests
+
+    }
 
     // One of the basic data files given on the assignment.
     // Alter this to try different data files.
@@ -89,7 +209,7 @@ public class NameSurfer {
     // main method. Driver for the whole program
     public static void main(String[] args) {
         // Delete the following line in the final version of your program.
-        simpleTest();
+        testing();
         Scanner fileScanner = getFileScannerForNames(NAME_FILE);
         Names namesDatabase = new Names(fileScanner);
         fileScanner.close();
@@ -153,7 +273,8 @@ public class NameSurfer {
     }
 
     /*
-     * Display the names that had at least one gap year (resurfaced after disappearing)
+     * Display the names that had at least one gap year (resurfaced after
+     * disappearing)
      * pre: n != null
      * post: print out names that have left the top thousand then came back
      */
@@ -166,7 +287,6 @@ public class NameSurfer {
             System.out.println(people.get(i));
         }
     }
-    
 
     /*
      * Display the names that have appeared in every decade.
@@ -251,10 +371,8 @@ public class NameSurfer {
             System.out.println(name + " does not appear in any decade");
             return;
         }
-        System.out.println(result.toString());  
+        System.out.println(result.toString());
     }
-
-    
 
     /*
      * Display all names that contain a substring from the user
@@ -279,8 +397,6 @@ public class NameSurfer {
             System.out.println(people.get(i).getName() + " " + people.get(i).getBestDecade());
         }
     }
-
-    
 
     /*
      * Get choice from the user keyboard != null and is connected to System.in

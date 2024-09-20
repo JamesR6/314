@@ -134,17 +134,17 @@ public class NameSurfer {
         }
 
         // topThousand Tests
-        int GBDExpected = 1990;
-        if (Allison.getBestDecade() == GBDExpected) {
-            System.out.println("Passed test 13: getBestDecade");
+        int TTExpected = 10;
+        if (Allison.topThousand() == TTExpected) {
+            System.out.println("Passed test 15: getBestDecade");
         } else {
-            System.out.println("failed test 13: getBestDecade");
+            System.out.println("failed test 15: getBestDecade");
         }
-        GBDExpected = 1820;
-        if (S1.getBestDecade() == GBDExpected) {
-            System.out.println("Passed test 14: getBestDecade");
+        TTExpected = 4;
+        if (S1.topThousand() == TTExpected) {
+            System.out.println("Passed test 16: getBestDecade");
         } else {
-            System.out.println("failed test 14: getBestDecade");
+            System.out.println("failed test 16: getBestDecade");
         }
 
         // alwaysPopular Tests

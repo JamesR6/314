@@ -1,7 +1,11 @@
+import java.util.ArrayList;
+
 public class test {
     public static void main(String[] args) {
-        int a = 1;
-        int b = 1;
-        System.out.println(((Object) a).equals(b));
+        ArrayList a = new ArrayList();
+        a.add("hello");
+        a.add(new ArrayList());
+        a.add(new String[4]);
+        System.out.println(a.toString());
     }
 }

@@ -1,11 +1,14 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class test {
     public static void main(String[] args) {
-        ArrayList a = new ArrayList();
+        HashSet<String> a = new HashSet<>();
         a.add("hello");
-        a.add(new ArrayList());
-        a.add(new String[4]);
-        System.out.println(a.toString());
+        HashSet<String> b = new HashSet<>(a);
+        b.add("world");
+        System.out.println(a);
+        System.out.println(b);
+
     }
 }

@@ -1,20 +1,22 @@
 /*  Student information for assignment:
  *
- *  On my honor, <NAME>, this programming assignment is my own work
+ *  On my honor, JP Reeves, this programming assignment is my own work
  *  and I have not provided this code to any other student.
  *
- *  Name:
- *  email address:
- *  UTEID:
- *  Section 5 digit ID:
- *  Grader name:
+ *  Name: JP Reeves
+ *  email address: jpascualsr06@gmail.com
+ *  UTEID: jsr3699
+ *  Section 5 digit ID: 
+ *  Grader name: Eliza
  *  Number of slip days used on this assignment:
  */
 
 // add imports as necessary
 
 import java.util.Set;
+import java.util.HashSet;
 import java.util.TreeMap;
+import java.util.ArrayList;
 
 /**
  * Manages the details of EvilHangman. This class keeps
@@ -25,6 +27,13 @@ import java.util.TreeMap;
 public class HangmanManager {
 
     // instance variables / fields
+    private Set<String> Dictionary;
+    private Set<String> activeDict;
+    private TreeMap<String, ArrayList<String>> families = new TreeMap<>();
+    private boolean debugging;
+    private int numGuesses;
+    private int wordLen;
+    private HangmanDifficulty diff;
 
     /**
      * Create a new HangmanManager from the provided set of words and phrases.
@@ -33,7 +42,11 @@ public class HangmanManager {
      * @param debugOn true if we should print out debugging to System.out.
      */
     public HangmanManager(Set<String> words, boolean debugOn) {
-
+        if (words == null || words.size() == 0) {
+            throw new IllegalArguementException("words must have length");
+        }
+        this.Dictionary = new HashSet<>(words);
+        this.debugging = debugOn;
     }
 
     /**
@@ -43,7 +56,8 @@ public class HangmanManager {
      * @param words A set with the words for this instance of Hangman.
      */
     public HangmanManager(Set<String> words) {
-
+        this.Dictionary = new HashSet<>(words);
+        this.debugging = false;
     }
 
 
@@ -69,7 +83,9 @@ public class HangmanManager {
      * @param diff The difficulty for this round.
      */
     public void prepForRound(int wordLen, int numGuesses, HangmanDifficulty diff) {
-
+        this.wordLen = wordLen;
+        this.numGuesses = numGuesses;
+        this.diff = diff;
     }
 
 

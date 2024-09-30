@@ -16,6 +16,7 @@
 import java.util.Set;
 import java.util.HashSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.ArrayList;
 
 /**
@@ -25,15 +26,17 @@ import java.util.ArrayList;
  *
  */
 public class HangmanManager {
-
+ 
     // instance variables / fields
-    private Set<String> Dictionary;
-    private Set<String> activeDict;
-    private TreeMap<String, ArrayList<String>> families = new TreeMap<>();
-    private boolean debugging;
-    private int numGuesses;
     private int wordLen;
+    private int StartNumGuesses;
+    private boolean debugging;
     private HangmanDifficulty diff;
+    private StringBuilder currPattern;
+    private HashSet<String> Dictionary;
+    private HashSet<Character> guesses;
+    private ArrayList<String> activeDict;
+    private TreeMap<String, ArrayList<String>> families;
 
     /**
      * Create a new HangmanManager from the provided set of words and phrases.
@@ -43,7 +46,7 @@ public class HangmanManager {
      */
     public HangmanManager(Set<String> words, boolean debugOn) {
         if (words == null || words.size() == 0) {
-            throw new IllegalArguementException("words must have length");
+            throw new IllegalArgumentException("constructor: words must have length");
         }
         this.Dictionary = new HashSet<>(words);
         this.debugging = debugOn;
@@ -56,6 +59,9 @@ public class HangmanManager {
      * @param words A set with the words for this instance of Hangman.
      */
     public HangmanManager(Set<String> words) {
+        if (words == null || words.size() == 0) {
+            throw new IllegalArgumentException("constructor: words must have length");
+        }
         this.Dictionary = new HashSet<>(words);
         this.debugging = false;
     }
@@ -69,7 +75,13 @@ public class HangmanManager {
      * with the given length
      */
     public int numWords(int length) {
-        return 0;
+        int count = 0;
+        for (String word : Dictionary) {
+            if (word.length() == length) {
+                count++;
+            }
+        }
+        return count;
     }
 
 
@@ -83,9 +95,18 @@ public class HangmanManager {
      * @param diff The difficulty for this round.
      */
     public void prepForRound(int wordLen, int numGuesses, HangmanDifficulty diff) {
+        if (wordLen == 0 || numGuesses == 0) {
+            throw new IllegalArgumentException("wordLen and numGuesses must be greater than 0");
+        }
         this.wordLen = wordLen;
-        this.numGuesses = numGuesses;
+        this.StartNumGuesses = numGuesses;
         this.diff = diff;
+        this.activeDict = new ArrayList<>(this.Dictionary);
+        this.guesses = new HashSet<>();
+        this.families = new TreeMap<>();
+        for (int a = 0; a < wordLen; a++) {
+            this.currPattern.append('-');
+        }
     }
 
 
@@ -96,7 +117,7 @@ public class HangmanManager {
      * original dictionary and the guesses so far.
      */
     public int numWordsCurrent() {
-        return 0;
+        return activeDict.size();
     }
 
 
@@ -107,7 +128,7 @@ public class HangmanManager {
      * in this round (game) of Hangman.
      */
     public int getGuessesLeft() {
-        return 0;
+        return StartNumGuesses - guesses.size();
     }
 
 
@@ -121,7 +142,7 @@ public class HangmanManager {
      * has guessed so far during this round.
      */
     public String getGuessesMade() {
-        return "DEFAULT";
+        return guesses.toString();
     }
 
 
@@ -132,7 +153,7 @@ public class HangmanManager {
      * false otherwise.
      */
     public boolean alreadyGuessed(char guess) {
-        return false;
+        return !guesses.contains(guess);
     }
 
 
@@ -143,7 +164,7 @@ public class HangmanManager {
      * @return the current pattern.
      */
     public String getPattern() {
-        return "DEFAULT";
+        return currPattern.toString();
     }
 
 
@@ -168,6 +189,10 @@ public class HangmanManager {
      * @return return the secret word the manager picked.
      */
     public String getSecretWord() {
-        return "DEFAULT";
+        if (this.activeDict.size() == 0) {
+            throw new IllegalStateException("active dictionary must have length 1 or more");
+        }
+        int index = (int)(Math.random()*(activeDict.size()));
+        return activeDict.get(index);
     }
 }

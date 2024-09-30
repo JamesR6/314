@@ -3,12 +3,17 @@ import java.util.HashSet;
 
 public class test {
     public static void main(String[] args) {
-        HashSet<String> a = new HashSet<>();
-        a.add("hello");
-        HashSet<String> b = new HashSet<>(a);
-        b.add("world");
+        ArrayList<String> a = new ArrayList<>();
+        a.add("1");
+        a.add("2");
+        a.add("3");
+        a.add("4");
+        a.add("5");
+        a.add("6");
         System.out.println(a);
-        System.out.println(b);
+        int index = (int) (Math.random()*a.size());
+        System.out.println(a.get(index));
+        
 
     }
 }

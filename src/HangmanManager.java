@@ -131,7 +131,13 @@ public class HangmanManager {
      * in this round (game) of Hangman.
      */
     public int getGuessesLeft() {
-        return StartNumGuesses - guesses.size();
+        int wrongGuesses = 0;
+        for (char letter : guesses) {
+            if (currPattern.indexOf("" + letter) == -1) {
+                wrongGuesses++;
+            }
+        }
+        return StartNumGuesses - wrongGuesses;
     }
 
 
@@ -201,11 +207,12 @@ public class HangmanManager {
      * matching letters will show up in the pattern while anything else will be a wildcard, "-"
      */
     private String getPattern(String word, String guess) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(currPattern);
         for (int i = 0; i < word.length(); i++) {
             //the added character is either the guessed letter or a wildcard
-            String add = (word.substring(i, i+1).equals(guess)) ? guess : "-";
-            sb.append(add);
+            if (word.substring(i, i + 1).equals(guess)) {
+                sb.replace(i, i + 1, guess);
+            }
         }
         return sb.toString();
     }
@@ -230,10 +237,24 @@ public class HangmanManager {
             FamilyChooser temp = new FamilyChooser(key, families.get(key).size());
             ordered.add(temp);
         }
-        //TODO difficulty
         Collections.sort(ordered);
-        String chosenPattern = ordered.get(0).getPattern();
-        return chosenPattern;
+        int chosenIndex = 0;
+        if (ordered.size() > 1 && !diffTracker()) {
+            chosenIndex = 1;
+        }
+        return ordered.get(chosenIndex).getPattern();
+    }
+
+    private boolean diffTracker() {
+        int round = guesses.size();
+        if (difficulty == HangmanDifficulty.HARD) {
+            return true;
+        } else if (difficulty == HangmanDifficulty.MEDIUM && (round % 4 == 0)) {
+            return false;
+        } else if (round % 2 == 0) {
+             return false;
+        }
+        return true;
     }
 
     /*
@@ -295,12 +316,10 @@ public class HangmanManager {
         public int compareTo(FamilyChooser o) {
             if (wordCount != o.wordCount) {
                 return o.wordCount - wordCount;
-            } else {
-                if (countDashes(pattern) != countDashes(o.pattern)) {
-                    return countDashes(o.pattern) - countDashes(pattern);
-                } else { //TODO style
-                    return o.pattern.compareTo(pattern);
-                }
+            } else if (countDashes(pattern) != countDashes(o.pattern)) {
+                return countDashes(o.pattern) - countDashes(pattern);
+            } else { //TODO style
+                return pattern.compareTo(o.pattern);
             }
         }
 

@@ -6,9 +6,9 @@
  *  Name: JP Reeves
  *  email address: jpascualsr06@gmail.com
  *  UTEID: jsr3699
- *  Section 5 digit ID: 
+ *  Section 5 digit ID: 50259
  *  Grader name: Eliza
- *  Number of slip days used on this assignment:
+ *  Number of slip days used on this assignment: 0
  */
 
 // add imports as necessary
@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Manages the details of EvilHangman. This class keeps
@@ -28,15 +29,13 @@ import java.util.ArrayList;
 public class HangmanManager {
  
     // instance variables / fields
-    private int wordLen;
     private int StartNumGuesses;
     private boolean debugging;
-    private HangmanDifficulty diff;
+    private HangmanDifficulty difficulty;
     private StringBuilder currPattern;
     private HashSet<String> Dictionary;
-    private HashSet<Character> guesses;
+    private TreeSet<Character> guesses;
     private ArrayList<String> activeDict;
-    private TreeMap<String, ArrayList<String>> families;
 
     /**
      * Create a new HangmanManager from the provided set of words and phrases.
@@ -48,8 +47,8 @@ public class HangmanManager {
         if (words == null || words.size() == 0) {
             throw new IllegalArgumentException("constructor: words must have length");
         }
-        this.Dictionary = new HashSet<>(words);
-        this.debugging = debugOn;
+        Dictionary = new HashSet<>(words);
+        debugging = debugOn;
     }
 
     /**
@@ -62,8 +61,8 @@ public class HangmanManager {
         if (words == null || words.size() == 0) {
             throw new IllegalArgumentException("constructor: words must have length");
         }
-        this.Dictionary = new HashSet<>(words);
-        this.debugging = false;
+        Dictionary = new HashSet<>(words);
+        debugging = false;
     }
 
 
@@ -98,14 +97,18 @@ public class HangmanManager {
         if (wordLen == 0 || numGuesses == 0) {
             throw new IllegalArgumentException("wordLen and numGuesses must be greater than 0");
         }
-        this.wordLen = wordLen;
-        this.StartNumGuesses = numGuesses;
-        this.diff = diff;
-        this.activeDict = new ArrayList<>(this.Dictionary);
-        this.guesses = new HashSet<>();
-        this.families = new TreeMap<>();
+        difficulty = diff;
+        StartNumGuesses = numGuesses;
+        activeDict = new ArrayList<>();
+        guesses = new TreeSet<>();
+        currPattern = new StringBuilder();
         for (int a = 0; a < wordLen; a++) {
-            this.currPattern.append('-');
+            currPattern.append("-");
+        }
+        for (String word : Dictionary) {
+            if (word.length() == wordLen) {
+                activeDict.add(word);
+            }
         }
     }
 
@@ -153,7 +156,7 @@ public class HangmanManager {
      * false otherwise.
      */
     public boolean alreadyGuessed(char guess) {
-        return !guesses.contains(guess);
+        return guesses.contains(guess);
     }
 
 
@@ -166,7 +169,7 @@ public class HangmanManager {
     public String getPattern() {
         return currPattern.toString();
     }
-
+//----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * Update the game status (pattern, wrong guesses, word list),
@@ -177,9 +180,86 @@ public class HangmanManager {
      * The return value is for testing and debugging purposes.
      */
     public TreeMap<String, Integer> makeGuess(char guess) {
-        return null;
+        if (alreadyGuessed(guess)) {
+            throw new IllegalArgumentException("Must choose only new characters");
+        }
+
+        TreeMap<String, ArrayList<String>> families = new TreeMap<>();
+        guesses.add(guess);
+        for (String word : activeDict) {
+            String wordPat = getPattern(word, "" + guess);
+            putInFamilies(families, wordPat, word);
+        }
+        String chosenPattern = chooseList(families);
+        activeDict = new ArrayList<>(families.get(chosenPattern));
+        adjustPattern(chosenPattern, "" + guess);
+        return convertToStrInt(families);
     }
 
+    /* 
+     * given a word and a specific letterm guess, returns a pattern of that word.
+     * matching letters will show up in the pattern while anything else will be a wildcard, "-"
+     */
+    private String getPattern(String word, String guess) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < word.length(); i++) {
+            //the added character is either the guessed letter or a wildcard
+            String add = (word.substring(i, i+1).equals(guess)) ? guess : "-";
+            sb.append(add);
+        }
+        return sb.toString();
+    }
+    /*
+     * inserts a given word into its associated family or makes a new family for it and
+     * places it there
+     */   
+    private void putInFamilies(TreeMap<String, ArrayList<String>> families, String pattern, String word) {
+        if (!families.containsKey(pattern)) {
+            families.put(pattern, new ArrayList<>());
+        }
+        families.get(pattern).add(word);
+    }
+
+    /*
+     * chooses which list is most difficult and returns it as an ArrayList<String>
+     */
+    private String chooseList(TreeMap<String, ArrayList<String>> families) {
+        ArrayList<FamilyChooser> ordered = new ArrayList<>();
+        Set<String> keys = families.keySet();
+        for (String key : keys) {
+            FamilyChooser temp = new FamilyChooser(key, families.get(key).size());
+            ordered.add(temp);
+        }
+        //TODO difficulty
+        Collections.sort(ordered);
+        String chosenPattern = ordered.get(0).getPattern();
+        return chosenPattern;
+    }
+
+    /*
+     * returns the given families treemap but with Integers as values, corresponding to 
+     * how many words were in the key's arraylist
+     */
+    private TreeMap<String, Integer> convertToStrInt(TreeMap<String, ArrayList<String>> families) {
+        TreeMap<String, Integer> result = new TreeMap<>();
+        Set<String> keys = families.keySet();
+        for (String key : keys) {
+            Integer value = families.get(key).size();
+            result.put(key, value);
+        }
+        return result;
+    }
+
+    private void adjustPattern(String add, String letter) {
+        for (int i = 0; i < add.length(); i++) {
+            if (add.substring(i, i + 1).equals(letter)) {
+                currPattern.replace(i, i + 1, letter);
+            }
+        }
+    }
+
+    
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * Return the secret word this HangmanManager finally ended up
@@ -189,10 +269,50 @@ public class HangmanManager {
      * @return return the secret word the manager picked.
      */
     public String getSecretWord() {
-        if (this.activeDict.size() == 0) {
+        if (activeDict.size() == 0) {
             throw new IllegalStateException("active dictionary must have length 1 or more");
         }
         int index = (int)(Math.random()*(activeDict.size()));
         return activeDict.get(index);
+    }
+
+
+    public class FamilyChooser implements Comparable<FamilyChooser> {
+        private String pattern;
+        private int wordCount;
+
+        public FamilyChooser(String pattern, int wordCount) {
+            this.pattern = pattern;
+            this.wordCount = wordCount;
+        }
+
+        public String getPattern() {
+            return pattern;
+        }
+
+
+        @Override
+        public int compareTo(FamilyChooser o) {
+            if (wordCount != o.wordCount) {
+                return o.wordCount - wordCount;
+            } else {
+                if (countDashes(pattern) != countDashes(o.pattern)) {
+                    return countDashes(o.pattern) - countDashes(pattern);
+                } else { //TODO style
+                    return o.pattern.compareTo(pattern);
+                }
+            }
+        }
+
+        private int countDashes(String pat) {
+            int count = 0;
+            for (int i = 0; i < pat.length(); i++) {
+                if (pat.substring(i, i + 1).equals("-")) {
+                    count++;
+                }
+            }
+            return count;
+        }
+        
     }
 }

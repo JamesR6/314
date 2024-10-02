@@ -243,7 +243,11 @@ public class HangmanManager {
             chosenIndex = 1;
         }
         String chosenPattern = ordered.get(chosenIndex).getPattern();
+
         if (debugging) {
+            if (ordered.size() == 1 && !diffTracker()) {
+                System.out.println("\nDEBUGGING: Should pick second hardest pattern this turn, but only one pattern available.\n");
+            }
             printDebug(chosenPattern, chosenIndex == 0, families.get(chosenPattern).size());
         }
         return chosenPattern;

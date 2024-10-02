@@ -242,16 +242,31 @@ public class HangmanManager {
         if (ordered.size() > 1 && !diffTracker()) {
             chosenIndex = 1;
         }
-        return ordered.get(chosenIndex).getPattern();
+        String chosenPattern = ordered.get(chosenIndex).getPattern();
+        if (debugging) {
+            printDebug(chosenPattern, chosenIndex == 0, families.get(chosenPattern).size());
+        }
+        return chosenPattern;
+    }
+    
+    private void printDebug(String chosenPattern, boolean hardest, int numWords) {
+        if (hardest) {
+            System.out.println("\nDEBUGGING: Picking hardest list.");
+        } else {
+            System.out.println("\nDEBUGGING: Difficulty second hardest pattern and list.\n");
+        }
+        System.out.println("DEBUGGING: New pattern is: " + chosenPattern + 
+                            ". New family has " + numWords + " words.\n");
     }
 
     private boolean diffTracker() {
+        
         int round = guesses.size();
         if (difficulty == HangmanDifficulty.HARD) {
             return true;
         } else if (difficulty == HangmanDifficulty.MEDIUM && (round % 4 == 0)) {
             return false;
-        } else if (round % 2 == 0) {
+        } else if (difficulty == HangmanDifficulty.EASY && round % 2 == 0) {
              return false;
         }
         return true;

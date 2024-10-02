@@ -7,29 +7,32 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
- *  Class HangmanMain is the driver program for the Hangman program.  It reads 
- *  a dictionary of words to be used during the game and then plays a game with
- *  the user.
- *   
- *   <br><br>This is a cheating version of hangman that delays picking a word
- *   to keep its options open.  You can change the setting for DEBUG to see
- *   how many options are still left on each turn and what patterns are
- *   being generated from the guess
- *   
- *   Based on a program by Stuart Reges, modified my Mike Scott.
+ * Class HangmanMain is the driver program for the Hangman program. It reads
+ * a dictionary of words to be used during the game and then plays a game with
+ * the user.
+ * 
+ * <br>
+ * <br>
+ * This is a cheating version of hangman that delays picking a word
+ * to keep its options open. You can change the setting for DEBUG to see
+ * how many options are still left on each turn and what patterns are
+ * being generated from the guess
+ * 
+ * Based on a program by Stuart Reges, modified my Mike Scott.
  */
 
+public class HangmanMain {
 
-public class HangmanMain  {
-
-    /* Name of the dictionary file. 
-       change to dictionary.txt for full version of game. */
-    private static final String DICTIONARY_FILE = "Dictionary.txt";
+    /*
+     * Name of the dictionary file.
+     * change to dictionary.txt for full version of game.
+     */
+    private static final String DICTIONARY_FILE = "smallDictionary.txt";
     // Used to tell HangmanManager if it should output debugging information.
-    private static final boolean DEBUG = true;  
+    private static final boolean DEBUG = true;
     private static final int MAX_GUESSES = 25;
 
-	// Run the game with a human user.
+    // Run the game with a human user.
     public static void main(String[] args) {
         System.out.println("Welcome to the CS314 hangman game.");
         System.out.println();
@@ -47,13 +50,13 @@ public class HangmanMain  {
             setGameParameters(hangman, keyboard);
             playGame(keyboard, hangman);
             showResults(hangman);
-        } while(playAgain(keyboard));
+        } while (playAgain(keyboard));
         keyboard.close();
     }
 
-
     /**
      * Check to see if the user wants to play another game.
+     * 
      * @param keyboard We assume the Scanner is connected to standard input
      * @return true if the user wants to play another game, false otherwise.
      */
@@ -64,7 +67,6 @@ public class HangmanMain  {
         String answer = keyboard.nextLine();
         return answer.length() > 0 && answer.toLowerCase().charAt(0) == 'y';
     }
-
 
     /*
      * Get user choices for the current game of Hangman.
@@ -88,7 +90,7 @@ public class HangmanMain  {
         do {
             System.out.print("How many wrong answers allowed? ");
             numGuesses = Integer.parseInt(keyboard.nextLine());
-        } while (!validChoice(numGuesses, 1, MAX_GUESSES, 
+        } while (!validChoice(numGuesses, 1, MAX_GUESSES,
                 "number of wrong guesses"));
 
         HangmanDifficulty difficulty = getDifficulty(keyboard);
@@ -98,7 +100,7 @@ public class HangmanMain  {
     // determine difficulty level from user. They must enter a valid choice.
     // pre: keyboard != null
     private static HangmanDifficulty getDifficulty(Scanner keyboard) {
-        if (keyboard== null) {
+        if (keyboard == null) {
             throw new IllegalArgumentException("The Scanner object "
                     + "may not be null.");
         }
@@ -106,48 +108,46 @@ public class HangmanMain  {
         do {
             System.out.println("What difficulty level do you want?");
             // we number difficulties 1 to 3 for user
-            System.out.print("Enter a number between " 
-                    + (HangmanDifficulty.EASY.ordinal() + 1) 
-                    + "(EASIEST) " + "and " 
-                    + (HangmanDifficulty.HARD.ordinal() + 1) 
+            System.out.print("Enter a number between "
+                    + (HangmanDifficulty.EASY.ordinal() + 1)
+                    + "(EASIEST) " + "and "
+                    + (HangmanDifficulty.HARD.ordinal() + 1)
                     + "(HARDEST) : ");
             diffChoiceAsInt = Integer.parseInt(keyboard.nextLine());
-            
-        } while (!validChoice(diffChoiceAsInt, HangmanDifficulty.minPossible(), 
+
+        } while (!validChoice(diffChoiceAsInt, HangmanDifficulty.minPossible(),
                 HangmanDifficulty.maxPossible(), "difficulty"));
-        
-        return HangmanDifficulty.values()[diffChoiceAsInt - 1];    
+
+        return HangmanDifficulty.values()[diffChoiceAsInt - 1];
     }
 
     // Determine if choice is within the range [min, max]
-    private static boolean validChoice(int choice, int min, int max, 
-    		String explanation) {
-    		
+    private static boolean validChoice(int choice, int min, int max,
+            String explanation) {
+
         boolean valid = (min <= choice) && (choice <= max);
         if (!valid) {
-            System.out.println(choice + " is not a valid number for " 
-            		+ explanation);
-            System.out.println("Pick a number between " + min + " and " 
-            		+ max + ".");
+            System.out.println(choice + " is not a valid number for "
+                    + explanation);
+            System.out.println("Pick a number between " + min + " and "
+                    + max + ".");
         }
         return valid;
     }
 
-
-    // check to ensure there is at least one word of 
+    // check to ensure there is at least one word of
     // the given length in the manager
-    private static boolean atLeastOneWord(HangmanManager hangman, 
-    		int wordLength) {
-    		
+    private static boolean atLeastOneWord(HangmanManager hangman,
+            int wordLength) {
+
         int numWords = hangman.numWords(wordLength);
         if (numWords == 0) {
             System.out.println();
-            System.out.println("I don't know any words with " 
+            System.out.println("I don't know any words with "
                     + wordLength + " letters. Enter another number.");
         }
         return numWords != 0;
     }
-
 
     // open the dictionary file. Return a list containing
     // the words in the dictionary file.
@@ -160,8 +160,7 @@ public class HangmanMain  {
             while (input.hasNext())
                 dictionary.add(input.next().toLowerCase());
             input.close();
-        }
-        catch(FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.out.println("Unable to find this file: " + DICTIONARY_FILE);
             System.out.print("Program running in this directory: ");
@@ -173,21 +172,20 @@ public class HangmanMain  {
         return Collections.unmodifiableSet(dictionary);
     }
 
-
     // Plays one game with the user
     private static void playGame(Scanner keyboard, HangmanManager hangman) {
-        // keep asking for guesses as long as 
+        // keep asking for guesses as long as
         // user has guesses left and puzzle not solved the puzzle
         final String UNKNOWN = "-";
-        while (hangman.getGuessesLeft() > 0 
-        		&& hangman.getPattern().contains(UNKNOWN)) {
-        		
+        while (hangman.getGuessesLeft() > 0
+                && hangman.getPattern().contains(UNKNOWN)) {
+
             System.out.println("guesses left: " + hangman.getGuessesLeft());
 
             // debugging
             if (DEBUG) {
-                System.out.println("DEBUGGING: words left : " 
-                		+ hangman.numWordsCurrent());
+                System.out.println("DEBUGGING: words left : "
+                        + hangman.numWordsCurrent());
             }
             System.out.println("guessed so far : " + hangman.getGuessesMade());
             System.out.println("current word : " + hangman.getPattern());
@@ -210,9 +208,8 @@ public class HangmanMain  {
         } else {
             System.out.println("Yes, there are " + count + " " + guess + "'s");
         }
-        System.out.println();   
+        System.out.println();
     }
-
 
     // pre, keyboard != null, hangman != null
     private static char getLetter(Scanner keyboard, HangmanManager manager) {
@@ -224,9 +221,9 @@ public class HangmanMain  {
         while (alreadyGuessed) {
             System.out.print("Your guess? ");
             String result = keyboard.nextLine().toLowerCase();
-            while (result == null || result.length() == 0 
+            while (result == null || result.length() == 0
                     || !isEnglishLetter(result.charAt(0))) {
-                
+
                 System.out.println("That is not an English letter.");
                 System.out.print("Your guess? ");
                 result = keyboard.nextLine().toLowerCase();
@@ -238,8 +235,8 @@ public class HangmanMain  {
             }
         }
         System.out.println("the guess: " + guess + ".");
-        assert isEnglishLetter(guess) && !manager.alreadyGuessed(guess) 
-            : "something wrong with my logic in getting guess. " + guess;
+        assert isEnglishLetter(guess) && !manager.alreadyGuessed(guess)
+                : "something wrong with my logic in getting guess. " + guess;
         return guess;
     }
 
@@ -248,8 +245,7 @@ public class HangmanMain  {
         return ('A' <= ch && ch <= 'Z') || ('a' <= ch && ch <= 'z');
     }
 
-
-    // debugging method to show current patterns and number of words for each 
+    // debugging method to show current patterns and number of words for each
     // pre: results != null
     private static void showPatterns(TreeMap<String, Integer> results) {
         if (results == null) {
@@ -260,18 +256,17 @@ public class HangmanMain  {
                 + "are resulting patterns and number");
         System.out.println("of words in each pattern: ");
         for (String key : results.keySet()) {
-            System.out.println("pattern: " + key 
+            System.out.println("pattern: " + key
                     + ", number of words: " + results.get(key));
         }
         System.out.println("END DEBUGGING");
         System.out.println();
     }
 
-
     // pre: pattern != null
     // return the number of times the guess occurs in the pattern
     private static int getCount(String pattern, char guess) {
-        if (pattern == null ) {
+        if (pattern == null) {
             throw new IllegalArgumentException("Violation of "
                     + "precondition in getCount.");
         }
@@ -284,7 +279,6 @@ public class HangmanMain  {
         return result;
     }
 
-
     // reports the results of the game, including showing the answer
     private static void showResults(HangmanManager hangman) {
         // if the game is over, get the secret word
@@ -296,7 +290,6 @@ public class HangmanMain  {
             System.out.println("Sorry, you lose");
         }
     }
-
 
     // helper method for debugging. Display number of words of length
     // dictionary.txt has words from length 2 to 25

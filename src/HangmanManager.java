@@ -175,7 +175,6 @@ public class HangmanManager {
     public String getPattern() {
         return currPattern.toString();
     }
-//----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * Update the game status (pattern, wrong guesses, word list),
@@ -196,14 +195,13 @@ public class HangmanManager {
             String wordPat = getPattern(word, "" + guess);
             putInFamilies(families, wordPat, word);
         }
-        String chosenPattern = chooseList(families);
-        activeDict = new ArrayList<>(families.get(chosenPattern));
-        adjustPattern(chosenPattern, "" + guess);
+        currPattern = new StringBuilder(chooseList(families));
+        activeDict = new ArrayList<>(families.get(currPattern.toString()));
         return convertToStrInt(families);
     }
 
     /* 
-     * given a word and a specific letterm guess, returns a pattern of that word.
+     * given a word and a chosen letter, guess, returns a pattern of that word.
      * matching letters will show up in the pattern while anything else will be a wildcard, "-"
      */
     private String getPattern(String word, String guess) {
@@ -216,6 +214,7 @@ public class HangmanManager {
         }
         return sb.toString();
     }
+
     /*
      * inserts a given word into its associated family or makes a new family for it and
      * places it there
@@ -228,7 +227,8 @@ public class HangmanManager {
     }
 
     /*
-     * chooses which list is most difficult and returns it as an ArrayList<String>
+     * chooses which pattern is to be chosen out of families and returns it as an String.
+     * Determines which list based on difficulty and round.
      */
     private String chooseList(TreeMap<String, ArrayList<String>> families) {
         ArrayList<FamilyChooser> ordered = new ArrayList<>();
@@ -246,13 +246,18 @@ public class HangmanManager {
 
         if (debugging) {
             if (ordered.size() == 1 && !diffTracker()) {
-                System.out.println("\nDEBUGGING: Should pick second hardest pattern this turn, but only one pattern available.\n");
+                System.out.println("\nDEBUGGING: Should pick second hardest pattern this turn, but only one pattern available.");
             }
             printDebug(chosenPattern, chosenIndex == 0, families.get(chosenPattern).size());
         }
+
         return chosenPattern;
     }
     
+    /*
+     * if debugging is activated, prints out what pattern is being chosen for that round
+     * and other information like the number of words associated with that pattern.
+     */
     private void printDebug(String chosenPattern, boolean hardest, int numWords) {
         if (hardest) {
             System.out.println("\nDEBUGGING: Picking hardest list.");
@@ -263,8 +268,12 @@ public class HangmanManager {
                             ". New family has " + numWords + " words.\n");
     }
 
+    /*
+     * based on the difficulty chosen at the beginning of the game, determines
+     * if the current round should choose the most difficuly familiy or the second
+     * post: returns true if most difficult and false otherwise
+     */
     private boolean diffTracker() {
-        
         int round = guesses.size();
         if (difficulty == HangmanDifficulty.HARD) {
             return true;
@@ -289,18 +298,7 @@ public class HangmanManager {
         }
         return result;
     }
-
-    private void adjustPattern(String add, String letter) {
-        for (int i = 0; i < add.length(); i++) {
-            if (add.substring(i, i + 1).equals(letter)) {
-                currPattern.replace(i, i + 1, letter);
-            }
-        }
-    }
-
     
-//------------------------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * Return the secret word this HangmanManager finally ended up
      * picking for this round.
@@ -316,8 +314,11 @@ public class HangmanManager {
         return activeDict.get(index);
     }
 
-
-    public class FamilyChooser implements Comparable<FamilyChooser> {
+    /*
+     * Converts families into comparable objects with their pattern and 
+     * amount of associated words as variables.
+     */
+    private class FamilyChooser implements Comparable<FamilyChooser> {
         private String pattern;
         private int wordCount;
 
@@ -330,14 +331,14 @@ public class HangmanManager {
             return pattern;
         }
 
-
+        
         @Override
         public int compareTo(FamilyChooser o) {
             if (wordCount != o.wordCount) {
                 return o.wordCount - wordCount;
             } else if (countDashes(pattern) != countDashes(o.pattern)) {
                 return countDashes(o.pattern) - countDashes(pattern);
-            } else { //TODO style
+            } else {
                 return pattern.compareTo(o.pattern);
             }
         }

@@ -27,7 +27,7 @@ import java.util.Collections;
  *
  */
 public class HangmanManager {
- 
+
     // instance variables / fields
     private int StartNumGuesses;
     private boolean debugging;
@@ -40,7 +40,8 @@ public class HangmanManager {
     /**
      * Create a new HangmanManager from the provided set of words and phrases.
      * pre: words != null, words.size() > 0
-     * @param words A set with the words for this instance of Hangman.
+     * 
+     * @param words   A set with the words for this instance of Hangman.
      * @param debugOn true if we should print out debugging to System.out.
      */
     public HangmanManager(Set<String> words, boolean debugOn) {
@@ -55,6 +56,7 @@ public class HangmanManager {
      * Create a new HangmanManager from the provided set of words and phrases.
      * Debugging is off.
      * pre: words != null, words.size() > 0
+     * 
      * @param words A set with the words for this instance of Hangman.
      */
     public HangmanManager(Set<String> words) {
@@ -65,13 +67,13 @@ public class HangmanManager {
         debugging = false;
     }
 
-
     /**
      * Get the number of words in this HangmanManager of the given length.
      * pre: none
+     * 
      * @param length The given length to check.
      * @return the number of words in the original Dictionary
-     * with the given length
+     *         with the given length
      */
     public int numWords(int length) {
         int count = 0;
@@ -83,28 +85,31 @@ public class HangmanManager {
         return count;
     }
 
-
     /**
      * Get for a new round of Hangman. Think of a round as a
      * complete game of Hangman.
-     * @param wordLen the length of the word to pick this time.
-     * numWords(wordLen) > 0
+     * 
+     * @param wordLen    the length of the word to pick this time.
+     *                   numWords(wordLen) > 0
      * @param numGuesses the number of wrong guesses before the
-     * player loses the round. numGuesses >= 1
-     * @param diff The difficulty for this round.
+     *                   player loses the round. numGuesses >= 1
+     * @param diff       The difficulty for this round.
      */
     public void prepForRound(int wordLen, int numGuesses, HangmanDifficulty diff) {
         if (wordLen == 0 || numGuesses == 0) {
             throw new IllegalArgumentException("wordLen and numGuesses must be greater than 0");
         }
+        // empty all lists and variables
         difficulty = diff;
         StartNumGuesses = numGuesses;
         activeDict = new ArrayList<>();
         guesses = new TreeSet<>();
         currPattern = new StringBuilder();
+        // currPattern reset to only wildcards, length = wordLen
         for (int a = 0; a < wordLen; a++) {
             currPattern.append("-");
         }
+        // reset active Dictionary to have every word with the correct length
         for (String word : Dictionary) {
             if (word.length() == wordLen) {
                 activeDict.add(word);
@@ -112,23 +117,23 @@ public class HangmanManager {
         }
     }
 
-
     /**
      * The number of words still possible (live) based on the guesses so far.
-     *  Guesses will eliminate possible words.
+     * Guesses will eliminate possible words.
+     * 
      * @return the number of words that are still possibilities based on the
-     * original dictionary and the guesses so far.
+     *         original dictionary and the guesses so far.
      */
     public int numWordsCurrent() {
         return activeDict.size();
     }
 
-
     /**
      * Get the number of wrong guesses the user has left in
      * this round (game) of Hangman.
+     * 
      * @return the number of wrong guesses the user has left
-     * in this round (game) of Hangman.
+     *         in this round (game) of Hangman.
      */
     public int getGuessesLeft() {
         int wrongGuesses = 0;
@@ -140,36 +145,36 @@ public class HangmanManager {
         return StartNumGuesses - wrongGuesses;
     }
 
-
     /**
      * Return a String that contains the letters the user has guessed
      * so far during this round.
      * The characters in the String are in alphabetical order.
      * The String is in the form [let1, let2, let3, ... letN].
      * For example [a, c, e, s, t, z]
+     * 
      * @return a String that contains the letters the user
-     * has guessed so far during this round.
+     *         has guessed so far during this round.
      */
     public String getGuessesMade() {
         return guesses.toString();
     }
 
-
     /**
      * Check the status of a character.
+     * 
      * @param guess The characater to check.
      * @return true if guess has been used or guessed this round of Hangman,
-     * false otherwise.
+     *         false otherwise.
      */
     public boolean alreadyGuessed(char guess) {
         return guesses.contains(guess);
     }
 
-
     /**
      * Get the current pattern. The pattern contains '-''s for
-     * unrevealed (or guessed) characters and the actual character 
+     * unrevealed (or guessed) characters and the actual character
      * for "correctly guessed" characters.
+     * 
      * @return the current pattern.
      */
     public String getPattern() {
@@ -179,35 +184,42 @@ public class HangmanManager {
     /**
      * Update the game status (pattern, wrong guesses, word list),
      * based on the give guess.
+     * 
      * @param guess pre: !alreadyGuessed(ch), the current guessed character
      * @return return a tree map with the resulting patterns and the number of
-     * words in each of the new patterns.
-     * The return value is for testing and debugging purposes.
+     *         words in each of the new patterns.
+     *         The return value is for testing and debugging purposes.
      */
     public TreeMap<String, Integer> makeGuess(char guess) {
         if (alreadyGuessed(guess)) {
             throw new IllegalArgumentException("Must choose only new characters");
         }
 
+        // put every word and its pattern into a family
         TreeMap<String, ArrayList<String>> families = new TreeMap<>();
-        guesses.add(guess);
         for (String word : activeDict) {
             String wordPat = getPattern(word, "" + guess);
             putInFamilies(families, wordPat, word);
         }
+
+        // update necessary lists and variables
+        guesses.add(guess);
         currPattern = new StringBuilder(chooseList(families));
         activeDict = new ArrayList<>(families.get(currPattern.toString()));
+        // convert families to correct return type
         return convertToStrInt(families);
     }
 
-    /* 
-     * given a word and a chosen letter, guess, returns a pattern of that word.
-     * matching letters will show up in the pattern while anything else will be a wildcard, "-"
+    /*
+     * given a word and a chosen letter, return a pattern of that word.
+     * matching letters will show up in the pattern while anything else will be
+     * the associated character in currPattern
      */
     private String getPattern(String word, String guess) {
+        // sb starts as currPattern
         StringBuilder sb = new StringBuilder(currPattern);
         for (int i = 0; i < word.length(); i++) {
-            //the added character is either the guessed letter or a wildcard
+            // any letters to add replaces a wildcard in sb
             if (word.substring(i, i + 1).equals(guess)) {
                 sb.replace(i, i + 1, guess);
             }
@@ -216,10 +228,12 @@ public class HangmanManager {
     }
 
     /*
-     * inserts a given word into its associated family or makes a new family for it and
+     * inserts a given word into its associated family or makes a new family for it
+     * and
      * places it there
-     */   
-    private void putInFamilies(TreeMap<String, ArrayList<String>> families, String pattern, String word) {
+     */
+    private void putInFamilies(TreeMap<String, ArrayList<String>> families,
+            String pattern, String word) {
         if (!families.containsKey(pattern)) {
             families.put(pattern, new ArrayList<>());
         }
@@ -227,10 +241,12 @@ public class HangmanManager {
     }
 
     /*
-     * chooses which pattern is to be chosen out of families and returns it as an String.
+     * chooses which pattern is to be chosen out of families and returns it as an
+     * String.
      * Determines which list based on difficulty and round.
      */
     private String chooseList(TreeMap<String, ArrayList<String>> families) {
+        // make a difficulty ordered list
         ArrayList<FamilyChooser> ordered = new ArrayList<>();
         Set<String> keys = families.keySet();
         for (String key : keys) {
@@ -238,24 +254,29 @@ public class HangmanManager {
             ordered.add(temp);
         }
         Collections.sort(ordered);
+
+        // determine if most or second most pattern is chosen
         int chosenIndex = 0;
         if (ordered.size() > 1 && !diffTracker()) {
             chosenIndex = 1;
         }
         String chosenPattern = ordered.get(chosenIndex).getPattern();
 
+        // print debugging lines
         if (debugging) {
             if (ordered.size() == 1 && !diffTracker()) {
-                System.out.println("\nDEBUGGING: Should pick second hardest pattern this turn, but only one pattern available.");
+                System.out.println("\nDEBUGGING: Should pick second hardest pattern " +
+                        "this turn, but only one pattern available.");
             }
             printDebug(chosenPattern, chosenIndex == 0, families.get(chosenPattern).size());
         }
 
         return chosenPattern;
     }
-    
+
     /*
-     * if debugging is activated, prints out what pattern is being chosen for that round
+     * if debugging is activated, prints out what pattern is being chosen for that
+     * round
      * and other information like the number of words associated with that pattern.
      */
     private void printDebug(String chosenPattern, boolean hardest, int numWords) {
@@ -264,8 +285,8 @@ public class HangmanManager {
         } else {
             System.out.println("\nDEBUGGING: Difficulty second hardest pattern and list.\n");
         }
-        System.out.println("DEBUGGING: New pattern is: " + chosenPattern + 
-                            ". New family has " + numWords + " words.\n");
+        System.out.println("DEBUGGING: New pattern is: " + chosenPattern +
+                ". New family has " + numWords + " words.\n");
     }
 
     /*
@@ -280,60 +301,78 @@ public class HangmanManager {
         } else if (difficulty == HangmanDifficulty.MEDIUM && (round % 4 == 0)) {
             return false;
         } else if (difficulty == HangmanDifficulty.EASY && round % 2 == 0) {
-             return false;
+            return false;
         }
         return true;
     }
 
     /*
-     * returns the given families treemap but with Integers as values, corresponding to 
+     * returns the given families treemap but with Integers as values, corresponding
+     * to
      * how many words were in the key's arraylist
      */
-    private TreeMap<String, Integer> convertToStrInt(TreeMap<String, ArrayList<String>> families) {
+    private TreeMap<String, Integer> convertToStrInt(TreeMap<String, ArrayList<String>> families) { // TODO STYLE
         TreeMap<String, Integer> result = new TreeMap<>();
         Set<String> keys = families.keySet();
         for (String key : keys) {
+            // get amount of words in associated pattern's family
             Integer value = families.get(key).size();
             result.put(key, value);
         }
         return result;
     }
-    
+
     /**
      * Return the secret word this HangmanManager finally ended up
      * picking for this round.
      * If there are multiple possible words left one is selected at random.
-     * <br> pre: numWordsCurrent() > 0
+     * <br>
+     * pre: numWordsCurrent() > 0
+     * 
      * @return return the secret word the manager picked.
      */
     public String getSecretWord() {
         if (activeDict.size() == 0) {
             throw new IllegalStateException("active dictionary must have length 1 or more");
         }
-        int index = (int)(Math.random()*(activeDict.size()));
+
+        int index = (int) (Math.random() * (activeDict.size()));
         return activeDict.get(index);
     }
 
     /*
-     * Converts families into comparable objects with their pattern and 
+     * Converts families into comparable objects with their pattern and
      * amount of associated words as variables.
      */
     private class FamilyChooser implements Comparable<FamilyChooser> {
         private String pattern;
         private int wordCount;
 
+        /*
+         * construct a new FamilyChooser object. wordCount is the amount of words
+         * in the pattern's family
+         */
         public FamilyChooser(String pattern, int wordCount) {
             this.pattern = pattern;
             this.wordCount = wordCount;
         }
 
+        /*
+         * return the pattern of this FamilyChooser
+         */
         public String getPattern() {
             return pattern;
         }
 
-        
+        /*
+         * override of compareTo
+         * sorts first by amount of words (more words take priority),
+         * then by letters revealed (less reveals takes priority),
+         * then by lexicographically comparing the patterns.
+         */
         @Override
         public int compareTo(FamilyChooser o) {
+            // first priority: amount of words
             if (wordCount != o.wordCount) {
                 return o.wordCount - wordCount;
             } else if (countDashes(pattern) != countDashes(o.pattern)) {
@@ -343,6 +382,9 @@ public class HangmanManager {
             }
         }
 
+        /*
+         * return the number of dashes (wildcards) in the given pattern, pat
+         */
         private int countDashes(String pat) {
             int count = 0;
             for (int i = 0; i < pat.length(); i++) {
@@ -352,6 +394,6 @@ public class HangmanManager {
             }
             return count;
         }
-        
+
     }
 }

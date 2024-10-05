@@ -207,7 +207,7 @@ public class HangmanManager {
         currPattern = new StringBuilder(chooseList(families));
         activeDict = new ArrayList<>(families.get(currPattern.toString()));
         // convert families to correct return type
-        return convertToStrInt(families);
+        return convertToInt(families);
     }
 
     /*
@@ -311,7 +311,7 @@ public class HangmanManager {
      * to
      * how many words were in the key's arraylist
      */
-    private TreeMap<String, Integer> convertToStrInt(TreeMap<String, ArrayList<String>> families) { // TODO STYLE
+    private TreeMap<String, Integer> convertToInt(TreeMap<String, ArrayList<String>> families) {
         TreeMap<String, Integer> result = new TreeMap<>();
         Set<String> keys = families.keySet();
         for (String key : keys) {

@@ -23,23 +23,24 @@ import java.util.NoSuchElementException;
 public class LL314<E> implements IList<E> {
     // CS314 students. Add you instance variables here.
     // You decide what instance variables to use.
-    // Must adhere to assignment requirements. 
+    // Must adhere to assignment requirements.
     // No ArrayLists or Java LinkedLists.
     private DoubleListNode<E> HEADER;
     private int size;
-    
+
     // CS314 students, add constructors here:
-    public LL314(){
+    public LL314() {
         HEADER = new DoubleListNode<E>(HEADER, null, HEADER);
     }
 
-    private void moveToIndex(DoubleListNode<E> tracer, int pos){
+    private void moveToIndex(DoubleListNode<E> tracer, int pos) {
         for (int i = 0; i < pos; i++) {
             tracer = tracer.next;
         }
     }
-    
+
     // CS314 students, add methods here:
+
     @Override
     public void add(E item) {
         DoubleListNode<E> newNode = new DoubleListNode<>(HEADER.prev, item, HEADER);
@@ -47,58 +48,65 @@ public class LL314<E> implements IList<E> {
         HEADER.prev = newNode;
         size++;
     }
-    
+
     @Override
     public void insert(int pos, E item) {
-        DoubleListNode<E> tracer = HEADER;
+        if (pos >= size || pos < 0) {
+            throw new IndexOutOfBoundsException("insert: position out of bounds");
+        }
+
+        DoubleListNode<E> tracer = HEADER.next;
         moveToIndex(tracer, pos);
         DoubleListNode<E> newNode = new DoubleListNode<>(tracer, item, tracer.next);
         tracer.next = newNode;
         tracer.next.prev = newNode;
-
+        size++;
     }
-    
+
     @Override
     public E set(int pos, E item) {
-        if (pos >= size) {
+        if (pos >= size || pos < 0) {
             throw new IndexOutOfBoundsException("set: position out of bounds");
         }
+
         DoubleListNode<E> tracer = HEADER.next;
         moveToIndex(tracer, pos);
+
         E result = tracer.data;
         tracer.data = item;
         return result;
     }
-    
+
     @Override
     public E get(int pos) {
-        if (pos >= size) {
+        if (pos >= size || pos < 0) {
             throw new IndexOutOfBoundsException("get: position out of bounds");
         }
-        
+
         DoubleListNode<E> tracer = HEADER.next;
         moveToIndex(tracer, pos);
         return tracer.data;
     }
-    
+
     @Override
     public E remove(int pos) {
-        if (pos >= size) {
+        if (pos >= size || pos < 0) {
             throw new IndexOutOfBoundsException("remove: position out of bounds");
         }
 
         DoubleListNode<E> tracer = HEADER.next;
         moveToIndex(tracer, pos);
+
         tracer.prev.next = tracer.next;
         tracer.next.prev = tracer.prev;
         size--;
         return tracer.data;
-        //TODO garbage collector
+        // TODO garbage collector
     }
-    
+
     @Override
     public boolean remove(E obj) {
-        //TODO efficiency
+        // TODO efficiency
         DoubleListNode<E> tracer = HEADER.next;
         for (int i = 0; i < size; i++) {
             if (tracer.data.equals(obj)) {
@@ -108,15 +116,19 @@ public class LL314<E> implements IList<E> {
         }
         return false;
     }
-    
+
     @Override
     public IList<E> getSubList(int start, int stop) {
-        //TODO in bounds
-        //meh idk if this method works
+        if (start >= size || start < 0 || stop >= size || stop < 0 || stop < start) {
+            throw new IllegalArgumentException("getSubList: arguements must be in bounds " +
+                                                "and stop > start");
+        }
+        // meh idk if this method works
+        //TODO check if it works stop = start
         LL314<E> result = new LL314<>();
         DoubleListNode<E> tracer = HEADER.next;
         moveToIndex(tracer, start);
-        for (int i = start; i < stop; i++) {
+        for (int i = start; i <= stop; i++) {
             result.add(tracer.data);
             tracer = tracer.next;
         }
@@ -127,7 +139,7 @@ public class LL314<E> implements IList<E> {
     public int size() {
         return size;
     }
-    
+
     @Override
     public int indexOf(E item) {
         DoubleListNode<E> tracer = HEADER.next;
@@ -141,12 +153,13 @@ public class LL314<E> implements IList<E> {
 
     @Override
     public int indexOf(E item, int pos) {
-        if (pos >= size) {
+        if (pos >= size || pos < 0) {
             throw new IndexOutOfBoundsException("indexOf: position out of bounds");
         }
 
         DoubleListNode<E> tracer = HEADER.next;
         moveToIndex(tracer, pos);
+
         for (int i = pos; i < size; i++) {
             if (tracer.data.equals(item)) {
                 return i;
@@ -158,21 +171,58 @@ public class LL314<E> implements IList<E> {
 
     @Override
     public void makeEmpty() {
-        //TODO WHAT
+        // TODO WHAT
         HEADER.next = HEADER;
         HEADER.prev = HEADER;
     }
-    
-    @Override
-    public Iterator<E> iterator() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iterator'");
-    }
+
     
     @Override
     public void removeRange(int start, int stop) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeRange'");
+        // TODO bounds and garbage collector
+        // size
+        DoubleListNode<E> first = HEADER.next;
+        DoubleListNode<E> last = HEADER.next;
+        moveToIndex(first, start);
+        moveToIndex(last, stop);
+        first.prev.next = last.next;
+        last.next.prev = first.prev;
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        return new LLIterator();
+    }
+
+    private class LLIterator implements Iterator<E> {
+
+        private DoubleListNode<E> nodeWithNext;
+        private int removeIndex;
+        private boolean removeOk;
+
+        public LLIterator() {
+            nodeWithNext = HEADER;
+            removeIndex = -1;
+            removeOk = false;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return nodeWithNext.next.data != null;
+        }
+
+        @Override
+        public E next() {
+            if (!hasNext) {
+                
+            }
+        }
+
+        @Override
+        public void remove() {
+
+        }
+        
     }
 
     /**
@@ -196,6 +246,7 @@ public class LL314<E> implements IList<E> {
      * @param item the data to add to the end of this list
      */
     public void addLast(E item) {
+        add(item);
     }
 
     /**
@@ -206,7 +257,10 @@ public class LL314<E> implements IList<E> {
      * @return the old first element of this list
      */
     public E removeFirst() {
-        return null;
+        // if size is 0
+        E result = HEADER.next.data;
+        remove(0);
+        return result;
     }
 
     /**
@@ -217,11 +271,10 @@ public class LL314<E> implements IList<E> {
      * @return the old last element of this list
      */
     public E removeLast() {
-        return null;
+        E result = HEADER.prev.data;
+        remove(size - 1);
+        return result;
     }
-
-    
-
 
     /**
      * A class that represents a node to be used in a linked list.
@@ -244,9 +297,12 @@ public class LL314<E> implements IList<E> {
 
         /**
          * default constructor.
-         * <br>pre: none
-         * <br>post: data = null, next = null, prev = null
-         * <br>O(1)
+         * <br>
+         * pre: none
+         * <br>
+         * post: data = null, next = null, prev = null
+         * <br>
+         * O(1)
          */
         public DoubleListNode() {
             this(null, null, null);
@@ -255,17 +311,21 @@ public class LL314<E> implements IList<E> {
         /**
          * create a DoubleListNode that holds the specified data
          * and refers to the specified next and previous elements.
-         * <br>pre: none
-         * <br>post: this.data = data, this.next = next, this.prev = prev
-         * <br>O(1)
+         * <br>
+         * pre: none
+         * <br>
+         * post: this.data = data, this.next = next, this.prev = prev
+         * <br>
+         * O(1)
+         * 
          * @param prev the previous node
-         * @param data the  data this DoubleListNode should hold
+         * @param data the data this DoubleListNode should hold
          * @param next the next node
          */
         public DoubleListNode(DoubleListNode<E> prev, E data, DoubleListNode<E> next) {
             this.prev = prev;
             this.data = data;
-            this.next = next;    
+            this.next = next;
         }
     }
 

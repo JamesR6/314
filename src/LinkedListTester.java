@@ -1,12 +1,12 @@
 /*  Student information for assignment:
  *
- *  On my honor, <NAME>, this programming assignment is my own work
+ *  On my honor, JP Reeves, this programming assignment is my own work
  *  and I have not provided this code to any other student.
  *
- *  Name:
- *  email address:
- *  UTEID:
- *  Number of slip days used on this assignment:
+ *  Name: JP Reeves
+ *  email address: jpascualsr06@gmail.com
+ *  UTEID: jsr3699
+ *  Number of slip days used on this assignment: 0
  */
 
 /* Experiment results. CS314 students, place your experiment

@@ -8,12 +8,8 @@
  */
 
 /* 
- * TODO: check everything (adjust size, syntax, logic, test cases)
- * TODO: Test the code
- * TODO: BIG O of each method
- * TODO: Method Headers
+ * TODO: test cases
  * TODO: Style
- * TODO: use iterator for indexOf stuff??
  */
 
 import java.util.Iterator;
@@ -59,7 +55,6 @@ public class LL314<E> implements IList<E> {
         size++;
     }
 
-    // TODO Should you be able to insert at the end
     /*
      * inserts item so that it takes the index pos
      * pre: item != null, pos in bounds 0 to size - 1
@@ -72,9 +67,11 @@ public class LL314<E> implements IList<E> {
             throw new IndexOutOfBoundsException("insert: position out of bounds");
         }
 
+        //add to end for efficiency
         if (pos == size) {
             add(item);
         } else {
+            //find place to insert and manipulate pointers
             DoubleListNode<E> tracer = moveToIndex(pos);
             DoubleListNode<E> newNode = new DoubleListNode<>(tracer.prev, item, tracer);
             newNode.prev.next = newNode;
@@ -134,9 +131,9 @@ public class LL314<E> implements IList<E> {
 
         tracer.prev.next = tracer.next;
         tracer.next.prev = tracer.prev;
+
         size--;
         return tracer.data;
-        // TODO garbage collector
     }
 
     /*
@@ -148,11 +145,13 @@ public class LL314<E> implements IList<E> {
      */
     @Override
     public boolean remove(E obj) {
-        // TODO efficiency
         DoubleListNode<E> tracer = HEADER.next;
         for (int i = 0; i < size; i++) {
             if (tracer.data.equals(obj)) {
-                remove(i);
+                //manipulate pointers around element when obj is found
+                tracer.prev.next = tracer.next;
+                tracer.next.prev = tracer.prev;
+                size--;
                 return true;
             }
             tracer = tracer.next;
@@ -164,7 +163,7 @@ public class LL314<E> implements IList<E> {
      * return a new LL314 object of index start to stop - 1
      * pre: both start and stop in bounds 0 to size - 1
      * post: return a new LL314 object of index start to stop - 1
-     * O(TODO)
+     * O(N)
      */
     @Override
     public IList<E> getSubList(int start, int stop) {
@@ -200,7 +199,6 @@ public class LL314<E> implements IList<E> {
      */
     @Override
     public int indexOf(E item) {
-        //TODO efficiency
         DoubleListNode<E> tracer = HEADER.next;
         for (int i = 0; i < size; i++) {
             if (tracer.data.equals(item)) {
@@ -215,15 +213,15 @@ public class LL314<E> implements IList<E> {
      * return the first index of item starting at position pos
      * pre: pos in bounds 0 to size - 1
      * post: return the first index of item starting at pos
-     * O(TODO)
+     * O(N)
      */
     @Override
     public int indexOf(E item, int pos) {
-        //TODO efficiency
         if (pos >= size || pos < 0) {
             throw new IndexOutOfBoundsException("indexOf: position out of bounds");
         }
 
+        //tracer moves to start at index pos
         DoubleListNode<E> tracer = moveToIndex(pos);
 
         for (int i = pos; i < size; i++) {
@@ -243,7 +241,6 @@ public class LL314<E> implements IList<E> {
      */
     @Override
     public void makeEmpty() {
-        // TODO WHAT
         HEADER.next = HEADER;
         HEADER.prev = HEADER;
         size = 0;
@@ -253,19 +250,23 @@ public class LL314<E> implements IList<E> {
      * return a string representation of linked list
      * format: all data between square brackets with a comma between
      * each item and a space after each comma
-     * O(TODO)
+     * O(N)
      */
     @Override
     public String toString() {
         if (size == 0) {
             return "[]";
         }
+
         Iterator<E> lit = iterator();
         StringBuilder result = new StringBuilder("[" + lit.next());
+
+        //add every element with formatting
         while (lit.hasNext()) {
             result.append(", " + lit.next());
         }
         result.append("]");
+
         return result.toString();
     }
 
@@ -281,10 +282,10 @@ public class LL314<E> implements IList<E> {
             throw new IndexOutOfBoundsException("removeRange: bounds out of bounds");
         }
 
-        // TODO garbage collector
         DoubleListNode<E> first = moveToIndex(start);
         DoubleListNode<E> last = moveToIndex(stop);
 
+        //manipulate pointers around the removed range
         first.prev.next = last;
         last.prev = first.prev;
 
@@ -301,15 +302,19 @@ public class LL314<E> implements IList<E> {
      */
     @Override
     public boolean equals(Object other) {
+        //incomparable lists check
         if (other == null || !(other instanceof IList)) {
             return false;
         }
 
+        //TODO iterator efficiency
+
+        //cast to IList after checking instanceof
         IList<E> o = (IList<E>) other;
+
         if (size() != o.size()) {
             return false;
         }
-
         for (int i = 0; i < size; i++) {
             if (!o.get(i).equals(get(i))) {
                 return false;
@@ -329,7 +334,6 @@ public class LL314<E> implements IList<E> {
 
     /*
      * iterator class for LL314
-     * TODO O(1)
      */
     private class LLIterator implements Iterator<E> {
 
@@ -388,6 +392,7 @@ public class LL314<E> implements IList<E> {
             //We know this node exists because removeOk is true
             DoubleListNode<E> rmNode = nodeWithNext.prev;
 
+            //manipulate pointers and adjust variables
             rmNode.prev.next = rmNode.next;
             rmNode.next.prev = rmNode.prev;
             size--;
@@ -401,7 +406,7 @@ public class LL314<E> implements IList<E> {
      * post: size() = old size() + 1, get(0) = item
      * 
      * @param item the data to add to the front of this list
-     *             O(TODO)
+     * O(1)
      */
     public void addFirst(E item) {
         DoubleListNode<E> newNode = new DoubleListNode<>(HEADER, item, HEADER.next);
@@ -416,7 +421,7 @@ public class LL314<E> implements IList<E> {
      * post: size() = old size() + 1, get(size() -1) = item
      * 
      * @param item the data to add to the end of this list
-     *             O(TODO)
+     * O(1)
      */
     public void addLast(E item) {
         add(item);
@@ -428,7 +433,7 @@ public class LL314<E> implements IList<E> {
      * post: size() = old size() - 1
      * 
      * @return the old first element of this list
-     *         O(TODO)
+     * O(1)
      */
     public E removeFirst() {
         if (size == 0) {
@@ -446,7 +451,7 @@ public class LL314<E> implements IList<E> {
      * post: size() = old size() - 1
      * 
      * @return the old last element of this list
-     *         O(TODO)
+     * O(1)
      */
     public E removeLast() {
         if (size == 0) {

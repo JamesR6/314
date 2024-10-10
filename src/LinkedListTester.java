@@ -14,7 +14,6 @@
  *  
  */
 
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
@@ -30,8 +29,7 @@ public class LinkedListTester {
         spring2021StressTests();
         itRemoveStressTests();
 
-
-        //CS314 students. Add your tests here:
+        // CS314 students. Add your tests here:
 
         // CS314 Students:
         // uncomment the following line to run tests comparing
@@ -40,7 +38,7 @@ public class LinkedListTester {
     }
 
     /*
-     * Runs very basic tests on the LinkedList class for 
+     * Runs very basic tests on the LinkedList class for
      * CS314 assignment 4.
      */
     private static void basicTests() {
@@ -62,7 +60,7 @@ public class LinkedListTester {
         if (list.get(0).equals("A")) {
             System.out.println("Passed test 0.1");
         } else {
-            System.out.println("Failed test 0.1"); 
+            System.out.println("Failed test 0.1");
         }
 
         // test 0.2
@@ -70,7 +68,7 @@ public class LinkedListTester {
         if (list.size() == 1) {
             System.out.println("Passed test 0.2");
         } else {
-            System.out.println("Failed test 0.2"); 
+            System.out.println("Failed test 0.2");
         }
 
         // test 0.3
@@ -79,7 +77,7 @@ public class LinkedListTester {
         if (removed.equals("A")) {
             System.out.println("Passed test 0.31");
         } else {
-            System.out.println("Failed test 0.31"); 
+            System.out.println("Failed test 0.31");
         }
 
         System.out.println("\nTest 0.31: toString after remove");
@@ -88,7 +86,7 @@ public class LinkedListTester {
         if (list.toString().equals("[]")) {
             System.out.println("Passed test 0.3");
         } else {
-            System.out.println("Failed test 0.3");  
+            System.out.println("Failed test 0.3");
         }
 
         // test 0.4
@@ -96,7 +94,7 @@ public class LinkedListTester {
         if (list.size() == 0) {
             System.out.println("Passed test 0.4");
         } else {
-            System.out.println("Failed test 0.4"); 
+            System.out.println("Failed test 0.4");
         }
 
         // test 0.5
@@ -106,7 +104,7 @@ public class LinkedListTester {
         if (list.toString().equals("[A, B]")) {
             System.out.println("Passed test 0.5");
         } else {
-            System.out.println("Failed test 0.5");  
+            System.out.println("Failed test 0.5");
         }
 
         // test 0.6
@@ -135,64 +133,62 @@ public class LinkedListTester {
             System.out.println("Failed test 0.8");
         }
 
-
         // test 1
         System.out.println("\nTest 1: Adding at end");
         list = new LL314<>();
         list.add("A");
         Object[] actual = toArray(list);
-        Object[] expected = new Object[] {"A"};
+        Object[] expected = new Object[] { "A" };
         System.out.println("Expected result: " + Arrays.toString(expected));
-        System.out.println("Actual result: " + Arrays.toString(actual));      
+        System.out.println("Actual result: " + Arrays.toString(actual));
         if (arraysSame(actual, expected)) {
             System.out.println("Passed test 1");
         } else {
             System.out.println("Failed test 1");
         }
 
-
         // test 2
         System.out.println("\nTest 2: making empty");
         list.makeEmpty();
         actual = toArray(list);
         expected = new Object[] {};
-        System.out.println( "Expected result: " + Arrays.toString(expected) );
-        System.out.println( "Actual result: " + Arrays.toString(actual) );  
+        System.out.println("Expected result: " + Arrays.toString(expected));
+        System.out.println("Actual result: " + Arrays.toString(actual));
         if (arraysSame(actual, expected)) {
             System.out.println("Passed test 2");
         } else {
             System.out.println("Failed test 2");
         }
 
-
         // test 3
         System.out.println("\nTest 3: Adding at pos 0 in empty list");
         list.insert(0, "A");
         actual = toArray(list);
-        expected = new Object[] {"A"};
-        System.out.println( "Expected result: " + Arrays.toString(expected) );
-        System.out.println( "Actual result: " + Arrays.toString(actual) );          
+        expected = new Object[] { "A" };
+        System.out.println("Expected result: " + Arrays.toString(expected));
+        System.out.println("Actual result: " + Arrays.toString(actual));
         if (arraysSame(actual, expected)) {
             System.out.println("Passed test 3");
         } else {
             System.out.println("Failed test 3");
         }
 
-
-        //test 4
+        // test 4
         System.out.println("\nTest 4: Adding at front");
         list = new LL314<>();
         list.addFirst("A");
+
+        System.out.println(list.toString());
+
         actual = toArray(list);
-        expected = new Object[] {"A"};
+        expected = new Object[] { "A" };
         System.out.println("Expected result: " + Arrays.toString(expected));
-        System.out.println("Actual result: " + Arrays.toString(actual));  
+        System.out.println("Actual result: " + Arrays.toString(actual));
         if (arraysSame(actual, expected)) {
             System.out.println("Passed test 4");
         } else {
             System.out.println("Failed test 4");
         }
-
 
         // test 5
         System.out.println("\nTest 5: Removing from front");
@@ -200,28 +196,26 @@ public class LinkedListTester {
         actual = toArray(list);
         expected = new Object[] {};
         System.out.println("Expected result: " + Arrays.toString(expected));
-        System.out.println("Actual result: " + Arrays.toString(actual));  
+        System.out.println("Actual result: " + Arrays.toString(actual));
         if (arraysSame(actual, expected)) {
             System.out.println("Passed test 5");
         } else {
             System.out.println("Failed test 5");
         }
 
-
         // test 6
         list = new LL314<>();
         System.out.println("\nTest 6: Adding at end");
         list.addLast("A");
         actual = toArray(list);
-        expected = new Object[] {"A"};
+        expected = new Object[] { "A" };
         System.out.println("Expected result: " + Arrays.toString(expected));
-        System.out.println("Actual result: " + Arrays.toString(actual));  
+        System.out.println("Actual result: " + Arrays.toString(actual));
         if (arraysSame(actual, expected)) {
             System.out.println("Passed test 6");
         } else {
             System.out.println("Failed test 6");
         }
-
 
         // test 7
         System.out.println("\nTest 7: Removing from back");
@@ -229,7 +223,7 @@ public class LinkedListTester {
         actual = toArray(list);
         expected = new Object[] {};
         System.out.println("Expected result: " + Arrays.toString(expected));
-        System.out.println("Actual result: " + Arrays.toString(actual));  
+        System.out.println("Actual result: " + Arrays.toString(actual));
         if (arraysSame(actual, expected)) {
             System.out.println("Passed test 7");
         } else {
@@ -243,15 +237,14 @@ public class LinkedListTester {
         list.add("C");
         list.insert(1, "B");
         actual = toArray(list);
-        expected = new Object[] {"A", "B", "C"};
-        System.out.println( "Expected result: " + Arrays.toString(expected) );
-        System.out.println( "Actual result: " + Arrays.toString(actual) );  
+        expected = new Object[] { "A", "B", "C" };
+        System.out.println("Expected result: " + Arrays.toString(expected));
+        System.out.println("Actual result: " + Arrays.toString(actual));
         if (arraysSame(actual, expected)) {
             System.out.println("Passed test 8");
         } else {
             System.out.println("Failed test 8");
         }
-
 
         // test 9
         System.out.println("\nTest 9: Setting");
@@ -261,10 +254,10 @@ public class LinkedListTester {
         list.add("C");
         String oldValue = list.set(1, "B");
         actual = toArray(list);
-        expected = new Object[] {"A", "B", "C"};
+        expected = new Object[] { "A", "B", "C" };
         System.out.println("Expected result: " + Arrays.toString(expected));
-        System.out.println("Actual result: " + Arrays.toString(actual));  
-        if (arraysSame(actual, expected) ) {
+        System.out.println("Actual result: " + Arrays.toString(actual));
+        if (arraysSame(actual, expected)) {
             System.out.println("Passed test 9.1");
         } else {
             System.out.println("Failed test 9.1");
@@ -275,7 +268,6 @@ public class LinkedListTester {
             System.out.println("Failed test 9.2");
         }
 
-
         // test 10
         System.out.println("\nTest 10: Removing");
         list = new LL314<>();
@@ -284,11 +276,11 @@ public class LinkedListTester {
         list.add("C");
         list.add("D");
         list.remove(0);
-        list.remove( list.size() - 1 );
+        list.remove(list.size() - 1);
         actual = toArray(list);
-        expected = new Object[] {"B", "C"};
+        expected = new Object[] { "B", "C" };
         System.out.println("Expected result: " + Arrays.toString(expected));
-        System.out.println("Actual result: " + Arrays.toString(actual));  
+        System.out.println("Actual result: " + Arrays.toString(actual));
         if (arraysSame(actual, expected)) {
             System.out.println("Passed test 10");
         } else {
@@ -296,15 +288,14 @@ public class LinkedListTester {
         }
     }
 
-
     // constants for the maximum length of the lists used in the tests as well as
     // the number of times each method should be tested
     private static final int MAX_LENGTH = 15;
     private static final int NUM_TESTS_PER_METHOD = 50;
 
     // From Spring 2021 students:
-    // Tests use randomness to find edge cases, 
-    // so the test numbering is irrelevant, each test being different every time the 
+    // Tests use randomness to find edge cases,
+    // so the test numbering is irrelevant, each test being different every time the
     // program is run.
     private static void spring2021StressTests() {
         System.out.println("\n****** SPRING 2021 RANDOM STRESS TESTS *******\n");
@@ -1014,7 +1005,6 @@ public class LinkedListTester {
                 + numTestsFailed + " | FAILED METHODS: " + failedTests.toString() + " |");
     }
 
-
     private static LL314<String> newResetedTestList(LL314<String> a) {
         a.makeEmpty();
         int random = (int) (Math.random() * MAX_LENGTH) + 1;
@@ -1055,9 +1045,9 @@ public class LinkedListTester {
 
     private static void itRemoveStressTests() {
         /*
-         *  Test that the iterator remove is O(1).
-         *  Total time to remove half of list should roughly double
-         *  when size of list is doubled.
+         * Test that the iterator remove is O(1).
+         * Total time to remove half of list should roughly double
+         * when size of list is doubled.
          */
         final int SEED = 19431215;
         Random r = new Random(SEED);
@@ -1067,7 +1057,7 @@ public class LinkedListTester {
         int n = INITIAL_N;
         for (int i = 0; i < NUM_DOUBLINGS; i++) {
             LL314<Double> list = new LL314<>();
-            for (int j =0; j < n; j++) {
+            for (int j = 0; j < n; j++) {
                 list.add(r.nextDouble());
             }
             Iterator<Double> it = list.iterator();
@@ -1076,15 +1066,15 @@ public class LinkedListTester {
                 it.next();
             }
             st.start();
-            while(it.hasNext()) {
+            while (it.hasNext()) {
                 it.next();
                 it.remove();
             }
             st.stop();
-            System.out.println("number of elements = " + n 
+            System.out.println("number of elements = " + n
                     + " time to remove half of list with iterator = " + st);
             n *= 2;
-        }   
+        }
     }
 
     // Convert elements of list to an array. Uses the list
@@ -1093,7 +1083,7 @@ public class LinkedListTester {
         Object[] result = new Object[list.size()];
         Iterator<String> it = list.iterator();
         int index = 0;
-        while(it.hasNext()){
+        while (it.hasNext()) {
             result[index] = it.next();
             index++;
         }
@@ -1101,17 +1091,17 @@ public class LinkedListTester {
     }
 
     // pre: none
-    // post: return true if the 
-    private static boolean arraysSame(Object[] one, Object[] two)  {
+    // post: return true if the
+    private static boolean arraysSame(Object[] one, Object[] two) {
         return Arrays.equals(one, two);
     }
-
 
     private static final int NUM_DOUBLINGS_OF_N = 5;
     private static final int NUM_REPEATS_OF_TEST = 100;
 
-    // A method to be run to compare the LinkedList you are completing and the Java ArrayList class
-    private static void comparison(){
+    // A method to be run to compare the LinkedList you are completing and the Java
+    // ArrayList class
+    private static void comparison() {
         Stopwatch s = new Stopwatch();
 
         int initialN = 30000;
@@ -1148,8 +1138,8 @@ public class LinkedListTester {
     // If the students had implemented the Java list interface there
     // could be a single method. Also we could use function objects to
     // reduce the awful repetition of code.
-    private static void addEndArrayList(Stopwatch s, int initialN, int numTests){
-        double[] totalTimes = new double[numTests];        
+    private static void addEndArrayList(Stopwatch s, int initialN, int numTests) {
+        double[] totalTimes = new double[numTests];
         for (int t = 0; t < NUM_REPEATS_OF_TEST; t++) {
             int n = initialN;
             for (int i = 0; i < numTests; i++) {
@@ -1178,8 +1168,8 @@ public class LinkedListTester {
         System.out.println();
     }
 
-    private static void addEndLinkedList(Stopwatch s, int initialN, int numTests){
-        double[] totalTimes = new double[numTests];        
+    private static void addEndLinkedList(Stopwatch s, int initialN, int numTests) {
+        double[] totalTimes = new double[numTests];
         for (int t = 0; t < NUM_REPEATS_OF_TEST; t++) {
             int n = initialN;
             for (int i = 0; i < numTests; i++) {
@@ -1196,8 +1186,8 @@ public class LinkedListTester {
         showResults("Adding at end: LinkedList", totalTimes, initialN);
     }
 
-    private static void addFrontArrayList(Stopwatch s, int initialN, int numTests){ 
-        double[] totalTimes = new double[numTests];        
+    private static void addFrontArrayList(Stopwatch s, int initialN, int numTests) {
+        double[] totalTimes = new double[numTests];
         for (int t = 0; t < NUM_REPEATS_OF_TEST; t++) {
             int n = initialN;
             for (int i = 0; i < numTests; i++) {
@@ -1214,8 +1204,8 @@ public class LinkedListTester {
         showResults("Adding at front: ArrayList", totalTimes, initialN);
     }
 
-    private static void addFrontLinkedList(Stopwatch s, int initialN, int numTests){
-        double[] totalTimes = new double[numTests];        
+    private static void addFrontLinkedList(Stopwatch s, int initialN, int numTests) {
+        double[] totalTimes = new double[numTests];
         for (int t = 0; t < NUM_REPEATS_OF_TEST; t++) {
             int n = initialN;
             for (int i = 0; i < numTests; i++) {
@@ -1232,13 +1222,13 @@ public class LinkedListTester {
         showResults("Adding at front: LinkedList", totalTimes, initialN);
     }
 
-    private static void removeFrontArrayList(Stopwatch s, int initialN, int numTests){     
-        double[] totalTimes = new double[numTests];        
+    private static void removeFrontArrayList(Stopwatch s, int initialN, int numTests) {
+        double[] totalTimes = new double[numTests];
         for (int t = 0; t < NUM_REPEATS_OF_TEST; t++) {
             int n = initialN;
             for (int i = 0; i < numTests; i++) {
                 ArrayList<String> javaList = new ArrayList<>();
-                for(int j = 0; j < n; j++)
+                for (int j = 0; j < n; j++)
                     javaList.add(j + "");
                 s.start();
                 while (!javaList.isEmpty()) {
@@ -1252,10 +1242,10 @@ public class LinkedListTester {
         showResults("Removing from front: ArrayList", totalTimes, initialN);
     }
 
-    private static void removeFrontLinkedList(Stopwatch s, int initialN, int numTests){
-        double[] totalTimes = new double[numTests];        
+    private static void removeFrontLinkedList(Stopwatch s, int initialN, int numTests) {
+        double[] totalTimes = new double[numTests];
         for (int t = 0; t < NUM_REPEATS_OF_TEST; t++) {
-            int n = initialN;    
+            int n = initialN;
             for (int i = 0; i < numTests; i++) {
                 LL314<String> studentList = new LL314<>();
                 for (int j = 0; j < n; j++) {
@@ -1273,8 +1263,8 @@ public class LinkedListTester {
         showResults("removing from front: LinkedList", totalTimes, initialN);
     }
 
-    private static void getRandomArrayList(Stopwatch s, int initialN, int numTests){
-        double[] totalTimes = new double[numTests];        
+    private static void getRandomArrayList(Stopwatch s, int initialN, int numTests) {
+        double[] totalTimes = new double[numTests];
         for (int t = 0; t < NUM_REPEATS_OF_TEST; t++) {
             int n = initialN;
             int total = 0;
@@ -1296,8 +1286,8 @@ public class LinkedListTester {
         showResults("Getting random: ArrayList", totalTimes, initialN);
     }
 
-    private static void getRandomLinkedList(Stopwatch s, int initialN, int numTests){
-        double[] totalTimes = new double[numTests];     
+    private static void getRandomLinkedList(Stopwatch s, int initialN, int numTests) {
+        double[] totalTimes = new double[numTests];
         for (int t = 0; t < NUM_REPEATS_OF_TEST; t++) {
             int n = initialN;
             Random r = new Random();
@@ -1319,12 +1309,12 @@ public class LinkedListTester {
         showResults("Getting random: LinkedList", totalTimes, initialN);
     }
 
-    private static void getAllArrayListUsingIterator(Stopwatch s, int initialN, int numTests){
+    private static void getAllArrayListUsingIterator(Stopwatch s, int initialN, int numTests) {
 
-        double[] totalTimes = new double[numTests];        
+        double[] totalTimes = new double[numTests];
         for (int t = 0; t < NUM_REPEATS_OF_TEST; t++) {
             int n = initialN;
-            for(int i = 0; i < numTests; i++){
+            for (int i = 0; i < numTests; i++) {
                 ArrayList<Integer> javaList = new ArrayList<>();
                 for (int j = 0; j < n; j++) {
                     javaList.add(j);
@@ -1334,7 +1324,7 @@ public class LinkedListTester {
                 int total = 0;
                 while (it.hasNext()) {
                     total += it.next();
-                }        
+                }
                 s.stop();
                 totalTimes[i] += s.time();
                 n *= 2;
@@ -1343,8 +1333,8 @@ public class LinkedListTester {
         showResults("Getting all using iterator: ArrayList", totalTimes, initialN);
     }
 
-    private static void getAllLinkedListUsingIterator(Stopwatch s, int initialN, int numTests){
-        double[] totalTimes = new double[numTests];        
+    private static void getAllLinkedListUsingIterator(Stopwatch s, int initialN, int numTests) {
+        double[] totalTimes = new double[numTests];
         for (int t = 0; t < NUM_REPEATS_OF_TEST; t++) {
             int n = initialN;
             for (int i = 0; i < numTests; i++) {
@@ -1366,8 +1356,8 @@ public class LinkedListTester {
         showResults("Getting all using iterator: LinkedList", totalTimes, initialN);
     }
 
-    private static void getAllArrayListUsingGetMethod(Stopwatch s, int initialN, int numTests){
-        double[] totalTimes = new double[numTests];        
+    private static void getAllArrayListUsingGetMethod(Stopwatch s, int initialN, int numTests) {
+        double[] totalTimes = new double[numTests];
         for (int t = 0; t < NUM_REPEATS_OF_TEST; t++) {
             int n = initialN;
             for (int i = 0; i < numTests; i++) {
@@ -1388,8 +1378,8 @@ public class LinkedListTester {
         showResults("Getting all using get method: ArrayList", totalTimes, initialN);
     }
 
-    private static void getAllLinkedListUsingGetMethod(Stopwatch s, int initialN, int numTests){
-        double[] totalTimes = new double[numTests];        
+    private static void getAllLinkedListUsingGetMethod(Stopwatch s, int initialN, int numTests) {
+        double[] totalTimes = new double[numTests];
         for (int t = 0; t < NUM_REPEATS_OF_TEST; t++) {
             int n = initialN;
             for (int i = 0; i < numTests; i++) {

@@ -56,7 +56,7 @@ public class LL314<E> implements IList<E> {
     //TODO Should you be able to insert at the end
     @Override
     public void insert(int pos, E item) {
-        if (pos >= size || pos < 0) {
+        if (pos > size || pos < 0) {
             throw new IndexOutOfBoundsException("insert: position out of bounds");
         }
 
@@ -180,14 +180,14 @@ public class LL314<E> implements IList<E> {
     @Override
     public String toString() {
         if (size == 0) {
-            return "[]   SIZE: 0";
+            return "[]";
         }
         Iterator<E> lit = iterator();
         StringBuilder result = new StringBuilder("[" + lit.next());
         while (lit.hasNext()) {
             result.append(", " + lit.next());
         }
-        result.append("]" + "   SIZE: " + size);
+        result.append("]");
         return result.toString();
     }
 
@@ -263,9 +263,10 @@ public class LL314<E> implements IList<E> {
      * @param item the data to add to the front of this list
      */
     public void addFirst(E item) {
-        DoubleListNode<E> add = new DoubleListNode<>(HEADER, item, HEADER.next);
-        add.next.prev = add;
-        add.prev.next = add;
+        DoubleListNode<E> newNode = new DoubleListNode<>(HEADER, item, HEADER.next);
+        newNode.next.prev = newNode;
+        newNode.prev.next = newNode;
+        size++;
     }
 
     /**

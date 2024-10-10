@@ -211,7 +211,7 @@ public class LL314<E> implements IList<E> {
 
     /*
      * return the first index of item starting at position pos
-     * pre: pos in bounds 0 to 
+     * pre: pos in bounds 0 to uhi
      */
     @Override
     public int indexOf(E item, int pos) {

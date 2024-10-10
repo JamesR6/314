@@ -8,7 +8,6 @@
  */
 
 /* 
- * TODO: write the code
  * TODO: check everything (adjust size, syntax, logic, test cases)
  * TODO: Test the code
  * TODO: BIG O of each method
@@ -29,12 +28,21 @@ public class LL314<E> implements IList<E> {
     private int size;
 
     // CS314 students, add constructors here:
+
+    /*
+     * return a new empty linked list
+     * O(1)
+     */
     public LL314() {
         HEADER = new DoubleListNode<E>();
         HEADER.next = HEADER;
         HEADER.prev = HEADER;
     }
 
+    /*
+     * helper method
+     * return the DoubleListNode at position pos
+     */
     private DoubleListNode<E> moveToIndex(int pos) {
         DoubleListNode<E> tracer = HEADER.next;
         for (int i = 0; i < pos; i++) {
@@ -45,8 +53,17 @@ public class LL314<E> implements IList<E> {
 
     // CS314 students, add methods here:
 
+    /*
+     * adds item to the end of this linked list
+     * pre: item != null
+     * post: item added and size increased
+     */
     @Override
     public void add(E item) {
+        if (item == null) {
+            throw new IllegalArgumentException("add: data can not be null");
+        }
+
         DoubleListNode<E> newNode = new DoubleListNode<>(HEADER.prev, item, HEADER);
         HEADER.prev.next = newNode;
         HEADER.prev = newNode;
@@ -54,6 +71,11 @@ public class LL314<E> implements IList<E> {
     }
 
     //TODO Should you be able to insert at the end
+    /*
+     * inserts item so that it takes the index pos
+     * pre: item != null, pos in bounds 0 to size - 1
+     * post: item added at pos and size increased
+     */
     @Override
     public void insert(int pos, E item) {
         if (pos > size || pos < 0) {
@@ -67,9 +89,14 @@ public class LL314<E> implements IList<E> {
         size++;
     }
 
+    /*
+     * replaces data at index pos with data item
+     * pre: item != null, pos in bounds 0 to size - 1
+     * post: return the data that was replaced
+     */
     @Override
     public E set(int pos, E item) {
-        if (pos >= size || pos < 0) {
+        if (pos >= size || pos < 0 || item == null) {
             throw new IndexOutOfBoundsException("set: position out of bounds");
         }
 
@@ -80,6 +107,11 @@ public class LL314<E> implements IList<E> {
         return result;
     }
 
+    /*
+     * return data from index pos
+     * pre: pos in bounds 0 to size - 1
+     * post: return data from index pos
+     */
     @Override
     public E get(int pos) {
         if (pos >= size || pos < 0) {
@@ -90,6 +122,11 @@ public class LL314<E> implements IList<E> {
         return tracer.data;
     }
 
+    /*
+     * removes index pos from this linked list
+     * pre: pos in bounds 0 to size - 1
+     * post: size decremented and index pos removed, return data of removed item
+     */
     @Override
     public E remove(int pos) {
         if (pos >= size || pos < 0) {
@@ -105,6 +142,12 @@ public class LL314<E> implements IList<E> {
         // TODO garbage collector
     }
 
+    /*
+     * removes the first instance of obj
+     * pre: none
+     * post: first instance of obj removed, return true if successful,
+     * false if no item to remove was found
+     */
     @Override
     public boolean remove(E obj) {
         // TODO efficiency
@@ -119,27 +162,41 @@ public class LL314<E> implements IList<E> {
         return false;
     }
 
+    /*
+     * return a new LL314 object of index start to stop - 1
+     * pre: both start and stop in bounds 0 to size - 1
+     * post: return a new LL314 object of index start to stop - 1
+     */
     @Override
     public IList<E> getSubList(int start, int stop) {
         if (start >= size || start < 0 || stop >= size || stop < 0 || stop < start) {
             throw new IllegalArgumentException("getSubList: arguements must be in bounds " +
                     "and stop > start");
         }
+
         LL314<E> result = new LL314<>();
         DoubleListNode<E> tracer = moveToIndex(start);
 
-        for (int i = start; i <= stop; i++) {
+        for (int i = start; i < stop; i++) {
             result.add(tracer.data);
             tracer = tracer.next;
         }
         return result;
     }
 
+    /*
+     * return size of linked list
+     */
     @Override
     public int size() {
         return size;
     }
 
+    /*
+     * return the first index of item
+     * pre: none
+     * post: return the first index of item
+     */
     @Override
     public int indexOf(E item) {
         DoubleListNode<E> tracer = HEADER.next;
@@ -152,6 +209,10 @@ public class LL314<E> implements IList<E> {
         return -1;
     }
 
+    /*
+     * return the first index of item starting at position pos
+     * pre: pos in bounds 0 to 
+     */
     @Override
     public int indexOf(E item, int pos) {
         if (pos >= size || pos < 0) {
@@ -201,10 +262,31 @@ public class LL314<E> implements IList<E> {
         DoubleListNode<E> first = moveToIndex(start);
         DoubleListNode<E> last = moveToIndex(stop);
         
-        first.prev.next = last.next;
-        last.next.prev = first.prev;
+        first.prev.next = last;
+        last.prev = first.prev;
 
-        size -= (stop - start + 1);
+        size -= (stop - start);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other.getClass() != getClass()) {
+            return false;
+        }
+        IList<E> o = (IList<E>) other;
+        if (o.size() == 0 && size == 0) {
+            return true;
+        }
+        
+        if (o.size() == size) {
+            for (int i = 0; i < size; i++) {
+                if (!o.get(i).equals(get(i))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     // -------------------------------------------------------------

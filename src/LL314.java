@@ -4,7 +4,7 @@
  * and I have not provided this code to any other student. 
  * UTEID: jsr3699
  * email address: jpascualsr06@gmail.com
- * Number of slip days I am using: 0
+ * Number of slip days I am using: 1
  */
 
 /* 
@@ -67,11 +67,11 @@ public class LL314<E> implements IList<E> {
             throw new IndexOutOfBoundsException("insert: position out of bounds");
         }
 
-        //add to end for efficiency
+        // add to end for efficiency
         if (pos == size) {
             add(item);
         } else {
-            //find place to insert and manipulate pointers
+            // find place to insert and manipulate pointers
             DoubleListNode<E> tracer = moveToIndex(pos);
             DoubleListNode<E> newNode = new DoubleListNode<>(tracer.prev, item, tracer);
             newNode.prev.next = newNode;
@@ -128,7 +128,6 @@ public class LL314<E> implements IList<E> {
         }
 
         DoubleListNode<E> tracer = moveToIndex(pos);
-
         tracer.prev.next = tracer.next;
         tracer.next.prev = tracer.prev;
 
@@ -148,7 +147,7 @@ public class LL314<E> implements IList<E> {
         DoubleListNode<E> tracer = HEADER.next;
         for (int i = 0; i < size; i++) {
             if (tracer.data.equals(obj)) {
-                //manipulate pointers around element when obj is found
+                // manipulate pointers around element when obj is found
                 tracer.prev.next = tracer.next;
                 tracer.next.prev = tracer.prev;
                 size--;
@@ -167,7 +166,7 @@ public class LL314<E> implements IList<E> {
      */
     @Override
     public IList<E> getSubList(int start, int stop) {
-        if (start >= size || start < 0 || stop >= size || stop < 0 || stop < start) {
+        if (start > size || start < 0 || stop > size || stop < 0 || stop < start) {
             throw new IllegalArgumentException("getSubList: arguements must be in bounds " +
                     "and stop > start");
         }
@@ -221,7 +220,7 @@ public class LL314<E> implements IList<E> {
             throw new IndexOutOfBoundsException("indexOf: position out of bounds");
         }
 
-        //tracer moves to start at index pos
+        // tracer moves to start at index pos
         DoubleListNode<E> tracer = moveToIndex(pos);
 
         for (int i = pos; i < size; i++) {
@@ -261,7 +260,7 @@ public class LL314<E> implements IList<E> {
         Iterator<E> lit = iterator();
         StringBuilder result = new StringBuilder("[" + lit.next());
 
-        //add every element with formatting
+        // add every element with formatting
         while (lit.hasNext()) {
             result.append(", " + lit.next());
         }
@@ -278,14 +277,14 @@ public class LL314<E> implements IList<E> {
      */
     @Override
     public void removeRange(int start, int stop) {
-        if (start < 0 || start >= size || stop < 0 || stop >= size || stop < start) {
+        if (start < 0 || start > size || stop < 0 || stop > size || stop < start) {
             throw new IndexOutOfBoundsException("removeRange: bounds out of bounds");
         }
 
         DoubleListNode<E> first = moveToIndex(start);
         DoubleListNode<E> last = moveToIndex(stop);
 
-        //manipulate pointers around the removed range
+        // manipulate pointers around the removed range
         first.prev.next = last;
         last.prev = first.prev;
 
@@ -302,14 +301,14 @@ public class LL314<E> implements IList<E> {
      */
     @Override
     public boolean equals(Object other) {
-        //incomparable lists check
+        // incomparable lists check
         if (other == null || !(other instanceof IList)) {
             return false;
         }
 
-        //TODO iterator efficiency
+        // TODO iterator efficiency
 
-        //cast to IList after checking instanceof
+        // cast to IList after checking instanceof
         IList<E> o = (IList<E>) other;
 
         if (size() != o.size()) {
@@ -389,10 +388,10 @@ public class LL314<E> implements IList<E> {
                 throw new IllegalStateException("remove method");
             }
 
-            //We know this node exists because removeOk is true
+            // We know this node exists because removeOk is true
             DoubleListNode<E> rmNode = nodeWithNext.prev;
 
-            //manipulate pointers and adjust variables
+            // manipulate pointers and adjust variables
             rmNode.prev.next = rmNode.next;
             rmNode.next.prev = rmNode.prev;
             size--;
@@ -406,7 +405,7 @@ public class LL314<E> implements IList<E> {
      * post: size() = old size() + 1, get(0) = item
      * 
      * @param item the data to add to the front of this list
-     * O(1)
+     *             O(1)
      */
     public void addFirst(E item) {
         DoubleListNode<E> newNode = new DoubleListNode<>(HEADER, item, HEADER.next);
@@ -421,7 +420,7 @@ public class LL314<E> implements IList<E> {
      * post: size() = old size() + 1, get(size() -1) = item
      * 
      * @param item the data to add to the end of this list
-     * O(1)
+     *             O(1)
      */
     public void addLast(E item) {
         add(item);
@@ -433,7 +432,7 @@ public class LL314<E> implements IList<E> {
      * post: size() = old size() - 1
      * 
      * @return the old first element of this list
-     * O(1)
+     *         O(1)
      */
     public E removeFirst() {
         if (size == 0) {
@@ -451,7 +450,7 @@ public class LL314<E> implements IList<E> {
      * post: size() = old size() - 1
      * 
      * @return the old last element of this list
-     * O(1)
+     *         O(1)
      */
     public E removeLast() {
         if (size == 0) {

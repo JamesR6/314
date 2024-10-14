@@ -7,11 +7,6 @@
  * Number of slip days I am using: 1
  */
 
-/* 
- * TODO: test cases
- * TODO: Style
- */
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -306,16 +301,17 @@ public class LL314<E> implements IList<E> {
             return false;
         }
 
-        // TODO iterator efficiency
-
         // cast to IList after checking instanceof
         IList<E> o = (IList<E>) other;
+
+        Iterator<E> LLit = this.iterator();
+        Iterator<E> OthIt = o.iterator();
 
         if (size() != o.size()) {
             return false;
         }
-        for (int i = 0; i < size; i++) {
-            if (!o.get(i).equals(get(i))) {
+        while (LLit.hasNext()) {
+            if (!LLit.next().equals(OthIt.next())) {
                 return false;
             }
         }

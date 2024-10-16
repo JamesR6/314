@@ -1,19 +1,15 @@
 /*  Student information for assignment:
  *
- *  On <MY|OUR> honor, <NAME1> and <NAME2), this programming assignment is <MY|OUR> own work
- *  and <I|WE> have not provided this code to any other student.
+ *  On MY honor, JP Reeves, this programming assignment is MY own work
+ *  and I have not provided this code to any other student.
  *
- *  Number of slip days used:
+ *  Number of slip days used: 0
  *
  *  Student 1 (Student whose Canvas account is being used)
- *  UTEID:
- *  email address:
- *  Grader name:
- *  Section number:
- *
- *  Student 2
- *  UTEID:
- *  email address:
+ *  UTEID: jsr3699
+ *  email address: jpascualsr06@gmail.com
+ *  Grader name: Eliza
+ *  Section number: 50529
  *
  */
 
@@ -36,9 +32,9 @@ public class RecursiveTester {
 
         // doListMnemonicsTests();
         // doCarpetTest();
-        doFlowOffMapTests();
+        // doFlowOffMapTests();
+        doFairTeamsTests();
         // doMazeTests();
-        // doFairTeamsTests();
         // studentTests();
     }
 

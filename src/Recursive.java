@@ -1,6 +1,6 @@
 /*  Student information for assignment:
  *
- *  On <MY|OUR> honor, James Reeves,
+ *  On MY honor, James Reeves,
  *  this programming assignment is MY own work
  *  and I have not provided this code to any other student.
  *
@@ -381,8 +381,77 @@ public class Recursive {
      *         ability. The return value will be greater than or equal to 0.
      */
     public static int minDifference(int numTeams, int[] abilities) {
-        return -1;
+        int teamDataColumns = 2;
+        int[][] teams = new int[numTeams][teamDataColumns];
+        return minDiffSolver(abilities, teams, 0);
     }
+
+    private static int minDiffSolver(int[] abilities, int[][] teams, int index) {
+        //teams is row(which team) and col(teamScore, numMembers)
+
+        //base case
+        if (index == teams.length && fullTeams(teams)) {
+            return minMax(teams);
+        }
+        if (index == teams.length && !fullTeams(teams)) {
+            return Integer.MAX_VALUE;
+        }
+
+        //recursive step
+        int best = Integer.MAX_VALUE;
+        for (int t = 0; t < teams.length; t++) {
+            adjustTeams(teams, t, abilities[index], false);
+            int compare = minDiffSolver(abilities, teams, index + 1);
+            if (compare < best) {
+                return minDiffSolver(abilities, teams, index + 1);
+            }
+            adjustTeams(teams, t, abilities[index], true);
+        }
+    }
+
+    private static int minMax(int[][] teams) {
+        final int teamScore = 0;
+
+        int min = teams[0][teamScore];
+        int max = teams[0][teamScore];
+
+        for (int i = 0; i < teams.length; i++) {
+            int currScore = teams[0][teamScore];
+            if (currScore < min) {
+                min = currScore;
+            } 
+            if (currScore > max) {
+                max = currScore;
+            }
+        }
+
+        return (max - min);
+    }
+
+    private static boolean fullTeams(int[][] teams) {
+        final int members = 1;
+        for (int i = 0; i < teams.length; i++) {
+            if (teams[i][members] == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static void adjustTeams(int[][] teams, int index, int ability, boolean removing) {
+        final int teamScore = 0;
+        final int numMembers = 1;
+
+        int member = 1;
+        if (removing) {
+            member = -1;
+            ability = -ability;
+        }
+        teams[index][teamScore] += ability;
+        teams[index][numMembers] += member;
+    }   
+
+    
 
     /**
      * Problem 8: Maze solver.
@@ -410,4 +479,6 @@ public class Recursive {
     public static int canEscapeMaze(char[][] rawMaze) {
         return -1;
     }
+
+    private static int mazeSolver(char[][] maze, )
 }

@@ -35,7 +35,7 @@ public class RecursiveTester {
         // doNextIsDoubleTests();
 
         // doListMnemonicsTests();
-        doCarpetTest();
+        // doCarpetTest();
         doFlowOffMapTests();
         // doMazeTests();
         // doFairTeamsTests();
@@ -211,7 +211,6 @@ public class RecursiveTester {
 
     private static void doOneFlowTest(int[][] world, int r, int c,
             boolean expected, int testNum) {
-
         System.out.println("Can Flow Off Map Test Number " + testNum);
         boolean actual = Recursive.canFlowOffMap(world, r, c);
         System.out.println("Start location = " + r + ", " + c);

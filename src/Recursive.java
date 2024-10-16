@@ -294,7 +294,35 @@ public class Recursive {
             throw new IllegalArgumentException("Failed precondition: "
                     + "canFlowOffMap");
         }
-        return true; // Change as necessary.
+        
+        boolean[][] visited = new boolean[map.length][map[0].length];
+        return flowSolver(map, visited, row, col);
+
+    }
+
+    private static boolean flowSolver(int[][] map, boolean[][] visited, int row, int col) {
+        //base cases
+        if (row == 0 || row == map.length - 1 || col == 0 || col == map[0].length - 1) {
+            return true;
+        }
+        if (visited[row][col] || isSurrounded(map, row, col)) {
+            return false;
+        }
+        //recursive step
+        visited[row][col] = true;
+        return (flowSolver(map, visited, row + 1, col) || 
+                flowSolver(map, visited, row - 1, col) || 
+                flowSolver(map, visited, row, col + 1) || 
+                flowSolver(map, visited, row, col - 1));
+    }
+
+    private static boolean isSurrounded(int[][] map, int row, int col) {
+        int here = map[row][col];
+        int up = map[row - 1][col];
+        int down = map[row + 1][col];
+        int left = map[row][col - 1];
+        int right = map[row][col + 1];
+        return (up >= here && down >= here && left >= here && right >= here);
     }
 
     /*

@@ -73,7 +73,14 @@ public class Recursive {
             throw new IllegalArgumentException("Failed precondition: "
                     + "revString. parameter may not be null.");
         }
-        return ""; // dummy return, replace as necessary
+        
+        //base case
+        if (stringToRev.length() == 0) {
+            return "";
+        }
+        //recursive case
+        int len = stringToRev.length();
+        return stringToRev.substring(len - 1) + revString(stringToRev.substring(0, len - 1));
     }
 
     /**
@@ -93,10 +100,24 @@ public class Recursive {
             throw new IllegalArgumentException("Failed precondition: "
                     + "revString. parameter may not be null.");
         }
-        return 0; // Change as necessary. Write a helper method.
+
+        return doubleHelper(data, 0);        
     }
 
     // CS314 students, add your nextIsDouble helper method here
+    private static int doubleHelper(int[] data, int index) {
+        int len = data.length;
+        //base case
+        if (index == len - 1) {
+            return 0;
+        } 
+        //recursive step
+        if (data[index + 1] == data[index] * 2) {
+            return 1 + doubleHelper(data, index + 1);
+        } else {
+            return doubleHelper(data, index + 1);
+        }
+    }
 
     /**
      * Problem 4: Find all combinations of mnemonics
@@ -130,7 +151,18 @@ public class Recursive {
     private static void recursiveMnemonics(ArrayList<String> mnemonics,
             String mnemonicSoFar, String digitsLeft) {
 
-        // CS314 students, complete this method
+        //base case
+        if (digitsLeft.length() == 0) {
+            mnemonics.add(mnemonicSoFar);
+        } else {
+            //recursive step
+            String options = digitLetters(digitsLeft.charAt(0));
+            for (int i = 0; i < options.length(); i++) {
+                String addLetter = options.substring(i, i + 1);
+                recursiveMnemonics(mnemonics, mnemonicSoFar + addLetter, digitsLeft.substring(1));
+            }
+        }
+
     }
 
     /*
@@ -217,6 +249,23 @@ public class Recursive {
      */
     private static void drawSquares(Graphics g, int size, int limit,
             double x, double y) {
+        if (size <= limit) {
+            return;
+        }        
+        //draw white square
+        int third = size / 3;
+        g.fillRect((int) x + third, (int) y + third, (int) third, (int) third);
+        //call drawSquares on each 8 sections
+        final int separations = 3;
+        for (int i = 0; i < separations; i++) {
+            for (int j = 0; j < separations; j++) {
+                if (!(x == 1 && y == 1)) {
+                    double newX = x + (i * third);
+                    double newY =  y + (j * third);
+                    drawSquares(g, third, limit, newX, newY);
+                }
+            }
+        }
 
     }
 

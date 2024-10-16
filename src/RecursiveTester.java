@@ -17,12 +17,12 @@
  *
  */
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 
 /**
  * Tester class for the methods in Recursive.java
+ * 
  * @author scottm
  *
  */
@@ -30,13 +30,14 @@ public class RecursiveTester {
 
     // run the tests
     public static void main(String[] args) {
-        doBinaryTests();
+        // doBinaryTests();
         // doReverseTests();
         // doNextIsDoubleTests();
+
         // doListMnemonicsTests();
-        // // doCarpetTest();
+        doCarpetTest();
+        doFlowOffMapTests();
         // doMazeTests();
-        // doFlowOffMapTests();
         // doFairTeamsTests();
         // studentTests();
     }
@@ -113,7 +114,7 @@ public class RecursiveTester {
     private static char[][] makeMaze(String rawMaze, int rows) {
         if (rawMaze == null || rawMaze.length() % rows != 0) {
             throw new IllegalArgumentException("Violation of precondition in makeMaze."
-                            + "Either raw data is null or left over values: ");
+                    + "Either raw data is null or left over values: ");
         }
         int cols = rawMaze.length() / rows;
         char[][] result = new char[rows][cols];
@@ -128,42 +129,45 @@ public class RecursiveTester {
     }
 
     // Test the Sierpinski carpet method.
-    private static void  doCarpetTest() {
+    private static void doCarpetTest() {
         Recursive.drawCarpet(729, 4);
         Recursive.drawCarpet(729, 1);
     }
 
     private static void doFairTeamsTests() {
-//        System.out.println("Stress test for minDifference - may take up to a minute");
-//        int[] testerArr = new int[] {5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 100000};
-//        Stopwatch s = new Stopwatch();
-//        s.start();
-//        int actualInt = Recursive.minDifference(4, testerArr);
-//        s.stop();
-//        System.out.println("Time to solve for 16 people on 4 teams: " + s.time() + "\n");
-//        System.out.println(actualInt);
+        // System.out.println("Stress test for minDifference - may take up to a
+        // minute");
+        // int[] testerArr = new int[] {5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60,
+        // 65, 70, 75, 100000};
+        // Stopwatch s = new Stopwatch();
+        // s.start();
+        // int actualInt = Recursive.minDifference(4, testerArr);
+        // s.stop();
+        // System.out.println("Time to solve for 16 people on 4 teams: " + s.time() +
+        // "\n");
+        // System.out.println(actualInt);
 
-
-        int[] abilities = {1, 2, 3, 4, 5, 6, 7};
+        int[] abilities = { 1, 2, 3, 4, 5, 6, 7 };
         showFairTeamsResults(Recursive.minDifference(3, abilities), 1, 1);
         showFairTeamsResults(Recursive.minDifference(5, abilities), 2, 2);
         showFairTeamsResults(Recursive.minDifference(6, abilities), 4, 3);
 
-        abilities = new int[] {1, 12, 46, 60, 53, 86, 72, 79, 44, 7};
+        abilities = new int[] { 1, 12, 46, 60, 53, 86, 72, 79, 44, 7 };
         showFairTeamsResults(Recursive.minDifference(3, abilities), 3, 4);
         showFairTeamsResults(Recursive.minDifference(5, abilities), 19, 5);
 
-        abilities = new int[] {10, 10, 7, 7, 7};
+        abilities = new int[] { 10, 10, 7, 7, 7 };
         showFairTeamsResults(Recursive.minDifference(2, abilities), 1, 6);
 
-        abilities = new int[] {-10, -10, -8, -8, -8};
+        abilities = new int[] { -10, -10, -8, -8, -8 };
         showFairTeamsResults(Recursive.minDifference(2, abilities), 4, 7);
 
-        abilities = new int[] {-5, 5, 10, 5, 10, -15};
+        abilities = new int[] { -5, 5, 10, 5, 10, -15 };
         showFairTeamsResults(Recursive.minDifference(2, abilities), 0, 8);
     }
 
-    // Show the results of a fair teams test by comparing actual and expected result.
+    // Show the results of a fair teams test by comparing actual and expected
+    // result.
     private static void showFairTeamsResults(int actual, int expected, int testNum) {
         if (actual == expected) {
             System.out.println("Test " + testNum + " passed. min difference.");
@@ -176,30 +180,29 @@ public class RecursiveTester {
 
     private static void doFlowOffMapTests() {
         int testNum = 1;
-        int[][] world = {{5,5,5,5,5,5},
-                         {5,5,5,5,5,5},
-                         {5,5,5,5,5,5},
-                         {5,5,4,4,5,5},
-                         {5,5,3,3,5,5},
-                         {5,5,2,2,5,5},
-                         {5,5,5,1,5,5},
-                         {5,5,5,-2,5,5}};
+        int[][] world = { { 5, 5, 5, 5, 5, 5 },
+                { 5, 5, 5, 5, 5, 5 },
+                { 5, 5, 5, 5, 5, 5 },
+                { 5, 5, 4, 4, 5, 5 },
+                { 5, 5, 3, 3, 5, 5 },
+                { 5, 5, 2, 2, 5, 5 },
+                { 5, 5, 5, 1, 5, 5 },
+                { 5, 5, 5, -2, 5, 5 } };
 
         doOneFlowTest(world, 0, 0, true, testNum++);
         doOneFlowTest(world, 1, 1, false, testNum++);
         doOneFlowTest(world, 3, 3, true, testNum++);
         doOneFlowTest(world, 1, 5, true, testNum++);
 
-        world = new int[][]
-           {{10, 10, 10, 10, 10, 10, 10},
-            {10, 10, 10,  5, 10, 10, 10},
-            {10, 10, 10,  6, 10, 10, 10},
-            {10, 10, 10,  7, 10, 10, 10},
-            {5,   6,  7,  8,  7,  6, 10},
-            {10, 10, 10,  7, 10, 10, 10},
-            {10, 10, 10,  6, 10, 10, 10},
-            {10, 10, 10,  5, 10, 10, 10},
-            {10, 10, 10, 10, 10, 10, 10}};
+        world = new int[][] { { 10, 10, 10, 10, 10, 10, 10 },
+                { 10, 10, 10, 5, 10, 10, 10 },
+                { 10, 10, 10, 6, 10, 10, 10 },
+                { 10, 10, 10, 7, 10, 10, 10 },
+                { 5, 6, 7, 8, 7, 6, 10 },
+                { 10, 10, 10, 7, 10, 10, 10 },
+                { 10, 10, 10, 6, 10, 10, 10 },
+                { 10, 10, 10, 5, 10, 10, 10 },
+                { 10, 10, 10, 10, 10, 10, 10 } };
 
         doOneFlowTest(world, 3, 3, false, testNum++);
         doOneFlowTest(world, 4, 3, true, testNum++);
@@ -271,7 +274,7 @@ public class RecursiveTester {
     }
 
     private static void doNextIsDoubleTests() {
-        int[] numsForDouble = {1, 2, 4, 8, 16, 32, 64, 128, 256};
+        int[] numsForDouble = { 1, 2, 4, 8, 16, 32, 64, 128, 256 };
         int actualDouble = Recursive.nextIsDouble(numsForDouble);
         int expectedDouble = 8;
         if (actualDouble == expectedDouble) {
@@ -281,8 +284,7 @@ public class RecursiveTester {
                     + expectedDouble + ", actual: " + actualDouble);
         }
 
-
-        numsForDouble = new int[] {1, 3, 4, 2, 32, 8, 128, -5, 6};
+        numsForDouble = new int[] { 1, 3, 4, 2, 32, 8, 128, -5, 6 };
         actualDouble = Recursive.nextIsDouble(numsForDouble);
         expectedDouble = 0;
         if (actualDouble == expectedDouble) {
@@ -292,18 +294,17 @@ public class RecursiveTester {
                     + expectedDouble + ", actual: " + actualDouble);
         }
 
-
-        numsForDouble = new int[] {1, 0, 0, -5, -10, 32, 64, 128, 2, 9, 18};
+        numsForDouble = new int[] { 1, 0, 0, -5, -10, 32, 64, 128, 2, 9, 18 };
         actualDouble = Recursive.nextIsDouble(numsForDouble);
         expectedDouble = 5;
         if (actualDouble == expectedDouble) {
             System.out.println("Test 3 passed. next is double.");
-        }  else {
+        } else {
             System.out.println("Test 3 failed. next is double. expected: "
                     + expectedDouble + ", actual: " + actualDouble);
         }
 
-        numsForDouble = new int[] {37};
+        numsForDouble = new int[] { 37 };
         actualDouble = Recursive.nextIsDouble(numsForDouble);
         expectedDouble = 0;
         if (actualDouble == expectedDouble) {
@@ -313,7 +314,7 @@ public class RecursiveTester {
                     + expectedDouble + ", actual: " + actualDouble);
         }
 
-        numsForDouble = new int[] {37, 74};
+        numsForDouble = new int[] { 37, 74 };
         actualDouble = Recursive.nextIsDouble(numsForDouble);
         expectedDouble = 1;
         if (actualDouble == expectedDouble) {
@@ -334,7 +335,6 @@ public class RecursiveTester {
             System.out.println("Test 1 failed. reverse string. expected: " +
                     expectedRev + ", actual: " + actualRev);
         }
-
 
         actualRev = Recursive.revString("Calvin and Hobbes");
         expectedRev = "sebboH dna nivlaC";
@@ -366,7 +366,6 @@ public class RecursiveTester {
                     + expectedBinary + ", actual: " + actualBinary);
         }
 
-
         actualBinary = Recursive.getBinary(0);
         expectedBinary = "0";
         if (actualBinary.equals(expectedBinary)) {
@@ -393,7 +392,6 @@ public class RecursiveTester {
             System.out.println("Test 4 failed. get binary. expected: "
                     + expectedBinary + ", actual: " + actualBinary);
         }
-
 
         actualBinary = Recursive.getBinary(64);
         expectedBinary = "1000000";

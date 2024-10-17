@@ -33,8 +33,8 @@ public class RecursiveTester {
         // doListMnemonicsTests();
         // doCarpetTest();
         // doFlowOffMapTests();
-        doFairTeamsTests();
-        // doMazeTests();
+        // doFairTeamsTests();
+        doMazeTests();
         // studentTests();
     }
 

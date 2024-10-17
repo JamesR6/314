@@ -73,12 +73,12 @@ public class Recursive {
             throw new IllegalArgumentException("Failed precondition: "
                     + "revString. parameter may not be null.");
         }
-        
-        //base case
+
+        // base case
         if (stringToRev.length() == 0) {
             return "";
         }
-        //recursive case
+        // recursive case
         int len = stringToRev.length();
         return stringToRev.substring(len - 1) + revString(stringToRev.substring(0, len - 1));
     }
@@ -101,17 +101,17 @@ public class Recursive {
                     + "revString. parameter may not be null.");
         }
 
-        return doubleHelper(data, 0);        
+        return doubleHelper(data, 0);
     }
 
     // CS314 students, add your nextIsDouble helper method here
     private static int doubleHelper(int[] data, int index) {
         int len = data.length;
-        //base case
+        // base case
         if (index == len - 1) {
             return 0;
-        } 
-        //recursive step
+        }
+        // recursive step
         if (data[index + 1] == data[index] * 2) {
             return 1 + doubleHelper(data, index + 1);
         } else {
@@ -151,11 +151,11 @@ public class Recursive {
     private static void recursiveMnemonics(ArrayList<String> mnemonics,
             String mnemonicSoFar, String digitsLeft) {
 
-        //base case
+        // base case
         if (digitsLeft.length() == 0) {
             mnemonics.add(mnemonicSoFar);
         } else {
-            //recursive step
+            // recursive step
             String options = digitLetters(digitsLeft.charAt(0));
             for (int i = 0; i < options.length(); i++) {
                 String addLetter = options.substring(i, i + 1);
@@ -251,17 +251,17 @@ public class Recursive {
             double x, double y) {
         if (size <= limit) {
             return;
-        }        
-        //draw white square
+        }
+        // draw white square
         int third = size / 3;
         g.fillRect((int) x + third, (int) y + third, (int) third, (int) third);
-        //call drawSquares on each 8 sections
+        // call drawSquares on each 8 sections
         final int separations = 3;
         for (int i = 0; i < separations; i++) {
             for (int j = 0; j < separations; j++) {
                 if (!(x == 1 && y == 1)) {
                     double newX = x + (i * third);
-                    double newY =  y + (j * third);
+                    double newY = y + (j * third);
                     drawSquares(g, third, limit, newX, newY);
                 }
             }
@@ -294,25 +294,25 @@ public class Recursive {
             throw new IllegalArgumentException("Failed precondition: "
                     + "canFlowOffMap");
         }
-        
+
         boolean[][] visited = new boolean[map.length][map[0].length];
         return flowSolver(map, visited, row, col);
 
     }
 
     private static boolean flowSolver(int[][] map, boolean[][] visited, int row, int col) {
-        //base cases
+        // base cases
         if (row == 0 || row == map.length - 1 || col == 0 || col == map[0].length - 1) {
             return true;
         }
         if (visited[row][col] || isSurrounded(map, row, col)) {
             return false;
         }
-        //recursive step
+        // recursive step
         visited[row][col] = true;
-        return (flowSolver(map, visited, row + 1, col) || 
-                flowSolver(map, visited, row - 1, col) || 
-                flowSolver(map, visited, row, col + 1) || 
+        return (flowSolver(map, visited, row + 1, col) ||
+                flowSolver(map, visited, row - 1, col) ||
+                flowSolver(map, visited, row, col + 1) ||
                 flowSolver(map, visited, row, col - 1));
     }
 
@@ -387,39 +387,44 @@ public class Recursive {
     }
 
     private static int minDiffSolver(int[] abilities, int[][] teams, int index) {
-        //teams is row(which team) and col(teamScore, numMembers)
-
-        //base case
-        if (index == teams.length && fullTeams(teams)) {
+        // base case
+        if (index == abilities.length && fullTeams(teams)) {
             return minMax(teams);
         }
-        if (index == teams.length && !fullTeams(teams)) {
+        if (index == abilities.length && !fullTeams(teams)) {
             return Integer.MAX_VALUE;
         }
 
-        //recursive step
+        // recursive step
         int best = Integer.MAX_VALUE;
         for (int t = 0; t < teams.length; t++) {
+            // choose
             adjustTeams(teams, t, abilities[index], false);
+
+            // explore
             int compare = minDiffSolver(abilities, teams, index + 1);
             if (compare < best) {
-                return minDiffSolver(abilities, teams, index + 1);
+                best = compare;
             }
+
+            // unchoose
             adjustTeams(teams, t, abilities[index], true);
         }
+
+        return best;
     }
 
-    private static int minMax(int[][] teams) {
+    public static int minMax(int[][] teams) {
         final int teamScore = 0;
 
         int min = teams[0][teamScore];
         int max = teams[0][teamScore];
 
         for (int i = 0; i < teams.length; i++) {
-            int currScore = teams[0][teamScore];
+            int currScore = teams[i][teamScore];
             if (currScore < min) {
                 min = currScore;
-            } 
+            }
             if (currScore > max) {
                 max = currScore;
             }
@@ -438,7 +443,7 @@ public class Recursive {
         return true;
     }
 
-    private static void adjustTeams(int[][] teams, int index, int ability, boolean removing) {
+    public static void adjustTeams(int[][] teams, int index, int ability, boolean removing) {
         final int teamScore = 0;
         final int numMembers = 1;
 
@@ -449,9 +454,7 @@ public class Recursive {
         }
         teams[index][teamScore] += ability;
         teams[index][numMembers] += member;
-    }   
-
-    
+    }
 
     /**
      * Problem 8: Maze solver.
@@ -477,8 +480,99 @@ public class Recursive {
      * @return per the post condition
      */
     public static int canEscapeMaze(char[][] rawMaze) {
-        return -1;
+        int coins = 0;
+        int startRow = 0;
+        int startCol = 0;
+        for (int r = 0; r < rawMaze.length; r++) {
+            for (int c = 0; c < rawMaze[0].length; c++) {
+                if (rawMaze[r][c] == '$') {
+                    coins++;
+                }
+                if (rawMaze[r][c] == 'S') {
+                    startRow = r;
+                    startCol = c;
+                }
+            }
+        }
+
+        char[][] copy = new char[rawMaze.length][];
+        for (int i = 0; i < rawMaze.length; i++) {
+            copy[i] = rawMaze[i].clone();
+        }
+
+        return mazeSolver(copy, startRow, startCol, coins);
     }
 
-    private static int mazeSolver(char[][] maze, )
+    private static int mazeSolver(char[][] maze, int x, int y, int coinsLeft) {
+        //base cases
+        //check if on finish before checking if youre stuck because you couldve just come from a Y
+        if (outOfBounds(maze, x, y)) {
+            return 0;
+        }
+        if (maze[x][y] == 'E' && coinsLeft == 0) {
+            return 2;
+        }
+        if (maze[x][y] == 'E' && coinsLeft > 0) {
+            return 1;
+        }
+        if (stuck(maze, x, y) || maze[x][y] == '*') {
+            return 0;
+        }
+
+        char before = maze[x][y];
+        int newCoins = (before == '$') ? coinsLeft - 1 : coinsLeft;
+        maze[x][y] = moveOut(maze, x, y);
+        int up = mazeSolver(maze, x - 1, y, newCoins);
+        int down = mazeSolver(maze, x + 1, y, newCoins);
+        int left = mazeSolver(maze, x, y - 1, newCoins);
+        int right = mazeSolver(maze, x, y + 1, newCoins);
+        maze[x][y] = before;
+        return findBest(up, down, left, right);
+
+    }
+
+    private static char moveOut(char[][] maze, int x, int y) {
+        char current = maze[x][y];
+        if (current == 'G' || current == '$') {
+            return 'Y';
+        } else if (current == 'Y' || current == '*') {
+            return '*';
+        } else if (current == 'S') {
+            return 'G';
+        } else {
+            return current;
+        }
+    }
+
+    
+    private static boolean stuck(char[][] maze, int x, int y) {
+        boolean upStuck = (x == 0 || maze[x - 1][y] == '*');
+        boolean downStuck = (x == maze.length - 1 || maze[x + 1][y] == '*');
+        boolean leftStuck = (y == 0 || maze[x][y - 1] == '*');
+        boolean rightStuck = (y == maze[0].length - 1 || maze[x][y + 1] == '*');
+
+        return (upStuck && downStuck && leftStuck && rightStuck);
+    }
+
+    private static boolean outOfBounds(char[][] maze, int x, int y) {
+        if (x < 0 || x >= maze.length || y < 0 || y >= maze[0].length) {
+            return true;
+        }
+        return false;
+    }
+
+    private static int findBest(int a, int b, int c, int d) {
+        int max = a;
+        if (b > max) {
+            max = b;
+        }
+        if (c > max) {
+            max = c;
+        }
+        if (d > max) {
+            max = d;
+        }
+        return max;
+    }
+
 }

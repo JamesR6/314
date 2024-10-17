@@ -300,6 +300,12 @@ public class Recursive {
 
     }
 
+    /*
+     * Recursive method for canFlowOffMap
+     * return true if a drop of water starting at the location
+     * specified by row, column can reach the edge of the map,
+     * false otherwise
+     */
     private static boolean flowSolver(int[][] map, boolean[][] visited, int row, int col) {
         // base cases
         if (row == 0 || row == map.length - 1 || col == 0 || col == map[0].length - 1) {
@@ -308,14 +314,36 @@ public class Recursive {
         if (visited[row][col] || isSurrounded(map, row, col)) {
             return false;
         }
+
         // recursive step
+        // choose
         visited[row][col] = true;
-        return (flowSolver(map, visited, row + 1, col) ||
-                flowSolver(map, visited, row - 1, col) ||
-                flowSolver(map, visited, row, col + 1) ||
-                flowSolver(map, visited, row, col - 1));
+        // explore each direction only if it is downhill
+        boolean up = false;
+        boolean down = false;
+        boolean left = false;
+        boolean right = false;
+        if (map[row][col] > map[row - 1][col]) {
+            up = flowSolver(map, visited, row - 1, col);
+        }
+        if (map[row][col] > map[row + 1][col]) {
+            down = flowSolver(map, visited, row + 1, col);
+        }
+        if (map[row][col] > map[row][col - 1]) {
+            left = flowSolver(map, visited, row, col - 1);
+        }
+        if (map[row][col] > map[row][col + 1]) {
+            right = flowSolver(map, visited, row, col + 1);
+        }
+        // unchoose
+        visited[row][col] = false;
+        return (up || down || left || right);
     }
 
+    /*
+     * helper method for flowSolver
+     * return true if the given position is surrounded by non-downhill land, false otherwise
+     */
     private static boolean isSurrounded(int[][] map, int row, int col) {
         int here = map[row][col];
         int up = map[row - 1][col];
@@ -381,23 +409,34 @@ public class Recursive {
      *         ability. The return value will be greater than or equal to 0.
      */
     public static int minDifference(int numTeams, int[] abilities) {
+        final int minTeams = 2;
+        if (numTeams < minTeams || abilities == null || abilities.length < numTeams) {
+            throw new IllegalArgumentException("minDifference: invalid parameters");
+        }
+
         int teamDataColumns = 2;
         int[][] teams = new int[numTeams][teamDataColumns];
         return minDiffSolver(abilities, teams, 0);
     }
 
+    /*
+     * Recursive method for minDifference
+     * return the minimum possible difference between the team
+     * with the maximum total ability and the team with the minimum total
+     * ability
+     */
     private static int minDiffSolver(int[] abilities, int[][] teams, int index) {
         // base case
-        if (index == abilities.length && fullTeams(teams)) {
-            return minMax(teams);
-        }
-        if (index == abilities.length && !fullTeams(teams)) {
+        if (index == abilities.length) {
+            if (fullTeams(teams)) {
+                return minMax(teams);
+            }
             return Integer.MAX_VALUE;
         }
 
         // recursive step
         int best = Integer.MAX_VALUE;
-        for (int t = 0; t < teams.length; t++) {
+        for (int t = 0; t < teams.length && t < index + 1; t++) {
             // choose
             adjustTeams(teams, t, abilities[index], false);
 
@@ -410,11 +449,14 @@ public class Recursive {
             // unchoose
             adjustTeams(teams, t, abilities[index], true);
         }
-
         return best;
     }
 
-    public static int minMax(int[][] teams) {
+    /*
+     * helper method for minDiffSolver
+     * return the difference of the strongest and weakest team
+     */
+    private static int minMax(int[][] teams) {
         final int teamScore = 0;
 
         int min = teams[0][teamScore];
@@ -433,6 +475,10 @@ public class Recursive {
         return (max - min);
     }
 
+    /*
+     * helper method for minDiffSolver
+     * return true if every team has at least one member, false otherwise
+     */
     private static boolean fullTeams(int[][] teams) {
         final int members = 1;
         for (int i = 0; i < teams.length; i++) {
@@ -443,15 +489,22 @@ public class Recursive {
         return true;
     }
 
-    public static void adjustTeams(int[][] teams, int index, int ability, boolean removing) {
+    /*
+     * helper method for minDiffSolver
+     * adjust teams by adding or removing 1 player (index 1) and their ability (index 0)
+     * from team at index
+     */
+    private static void adjustTeams(int[][] teams, int index, int ability, boolean removing) {
         final int teamScore = 0;
         final int numMembers = 1;
 
+        //if removing, negate both before adding
         int member = 1;
         if (removing) {
             member = -1;
             ability = -ability;
         }
+
         teams[index][teamScore] += ability;
         teams[index][numMembers] += member;
     }
@@ -480,6 +533,9 @@ public class Recursive {
      * @return per the post condition
      */
     public static int canEscapeMaze(char[][] rawMaze) {
+        if (rawMaze == null || !rectangularMaze(rawMaze) || !validChars(rawMaze)) {
+            throw new IllegalArgumentException("canEscapeMaze: invalid maze");
+        }
         int coins = 0;
         int startRow = 0;
         int startCol = 0;
@@ -503,34 +559,88 @@ public class Recursive {
         return mazeSolver(copy, startRow, startCol, coins);
     }
 
+    /*
+     * precondition helper for canEscapeMaze
+     * return true if every character in the maze is valid and 
+     * there is exactly one starting character S
+     */
+    private static boolean validChars(char[][] maze) {
+        String valid = "SE$GY*";
+        int StartCount = 0;
+        for (char[] r : maze) {
+            for (char c : r) {
+                if (!valid.contains(c + "")) {
+                    return false;
+                }
+                if (c == 'S') {
+                    StartCount++;
+                }
+            }
+        }
+        return StartCount == 1;
+    }
+
+    /*
+     * precondition helper for canEscapeMaze
+     * return true if char[][] is rectangular, false otherwise
+     */
+    private static boolean rectangularMaze(char[][] maze) {
+        if (maze.length == 0) {
+            throw new IllegalArgumentException("maze must have size");
+        }
+        final int len = maze[0].length;
+        for (int i = 0; i < maze.length; i++) {
+            if (maze[i] == null || maze[i].length != len) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /*
+     * Recursive method for canEscapeMaze
+     * Return 2 if it is possible to escape the maze after
+     * collecting all the coins.
+     * Return 1 if it is possible to escape the maze
+     * but without collecting all the coins.
+     * Return 0 if it is not possible
+     * to escape the maze.
+     */
     private static int mazeSolver(char[][] maze, int x, int y, int coinsLeft) {
-        //base cases
-        //check if on finish before checking if youre stuck because you couldve just come from a Y
+        // base cases
         if (outOfBounds(maze, x, y)) {
             return 0;
         }
-        if (maze[x][y] == 'E' && coinsLeft == 0) {
+        if (maze[x][y] == 'E') {
+            if (coinsLeft > 0) {
+                return 1;
+            }
             return 2;
-        }
-        if (maze[x][y] == 'E' && coinsLeft > 0) {
-            return 1;
         }
         if (stuck(maze, x, y) || maze[x][y] == '*') {
             return 0;
         }
 
+        //recursive step
+        //choose
         char before = maze[x][y];
         int newCoins = (before == '$') ? coinsLeft - 1 : coinsLeft;
+        //explore
         maze[x][y] = moveOut(maze, x, y);
         int up = mazeSolver(maze, x - 1, y, newCoins);
         int down = mazeSolver(maze, x + 1, y, newCoins);
         int left = mazeSolver(maze, x, y - 1, newCoins);
         int right = mazeSolver(maze, x, y + 1, newCoins);
+        //unchoose
         maze[x][y] = before;
         return findBest(up, down, left, right);
-
     }
-
+    
+    /*
+     * helper method for mazeSolver
+     * determines what the replaced character should be, given the current
+     * char at the position
+     */
     private static char moveOut(char[][] maze, int x, int y) {
         char current = maze[x][y];
         if (current == 'G' || current == '$') {
@@ -544,7 +654,10 @@ public class Recursive {
         }
     }
 
-    
+    /*
+     * helper method for mazeSolver
+     * return true if the given position is surrounded by impassable cells, false otherwise
+     */
     private static boolean stuck(char[][] maze, int x, int y) {
         boolean upStuck = (x == 0 || maze[x - 1][y] == '*');
         boolean downStuck = (x == maze.length - 1 || maze[x + 1][y] == '*');
@@ -561,6 +674,10 @@ public class Recursive {
         return false;
     }
 
+    /*
+     * helper method for mazeSolver
+     * return the highest of the 4 given integers
+     */
     private static int findBest(int a, int b, int c, int d) {
         int max = a;
         if (b > max) {

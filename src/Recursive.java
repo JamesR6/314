@@ -96,7 +96,7 @@ public class Recursive {
      *         are followed immediately by a value that is double the element.
      */
     public static int nextIsDouble(int[] data) {
-        if (data == null) {
+        if (data == null || data.length == 0) {
             throw new IllegalArgumentException("Failed precondition: "
                     + "revString. parameter may not be null.");
         }
@@ -111,6 +111,7 @@ public class Recursive {
         if (index == len - 1) {
             return 0;
         }
+        
         // recursive step
         if (data[index + 1] == data[index] * 2) {
             return 1 + doubleHelper(data, index + 1);

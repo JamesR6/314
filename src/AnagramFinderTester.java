@@ -11,13 +11,13 @@ import java.util.Scanner;
  *
  * Student information for assignment:
  *
- *  On my honor, <NAME>, this programming assignment is my own work
+ *  On my honor, JP Reeves, this programming assignment is my own work
  *  and I have not provided this code to any other student.
  *
- *  UTEID:
- *  email address:
- *  TA name:
- *  Number of slip days I am using:
+ *  UTEID: jsr3699
+ *  email address: jpascualsr06@gmail.com
+ *  TA name: Eliza
+ *  Number of slip days I am using: 0
  */
 
 public class AnagramFinderTester {

@@ -47,14 +47,5 @@ public class LetterInventory {
         }
         return inventory[letter - 'a'];
     }
-
-    public String toString() {
-        int i = 1;
-        for (int a : inventory) {
-            System.out.println(i + " guykryfu" + a);
-            i++;
-        }
-        return "";
-    }
     
 }

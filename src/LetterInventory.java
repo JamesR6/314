@@ -51,7 +51,7 @@ public class LetterInventory {
     public String toString() {
         int i = 1;
         for (int a : inventory) {
-            System.out.println(i + " " + a);
+            System.out.println(i + " guykryfu" + a);
             i++;
         }
         return "";

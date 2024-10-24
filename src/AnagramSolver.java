@@ -22,6 +22,7 @@ public class AnagramSolver {
 
     //instance variable
     Map<String, LetterInventory> dictionary;
+    ArrayList<List<String>> anagrams;
     
     /*
      * pre: list != null
@@ -29,6 +30,7 @@ public class AnagramSolver {
      */
     public AnagramSolver(Set<String> dictionary) {
         // CS314 Students, add your code here
+        this.anagrams = new ArrayList<>();
         this.dictionary = new TreeMap<String, LetterInventory>();
         for (String word : dictionary) {
             this.dictionary.put(word, new LetterInventory(word));
@@ -61,20 +63,21 @@ public class AnagramSolver {
             maxWords = s.length();
         }
 
-        return recurAnagrams(target, maxWords, virtualDict, 0, new ArrayList<String>());
+        recurAnagrams(target, maxWords, virtualDict, maxWords, null, null);
+        return anagrams;
     }
 
-    private List<List<String>> recurAnagrams(LetterInventory lettersLeft, int maxWords, 
-    Map<String, LetterInventory> virtualDict, int index, ArrayList<String> curr) {
+    private void recurAnagrams(LetterInventory lettersLeft, int maxWords, 
+    Map<String, LetterInventory> virtualDict, int index, ArrayList<String> curr, 
+    ArrayList<ArrayList<String>> result) {
         //base cases
-        if (whatever) {
-            do whatever
+        if (lettersLeft.isEmpty() && curr.size() <= maxWords) {
+            anagrams.add(curr);
+        } else {
+
         }
 
-        List<String> result = new ArrayList<>();
-        //recursive step
-        return result;
+    
     }
-    //newest change
 
 }

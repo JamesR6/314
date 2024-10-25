@@ -22,135 +22,118 @@ import java.util.Scanner;
 
 public class AnagramFinderTester {
 
-
     private static final String testCaseFileName = "testCaseAnagrams.txt";
     private static final String dictionaryFileName = "d3.txt";
 
     /**
      * main method that executes tests.
+     * 
      * @param args Not used.
      */
     public static void main(String[] args) {
 
-        letterInventoryTests();
+        cs314StudentTestsForLetterInventory();
 
         // tests on the anagram solver itself
         boolean displayAnagrams = getChoiceToDisplayAnagrams();
-        AnagramSolver solver 
-                = new AnagramSolver(AnagramMain.readWords(dictionaryFileName));
+        AnagramSolver solver = new AnagramSolver(AnagramMain.readWords(dictionaryFileName));
         runAnagramTests(solver, displayAnagrams);
     }
 
-    private static void letterInventoryTests() {
-        LetterInventory lets1 = new LetterInventory("");
-        Object expected = 0;
-        Object actual = lets1.size();
-        showTestResults(expected, actual, 1, " size on empty LetterInventory");
-
-        expected = "";
-        actual = lets1.toString();
-        showTestResults(expected, actual, 2, " toString on empty LetterInventory");
-
-        expected = 0;
-        actual = lets1.get('A');
-        showTestResults(expected, actual, 3, " get on empty LetterInventory");
-
-        expected = 0;
-        actual = lets1.get('z');
-        showTestResults(expected, actual, 4, " get on empty LetterInventory");
-
-        expected = true;
-        actual = lets1.isEmpty();
-        showTestResults(expected, actual, 5, " isEmpty on empty LetterInventory");
-
-        expected = "";
-        actual = lets1.toString();
-        showTestResults(expected, actual, 6, " LetterInventory toString on empty LetterInventory");
-
-
-        lets1 = new LetterInventory("mmmmm");
-        expected = "mmmmm";
-        actual = lets1.toString();
-        showTestResults(expected, actual, 7, " LetterInventory toString");
-
-
-        LetterInventory lets2 = new LetterInventory("\"Stanford University\"!! Jr<>(())G");
-        expected = "adefgiijnnorrrssttuvy";
-        actual = lets2.toString();
-        showTestResults(expected, actual, 8, " LetterInventory constructor and toString");
-
-        expected = 21;
-        actual = lets2.size();
-        showTestResults(expected, actual, 9, " LetterInventory size");
-
-        expected = false;
-        actual = lets2.isEmpty();
-        showTestResults(expected, actual, 10, " LetterInventory isEmpty");
-
-        expected = null;
-        actual = lets2.subtract(lets1);
-        showTestResults(expected, actual, 11, "LetterInventory subtract");
-
-        lets1 = new LetterInventory("stand ---- ton");
-        expected = "efgiijrrrsuvy";
-        actual = lets2.subtract(lets1).toString();
-        showTestResults(expected, actual, 12, "LetterInventory subtract");
-
-        expected = 13;
-        actual = lets2.subtract(lets1).size();
-        showTestResults(expected, actual, 13, "LetterInventory size after subtract");
-
-        expected = false;
-        actual = lets2.isEmpty();
-        showTestResults(expected, actual, 14, "LetterInventory isEmpty after subtract");
-
-        expected = null;
-        actual = lets1.subtract(lets2);
-        showTestResults(expected, actual, 15, "LetterInventory subtract");
-
-        expected = false;
-        actual = lets1.equals(lets2);
-        showTestResults(expected, actual, 16, "LetterInventory equals");
-
-        lets1 = new LetterInventory("Ol33vIA33");
-        expected = "aadefgiiijlnnoorrrssttuvvy";
-        LetterInventory lets3 = lets1.add(lets2);
-        actual = lets3.toString();
-        showTestResults(expected, actual, 17, "LetterInventory add");
-
-        expected = 26;
-        actual = lets3.size();
-        showTestResults(expected, actual, 18, "LetterInventory size after add");
-
-        expected = false;
-        actual = lets3.isEmpty();
-        showTestResults(expected, actual, 19, "LetterInventory isEmpty after add");
-
-        lets3 = lets1.add(lets2);
-        LetterInventory lets4 = lets2.add(lets1);
-        showTestResults(lets3, lets4, 20, "LetterInventory add and equals");
-
-        expected = false;
-        StringBuilder foo = new StringBuilder();
-        actual = lets3.equals(foo);
-        showTestResults(expected, actual, 21, "LetterInventory equals");
-
-        expected = false;
-        String str = "abeeills";
-        lets3 = new LetterInventory("ISAbelle!!");
-        actual = lets3.equals(str);
-        showTestResults(expected, actual, 22, "LetterInventory equals");
-
-        expected = true;
-        lets2 = new LetterInventory("\\abeei\"ll0212s");
-        lets3 = new LetterInventory("ISAbelle!!");
-        actual = lets3.equals(lets2);
-        showTestResults(expected, actual, 23, "LetterInventory equals");
-    }
-
     private static void cs314StudentTestsForLetterInventory() {
-        // CS314 Students, delete the above tests when you turn in your assignment
-        // CS314 Students add your LetterInventory tests here. 
+        String expected;
+        String actual;
+        LetterInventory a;
+        LetterInventory b;
+
+        // String Constructor
+        a = new LetterInventory("apple");
+        expected = "aelpp";
+        actual = a.toString();
+        showTestResults(expected, actual, 1, "String Constructor");
+
+        a = new LetterInventory(">/';,+=-)(j*$##@%)");
+        expected = "j";
+        actual = a.toString();
+        showTestResults(expected, actual, 2, "String Constructor");
+
+        // int[] constructor
+        a = new LetterInventory(new int[] { 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
+                0, 1, 0, 1, 0, 1, 0 });
+        expected = "acegikmoqsuwy";
+        actual = a.toString();
+        showTestResults(expected, actual, 3, "int[] construtor");
+
+        a = new LetterInventory(new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0 });
+        expected = "jjjjjjjjjjjjjjjj";
+        actual = a.toString();
+        showTestResults(expected, actual, 4, "int[] construtor");
+
+        // get
+        int intExpected = 16;
+        int intActual = a.get('j');
+        showTestResults(intExpected, intActual, 5, "get");
+
+        intExpected = 0;
+        intActual = a.get('k');
+        showTestResults(intExpected, intActual, 6, "get");
+        
+        // size
+        intExpected = 16;
+        intActual = a.size();
+        showTestResults(intExpected, intActual, 7, "size");
+
+        a = new LetterInventory("abcdefghijklmnopqrstuvwxyz");
+        intExpected = 26;
+        intActual = a.size();
+        showTestResults(intExpected, intActual, 8, "size");
+
+        // isEmpty
+        boolean boolExpected = false;
+        boolean boolActual = a.isEmpty();
+        showTestResults(boolExpected, boolActual, 9, "isEmpty");
+
+        a = new LetterInventory("");
+        boolExpected = true;
+        boolActual = a.isEmpty();
+        showTestResults(boolExpected, boolActual, 10, "isEmpty");
+
+        // add
+        a = new LetterInventory("qwerty");
+        b = a.add(a);
+        expected = "eeqqrrttwwyy";
+        actual = b.toString();
+        showTestResults(expected, actual, 11, "add");
+        
+        a = new LetterInventory("");
+        b = a.add(a);
+        expected = "";
+        actual = b.toString();
+        showTestResults(expected, actual, 12, "add");
+        
+        // subtract
+        b = a.subtract(a);
+        actual = b.toString();
+        showTestResults(expected, actual, 13, "subtract");
+        
+        a = new LetterInventory("kjfebiua");
+        b = b.subtract(a);
+        expected = null;
+        showTestResults(expected, b, 14, "subtract");
+        
+        // equals
+        b = new LetterInventory("ejkbgiafb");
+        boolExpected = false;
+        boolActual = a.equals(b);
+        showTestResults(boolExpected, boolActual, 15, "equals");
+        
+        a = new LetterInventory("ejkbgiafb");
+        boolExpected = true;
+        boolActual = a.equals(b);
+        showTestResults(boolExpected, boolActual, 16, "equals");
+
+        // toString is tested throughout the previous tests
     }
 
     private static boolean getChoiceToDisplayAnagrams() {
@@ -158,18 +141,18 @@ public class AnagramFinderTester {
         System.out.print("Enter y or Y to display anagrams during tests: ");
         String response = console.nextLine();
         console.close();
-        return response.length() > 0 
+        return response.length() > 0
                 && response.toLowerCase().charAt(0) == 'y';
     }
 
-    private static boolean showTestResults(Object expected, Object actual, 
+    private static boolean showTestResults(Object expected, Object actual,
             int testNum, String featureTested) {
-        
-        System.out.println("Test Number " + testNum + " testing " 
+
+        System.out.println("Test Number " + testNum + " testing "
                 + featureTested);
         System.out.println("Expected result: " + expected);
         System.out.println("Actual result: " + actual);
-        boolean passed = (actual == null && expected == null) 
+        boolean passed = (actual == null && expected == null)
                 || (actual != null && actual.equals(expected));
         if (passed) {
             System.out.println("Passed test " + testNum);
@@ -192,9 +175,9 @@ public class AnagramFinderTester {
      * <NUMBER OF ANAGRAMS>
      * <ANAGRAMS>
      */
-    private static void runAnagramTests(AnagramSolver solver, 
+    private static void runAnagramTests(AnagramSolver solver,
             boolean displayAnagrams) {
-        
+
         int solverTestCases = 0;
         int solverTestCasesPassed = 0;
         Stopwatch st = new Stopwatch();
@@ -208,38 +191,38 @@ public class AnagramFinderTester {
                 solverTestCases++;
                 st.start();
                 // actual results
-                List<List<String>> actualAnagrams 
-                    = solver.getAnagrams(currentTest.phrase, currentTest.maxWords);
+                List<List<String>> actualAnagrams = solver.getAnagrams(currentTest.phrase, currentTest.maxWords);
                 st.stop();
-                if(displayAnagrams) {
+                if (displayAnagrams) {
                     displayAnagrams("actual anagrams", actualAnagrams);
                     displayAnagrams("expected anagrams", currentTest.anagrams);
                 }
 
-
-                if(checkPassOrFailTest(currentTest, actualAnagrams))
+                if (checkPassOrFailTest(currentTest, actualAnagrams))
                     solverTestCasesPassed++;
                 System.out.println("Time to find anagrams: " + st.time());
-                /* System.out.println("Number of calls to recursive helper method: " 
-                        + NumberFormat.getNumberInstance(Locale.US).format(AnagramSolver.callsCount));*/
+                /*
+                 * System.out.println("Number of calls to recursive helper method: "
+                 * +
+                 * NumberFormat.getNumberInstance(Locale.US).format(AnagramSolver.callsCount));
+                 */
             }
             sc.close();
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.out.println("\nProblem while running test cases on AnagramSolver. Check" +
-                            " that file testCaseAnagrams.txt is in the correct location.");
+                    " that file testCaseAnagrams.txt is in the correct location.");
             System.out.println(e);
             System.out.println("AnagramSolver test cases run: " + solverTestCases);
-            System.out.println("AnagramSolver test cases failed: " 
-                        + (solverTestCases - solverTestCasesPassed));
+            System.out.println("AnagramSolver test cases failed: "
+                    + (solverTestCases - solverTestCasesPassed));
         }
         System.out.println("\nAnagramSolver test cases run: " + solverTestCases);
         System.out.println("AnagramSolver test cases failed: " + (solverTestCases - solverTestCasesPassed));
     }
 
-
     // print out all of the anagrams in a list of anagram
     private static void displayAnagrams(String type,
-                    List<List<String>> anagrams) {
+            List<List<String>> anagrams) {
 
         System.out.println("Results for " + type);
         System.out.println("num anagrams: " + anagrams.size());
@@ -249,39 +232,38 @@ public class AnagramFinderTester {
         }
     }
 
-
     // determine if the test passed or failed
     private static boolean checkPassOrFailTest(TestCase currentTest,
-                    List<List<String>> actualAnagrams) {
+            List<List<String>> actualAnagrams) {
 
         boolean passed = true;
         System.out.println();
         System.out.println("Test number: " + currentTest.testCaseNumber);
         System.out.println("Phrase: " + currentTest.phrase);
         System.out.println("Word limit: " + currentTest.maxWords);
-        System.out.println("Expected Number of Anagrams: " 
-                    + currentTest.anagrams.size());
-        if(actualAnagrams.equals(currentTest.anagrams)) {
+        System.out.println("Expected Number of Anagrams: "
+                + currentTest.anagrams.size());
+        if (actualAnagrams.equals(currentTest.anagrams)) {
             System.out.println("Passed Test");
         } else {
             System.out.println("\n!!! FAILED TEST CASE !!!");
             System.out.println("Recall MAXWORDS = 0 means no limit.");
-            System.out.println("Expected number of anagrams: " 
-                        + currentTest.anagrams.size());
-            System.out.println("Actual number of anagrams:   " 
-                        + actualAnagrams.size());
-            if(currentTest.anagrams.size() == actualAnagrams.size()) {
+            System.out.println("Expected number of anagrams: "
+                    + currentTest.anagrams.size());
+            System.out.println("Actual number of anagrams:   "
+                    + actualAnagrams.size());
+            if (currentTest.anagrams.size() == actualAnagrams.size()) {
                 System.out.println("Sizes the same, "
                         + "but either a difference in anagrams or"
                         + " anagrams not in correct order.");
             }
             System.out.println();
             passed = false;
-        }  
+        }
         return passed;
     }
 
-    // class to handle the parameters for an anagram test 
+    // class to handle the parameters for an anagram test
     // and the expected result
     private static class TestCase {
 
@@ -301,11 +283,11 @@ public class AnagramFinderTester {
 
         // pre: sc is positioned at the start of the resulting anagrams
         // read in the number of anagrams and then for each anagram:
-        //  - read in the line
-        //  - break the line up into words
-        //  - create a new list of Strings for the anagram
-        //  - add each word to the anagram
-        //  - add the anagram to the list of anagrams
+        // - read in the line
+        // - break the line up into words
+        // - create a new list of Strings for the anagram
+        // - add each word to the anagram
+        // - add the anagram to the list of anagrams
         private void readAndStoreAnagrams(Scanner sc) {
             int numAnagrams = Integer.parseInt(sc.nextLine().trim());
             for (int j = 0; j < numAnagrams; j++) {
@@ -316,7 +298,7 @@ public class AnagramFinderTester {
                 }
                 anagrams.add(anagram);
             }
-            assert anagrams.size() == numAnagrams 
+            assert anagrams.size() == numAnagrams
                     : "Wrong number of angrams read or expected";
         }
     }

@@ -51,6 +51,7 @@ public class AnagramSolver {
             throw new IllegalArgumentException("invalid arguements");
         }
 
+        //only add valid words to virtual dictionary (preprocessing)
         ArrayList<String> virtualDict = new ArrayList<>();
         for (String word : dictionary.keySet()) {
             if (target.subtract(dictionary.get(word)) != null) {
@@ -58,6 +59,7 @@ public class AnagramSolver {
             }
         }
 
+        //max words tops at the length of s; words can not have length 0
         if (maxWords == 0 || maxWords > s.length()) {
             maxWords = s.length();
         }
@@ -78,15 +80,17 @@ public class AnagramSolver {
     ArrayList<String> virtualDict, int index, ArrayList<String> curr, 
     ArrayList<List<String>> anagrams) {
         //base cases
+        //stop recursion if either are true, but only add if both are true
         if (curr.size() == maxWords || lettersLeft.isEmpty()) {
             if (lettersLeft.isEmpty() && curr.size() <= maxWords) {
                 anagrams.add(new ArrayList<>(curr));
             }
         } else {
-            //recursive step
+            //recursive step, loop from index to account for duplicate words
             for (int i = index; i < virtualDict.size(); i++) {
                 String word = virtualDict.get(i);
                 LetterInventory test = lettersLeft.subtract(dictionary.get(word));
+                //if the word can be chosen given lettersLeft, initiate recursion
                 if (test != null) {
                     curr.add(word);
                     recurAnagrams(test, maxWords, virtualDict, i, curr, anagrams);
@@ -97,12 +101,18 @@ public class AnagramSolver {
     }
 
 
+    /*
+     * comparator class to sort each anagram arrayList
+     * First by number of words (less words takes priority)
+     * Then by the words themselves
+     */
     private static class AnagramComparator implements Comparator<List<String>> {
         public int compare(List<String> a1, List<String> a2) {
             int sizes = a1.size() - a2.size();
             if (sizes != 0) {
                 return sizes;
             } else {
+                //each string compared to corresponding index
                 for (int i = 0; i < a1.size(); i++) {
                     int compareTo = a1.get(i).compareTo(a2.get(i));
                     if (compareTo != 0) {

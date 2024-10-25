@@ -68,12 +68,20 @@ public class AnagramSolver {
         return results;
     }
 
+    /*
+     * recursive method for getAnagrams
+     * Return a list of anagrams that can be formed from s with
+     * no more than maxWords, unless maxWords is 0 in which case
+     * there is no limit on the number of words in the anagram
+     */
     private void recurAnagrams(LetterInventory lettersLeft, int maxWords, 
     ArrayList<String> virtualDict, int index, ArrayList<String> curr, 
     ArrayList<List<String>> anagrams) {
         //base cases
-        if (lettersLeft.isEmpty() && curr.size() <= maxWords){
-            anagrams.add(new ArrayList<>(curr));
+        if (curr.size() == maxWords || lettersLeft.isEmpty()) {
+            if (lettersLeft.isEmpty() && curr.size() <= maxWords) {
+                anagrams.add(new ArrayList<>(curr));
+            }
         } else {
             //recursive step
             for (int i = index; i < virtualDict.size(); i++) {

@@ -148,8 +148,9 @@ public class LetterInventory {
      * ascii math
      */
     private char getLetter(int index) {
-        //TODO casting
-        return (char) ('a' + index);
+        //to avoid casting
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        return alphabet.charAt(index);
     }
 
     /*

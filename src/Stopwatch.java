@@ -1,6 +1,3 @@
-public class Stopwatch {
-    
-}
 /**
  A class to measure time elapsed.
 */

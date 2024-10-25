@@ -124,7 +124,7 @@ public class LetterInventory {
      * post: neither this nor other is altered and new LetterInventory has the
      * subtracted counts as described or returns null if any are less than 0
      */
-    public LetterInventory substract(LetterInventory other) {
+    public LetterInventory subtract(LetterInventory other) {
         if (other == null) {
             throw new IllegalArgumentException("other can not be null");
         }

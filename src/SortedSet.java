@@ -31,6 +31,10 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
     private ArrayList<E> myCon;
 
+    /*
+     * return the index of target at O(logN) or the negative
+     * index - 1 if the element was not found
+     */
     int bsearch(E target, int low, int high) {
         if(low <= high){
             int mid = low + ((high - low) / 2);
@@ -46,6 +50,7 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
     /**
      * create an empty SortedSet
+     * O(TODO)
      */
     public SortedSet() {
         myCon = new ArrayList<>();
@@ -54,9 +59,13 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
     /**
      * Create a copy of other that is sorted.<br>
      * @param other != null
+     * O(TODO)
      */
-    //TODO O(NlogN)
     public SortedSet(ISet<E> other) {
+        if (other == null) {
+            throw new IllegalArgumentException("sortedSet");
+        }
+
         Iterator<E> iter = other.iterator();
         while (iter.hasNext()) {
             add(iter.next());
@@ -64,8 +73,20 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
     }
 
     //TODO why is this goal N
+    /**
+     * Add an item to this set.
+     * <br> item != null
+     * @param item the item to be added to this set. item may not equal null.
+     * @return true if this set changed as a result of this operation, 
+     * false otherwise.
+     * O(TODO)
+     */
     @Override
     public boolean add(E item) {
+        if (item == null) {
+            throw new IllegalArgumentException("add");
+        }
+
         int index = bsearch(item, 0, myCon.size() - 1);
         if (index < 0) {
             myCon.add(-(index + 1), item);
@@ -74,18 +95,130 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
         return false;
     }
 
+    /**
+      * A union operation. Add all items of otherSet that 
+      * are not already present in this set to this set.
+      * @param otherSet != null
+      * @return true if this set changed as a result of this operation, 
+      * false otherwise.
+      * O(TODO)
+      */
+    @Override
+    public boolean addAll(ISet<E> otherSet) {
+        if (otherSet == null) {
+            throw new IllegalArgumentException("addAll");
+        }
+        //TODO
+    }
+
+    /**
+     * Make this set empty.
+     * <br>pre: none
+     * <br>post: size() = 0
+     * O(TODO)
+     */
+    @Override
+    public void clear() {
+        //TODO
+    }
+
+    /**
+     * Determine if item is in this set. 
+     * <br>pre: item != null
+     * @param item element whose presence is being tested. 
+     * Item may not equal null.
+     * @return true if this set contains the specified item, false otherwise.
+     * O(TODO)
+     */
     @Override
     public boolean contains(E item) {
+        if (item == null) {
+            throw new IllegalArgumentException("contains");
+        }
+
         return (bsearch(item, 0, myCon.size() - 1) >= 0);
     }
 
+    /**
+     * Determine if all of the elements of otherSet are in this set.
+     * <br> pre: otherSet != null
+     * @param otherSet != null
+     * @return true if this set contains all of the elements in otherSet, 
+     * false otherwise.
+     * O(TODO)
+     */
+    @Override
+    public boolean containsAll(ISet<E> otherSet) {
+        if (otherSet == null) {
+            throw new IllegalArgumentException("containsAll");
+        }
+        //TODO
+    }
+
+    /**
+     * Create a new set that is the difference of this set and otherSet. 
+     * Return an ISet of elements that are in this Set but not in otherSet. 
+     * Also called the relative complement. 
+     * Neither this set or otherSet are altered as a result of this operation.
+     * <br> pre: otherSet != null
+     * @param otherSet != null
+     * @return a set that is the difference of this set and otherSet
+     * O(TODO)
+     */
+    @Override
+    public ISet<E> difference(ISet<E> otherSet) {
+        if (otherSet == null) [
+            throw new IllegalArgumentException("difference");
+        ]
+        //TODO
+    }
+
+    //equals
+
+    /**
+     * create a new set that is the intersection of this set and otherSet.
+     * <br>pre: otherSet != null<br>
+     * <br>post: returns a set that is the intersection of this set 
+     * and otherSet.
+     * Neither this set or otherSet are altered as a result of this operation.
+     * <br> pre: otherSet != null
+     * @param otherSet != null
+     * @return a set that is the intersection of this set and otherSet
+     * O(TODO)
+     */
+    @Override
+    public ISet<E> intersection(ISet<E> otherSet) {
+        if (otherSet == null) {
+            throw new IllegalArgumentException("intersection");
+        }
+        //TODO
+    }
+
+    /**
+     * Return an Iterator object for the elements of this set.
+     * pre: none
+     * @return an Iterator object for the elements of this set
+     * O(TODO)
+     */
     @Override 
     public Iterator<E> iterator() {
         return myCon.iterator();
     }
 
+    /**
+     * Remove the specified item from this set if it is present.
+     * pre: item != null
+     * @param item the item to remove from the set. item may not equal null.
+     * @return true if this set changed as a result of this operation, 
+     * false otherwise
+     * O(TODO)
+     */
     @Override
     public boolean remove(E item) {
+        if (item == null) {
+            throw new IllegalArgumentException("remove");
+        }
+
         int index = bsearch(item, 0, myCon.size() - 1);
         if (index >= 0) {
             myCon.remove(index);
@@ -94,15 +227,39 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
         return false;
     }
 
+    /**
+     * Return the number of elements of this set.
+     * pre: none
+     * @return the number of items in this set
+     * O(TODO)
+     */
     @Override
     public int size() {
         return myCon.size();
     }
 
     /**
+     * Create a new set that is the union of this set and otherSet.
+     * <br>pre: otherSet != null
+     * <br>post: returns a set that is the union of this set and otherSet.
+     * Neither this set or otherSet are altered as a result of this operation.
+     * <br> pre: otherSet != null
+     * @param otherSet != null
+     * @return a set that is the union of this set and otherSet
+     */
+    @Override
+    public ISet<E> union(ISet<E> otherSet) {
+        if (otherSet == null) {
+            throw new IllegalArgumentException("union");
+        }
+        //TODO
+    }
+
+    /**
      * Return the smallest element in this SortedSet.
      * <br> pre: size() != 0
      * @return the smallest element in this SortedSet.
+     * O(TODO)
      */
     public E min() {
         if (myCon.size() == 0) {
@@ -116,6 +273,7 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      * Return the largest element in this SortedSet.
      * <br> pre: size() != 0
      * @return the largest element in this SortedSet.
+     * O(TODO)
      */
     public E max() {
         if (myCon.size() == 0) {

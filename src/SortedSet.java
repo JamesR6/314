@@ -31,7 +31,7 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
     private ArrayList<E> myCon;
 
-    private int bsearch(E target, int low, int high) {
+    int bsearch(E target, int low, int high) {
         if(low <= high){
             int mid = low + ((high - low) / 2);
 	        if(myCon.get(mid).equals(target))
@@ -55,15 +55,48 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      * Create a copy of other that is sorted.<br>
      * @param other != null
      */
+    //TODO O(NlogN)
     public SortedSet(ISet<E> other) {
         Iterator<E> iter = other.iterator();
         while (iter.hasNext()) {
-            E input = iter.next();
-            int index = bsearch(input, 0, myCon.size() - 1);
-            if (index < 0) {
-                myCon.add(-(index + 1), input);
-            }
+            add(iter.next());
         }
+    }
+
+    //TODO why is this goal N
+    @Override
+    public boolean add(E item) {
+        int index = bsearch(item, 0, myCon.size() - 1);
+        if (index < 0) {
+            myCon.add(-(index + 1), item);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean contains(E item) {
+        return (bsearch(item, 0, myCon.size() - 1) >= 0);
+    }
+
+    @Override 
+    public Iterator<E> iterator() {
+        return myCon.iterator();
+    }
+
+    @Override
+    public boolean remove(E item) {
+        int index = bsearch(item, 0, myCon.size() - 1);
+        if (index >= 0) {
+            myCon.remove(index);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int size() {
+        return myCon.size();
     }
 
     /**

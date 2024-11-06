@@ -23,22 +23,11 @@ import java.util.Iterator;
  */
 public abstract class AbstractSet<E> implements ISet<E> {
 
-    /* DELETE THIS COMMENT FROM YOUR SUBMISSION.
-     * 
-     * RECALL:
-     * 
-     * NO INSTANCE VARIABLES ALLOWED.
-     * 
-     * NO DIRECT REFERENCE TO UnsortedSet OR SortedSet ALLOWED.
-     * (In other words the data types UnsortedSet and SortedSet
-     * will not appear any where in this class.)
-     * 
-     * NO DIRECT REFERENCES to ArrayList or other Java Collections.
-     * 
-     * NO METHODS ADDED other than those in ISet and Object.
+    /**
+     * Make this set empty.
+     * <br>pre: none
+     * <br>post: size() = 0
      */
-     
-      
     @Override
     public void clear() {
         Iterator<E> it = this.iterator();
@@ -48,8 +37,19 @@ public abstract class AbstractSet<E> implements ISet<E> {
         }
     }
     
+    /**
+     * Determine if item is in this set. 
+     * <br>pre: item != null
+     * @param item element whose presence is being tested. 
+     * Item may not equal null.
+     * @return true if this set contains the specified item, false otherwise.
+     */
     @Override
     public boolean contains(E obj) {
+        if (obj == null) {
+            throw new IllegalArgumentException("contains");
+        }
+
         for (E val : this) {
             if (val.equals(obj)) {
                 return true;
@@ -58,8 +58,19 @@ public abstract class AbstractSet<E> implements ISet<E> {
         return false;
     }
 
+    /**
+     * Determine if all of the elements of otherSet are in this set.
+     * <br> pre: otherSet != null
+     * @param otherSet != null
+     * @return true if this set contains all of the elements in otherSet, 
+     * false otherwise.
+     */
     @Override
     public boolean containsAll(ISet<E> otherSet) {
+        if (otherSet == null) {
+            throw new IllegalArgumentException("containsAll");
+        }
+
         for (E val : otherSet) {
             if (!this.contains(val)) {
                 return false;
@@ -68,8 +79,19 @@ public abstract class AbstractSet<E> implements ISet<E> {
         return true;
     }
 
+    /**
+     * Remove the specified item from this set if it is present.
+     * pre: item != null
+     * @param item the item to remove from the set. item may not equal null.
+     * @return true if this set changed as a result of this operation, 
+     * false otherwise
+     */
     @Override
     public boolean remove(E val) {
+        if (val == null) {
+            throw new IllegalArgumentException("remove");
+        }
+
         Iterator<E> iter = this.iterator();
         while (iter.hasNext()) {
             if (iter.next().equals(val)) {
@@ -80,6 +102,11 @@ public abstract class AbstractSet<E> implements ISet<E> {
         return false;
     }
 
+    /**
+     * Return the number of elements of this set.
+     * pre: none
+     * @return the number of items in this set
+     */
     @Override
     public int size() {
         int result = 0;
@@ -91,6 +118,14 @@ public abstract class AbstractSet<E> implements ISet<E> {
         return result;
     }
 
+    /**
+     * Determine if this set is equal to other.
+     * Two sets are equal if they have exactly the same elements.
+     * The order of the elements does not matter.
+     * <br>pre: none
+     * @param other the object to compare to this set 
+     * @return true if other is a Set and has the same elements as this set
+     */
     @Override
     public boolean equals(Object other) {
         if (other == null || !(other instanceof ISet)) {
@@ -112,13 +147,20 @@ public abstract class AbstractSet<E> implements ISet<E> {
     }
 
     //TODO ask what all the stuff means
+    /**
+     * Create a new set that is the union of this set and otherSet.
+     * <br>pre: otherSet != null
+     * <br>post: returns a set that is the union of this set and otherSet.
+     * Neither this set or otherSet are altered as a result of this operation.
+     * <br> pre: otherSet != null
+     * @param otherSet != null
+     * @return a set that is the union of this set and otherSet
+     */
     @Override
     public ISet<E> union(ISet<E> otherSet) {
         return this.union(otherSet);
     }
 
-
-    
     /**
      * Return a String version of this set. 
      * Format is (e1, e2, ... en)

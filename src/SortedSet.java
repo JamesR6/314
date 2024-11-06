@@ -1,19 +1,15 @@
 /*  Student information for assignment:
  *
- *  On <MY|OUR> honor, <NAME1> and <NAME2),
- *  this programming assignment is <MY|OUR> own work
- *  and <I|WE> have not provided this code to any other student.
+ *  On MY honor, JP Reeves, 
+ *  this programming assignment is MY own work
+ *  and I have not provided this code to any other student.
  *
- *  Number of slip days used:
+ *  Number of slip days used: 0
  *
  *  Student 1 (Student whose Canvas account is being used)
- *  UTEID:
- *  email address:
- *  TA name:
- *
- *  Student 2
- *  UTEID:
- *  email address:
+ *  UTEID: jsr3699
+ *  email address: jpascualsr06@gmail.com
+ *  TA name: Eliza  
  */
 
 import java.util.Iterator;
@@ -35,11 +31,24 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
 
     private ArrayList<E> myCon;
 
+    private int bsearch(E target, int low, int high) {
+        if(low <= high){
+            int mid = low + ((high - low) / 2);
+	        if(myCon.get(mid).equals(target))
+                return mid;
+            else if(myCon.get(mid).compareTo(target) > 0)
+                return bsearch(target, low, mid - 1);
+            else
+                return bsearch(target, mid + 1, high);
+        }
+        return -(low + 1);
+    }
+
     /**
      * create an empty SortedSet
      */
     public SortedSet() {
-
+        myCon = new ArrayList<>();
     }
 
     /**
@@ -47,7 +56,14 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      * @param other != null
      */
     public SortedSet(ISet<E> other) {
-
+        Iterator<E> iter = other.iterator();
+        while (iter.hasNext()) {
+            E input = iter.next();
+            int index = bsearch(input, 0, myCon.size() - 1);
+            if (index < 0) {
+                myCon.add(-(index + 1), input);
+            }
+        }
     }
 
     /**
@@ -56,7 +72,11 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      * @return the smallest element in this SortedSet.
      */
     public E min() {
+        if (myCon.size() == 0) {
+            throw new IllegalStateException("no size");
+        }
 
+        return myCon.get(0);
     }
 
     /**
@@ -65,7 +85,11 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      * @return the largest element in this SortedSet.
      */
     public E max() {
+        if (myCon.size() == 0) {
+            throw new IllegalStateException("no size");
+        }
 
+        return myCon.get(myCon.size() - 1);
     }
 
 

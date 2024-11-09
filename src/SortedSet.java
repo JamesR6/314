@@ -35,7 +35,8 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      * return the index of target at O(logN) or the negative
      * index - 1 if the element was not found
      */
-    int bsearch(E target, int low, int high) {
+    private int bsearch(E target, int low, int high) {
+        // code for binary search from class slides
         if(low <= high){
             int mid = low + ((high - low) / 2);
 	        if(myCon.get(mid).equals(target))
@@ -48,9 +49,47 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
         return -(low + 1);
     }
 
+    // code for quick sort from class slides
+    private void swapReferences(ArrayList<E> a, int index1, int index2) {
+       E tmp = a.get(index1);
+       a.set(index1, a.get(index2));
+       a.set(index2, tmp);
+   }
+
+    public void quicksort(ArrayList<E> data, int start, int stop) {
+        if(start < stop) {
+	    int pivotIndex = (start + stop) / 2;
+
+	    // Place pivot at start position
+             swapReferences(data, pivotIndex, start);
+             E pivot = data.get(start);
+
+             // Begin partitioning
+             int j = start;
+
+	    // from first to j are elements less than or equal to pivot
+   	    // from j to i are elements greater than pivot
+	    // elements beyond i have not been checked yet
+	    for(int i = start + 1; i <= stop; i++ ) {
+	        //is current element less than or equal to pivot
+	        if (data.get(i).compareTo(pivot) <= 0) {
+	            // if so move it to the less than or equal portion
+	            j++;
+	            swapReferences(data, i, j);
+	        }
+	    }
+	
+	    //restore pivot to correct spot
+	    swapReferences(data, start, j);
+	    quicksort( data, start, j - 1 );    // Sort small elements
+	    quicksort( data, j + 1, stop );   // Sort large elements
+        } // else start >= stop, 0 or 1 element, base case, do nothing
+    }
+
+
     /**
      * create an empty SortedSet
-     * O(TODO)
+     * O(1)
      */
     public SortedSet() {
         myCon = new ArrayList<>();
@@ -59,20 +98,24 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
     /**
      * Create a copy of other that is sorted.<br>
      * @param other != null
-     * O(TODO)
+     * O(NlogN)
      */
     public SortedSet(ISet<E> other) {
         if (other == null) {
             throw new IllegalArgumentException("sortedSet");
         }
 
+        
+        ArrayList<E> newCon = new ArrayList<>();
+        newCon.addAll(myCon);
         Iterator<E> iter = other.iterator();
         while (iter.hasNext()) {
-            add(iter.next());
+            newCon.add(iter.next());
         }
+        quicksort(newCon, 0, newCon.size() - 1);
+        myCon = newCon;
     }
 
-    //TODO why is this goal N
     /**
      * Add an item to this set.
      * <br> item != null
@@ -108,7 +151,16 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
         if (otherSet == null) {
             throw new IllegalArgumentException("addAll");
         }
-        //TODO
+
+        boolean changed = false;
+        
+        Iterator<E> iter = otherSet.iterator();
+        while (iter.hasNext()) {
+            if (this.add(iter.next()) && !changed) {
+                changed = true;
+            }
+        }
+        return changed;
     }
 
     /**
@@ -119,7 +171,7 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      */
     @Override
     public void clear() {
-        //TODO
+        myCon = new ArrayList<>();
     }
 
     /**

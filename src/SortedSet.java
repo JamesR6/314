@@ -4,7 +4,7 @@
  *  this programming assignment is MY own work
  *  and I have not provided this code to any other student.
  *
- *  Number of slip days used: 0
+ *  Number of slip days used: 2
  *
  *  Student 1 (Student whose Canvas account is being used)
  *  UTEID: jsr3699
@@ -86,6 +86,49 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
         } // else start >= stop, 0 or 1 element, base case, do nothing
     }
 
+    private void merge( ArrayList<E> data, ArrayList<E> temp, 
+			int leftPos, int rightPos, int rightEnd) {
+        // code for merge from class slides
+	    int leftEnd = rightPos - 1;
+	    int tempPos = leftPos;
+	    //main loop
+	    while(leftPos <= leftEnd && rightPos <= rightEnd){
+		    if( data.get(leftPos).compareTo(data.get(rightPos)) < 0) {
+			    temp.add(data.get(leftPos));
+			    leftPos++;
+		    } else if (data.get(leftPos).compareTo(data.get(rightPos)) > 0){
+			    temp.add(data.get(rightPos));
+			    rightPos++;
+		    } else {
+                temp.add(data.get(leftPos));
+                rightPos++;
+                leftPos++;
+            }
+		    tempPos++;
+	    }
+	    //copy rest of left half
+	    while (leftPos <= leftEnd) {
+            temp.add(data.get(leftPos));
+		    tempPos++;
+		    leftPos++;			                      
+	    }
+	    //copy rest of right half
+	    while (rightPos <= rightEnd) {
+            temp.add(data.get(rightPos));
+		    tempPos++;
+		    rightPos++;			                      
+	    }
+    }
+
+    private void combine(ArrayList<E> combined, ISet<E> otherSet) {
+        combined.addAll(myCon);
+        Iterator<E> iter = otherSet.iterator();
+        while (iter.hasNext()) {
+            combined.add(iter.next());
+        }
+    }
+
+
 
     /**
      * create an empty SortedSet
@@ -105,13 +148,9 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
             throw new IllegalArgumentException("sortedSet");
         }
 
-        
+        myCon = new ArrayList<>();
         ArrayList<E> newCon = new ArrayList<>();
-        newCon.addAll(myCon);
-        Iterator<E> iter = other.iterator();
-        while (iter.hasNext()) {
-            newCon.add(iter.next());
-        }
+        combine(newCon, other);
         quicksort(newCon, 0, newCon.size() - 1);
         myCon = newCon;
     }
@@ -122,7 +161,7 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      * @param item the item to be added to this set. item may not equal null.
      * @return true if this set changed as a result of this operation, 
      * false otherwise.
-     * O(TODO)
+     * O(N)
      */
     @Override
     public boolean add(E item) {
@@ -144,7 +183,7 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
       * @param otherSet != null
       * @return true if this set changed as a result of this operation, 
       * false otherwise.
-      * O(TODO)
+      * O(N)
       */
     @Override
     public boolean addAll(ISet<E> otherSet) {
@@ -152,22 +191,33 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
             throw new IllegalArgumentException("addAll");
         }
 
-        boolean changed = false;
-        
-        Iterator<E> iter = otherSet.iterator();
-        while (iter.hasNext()) {
-            if (this.add(iter.next()) && !changed) {
-                changed = true;
+        if (otherSet instanceof SortedSet) {
+            ArrayList<E> data = new ArrayList<>();
+            ArrayList<E> temp = new ArrayList<>();
+            combine(data, otherSet);
+
+            //combine all data and merge sort
+            merge(data, temp, 0, myCon.size(), data.size() - 1);
+            boolean changed = (myCon.size() < temp.size());
+            myCon = temp;
+            return changed;
+        } else {
+            Iterator<E> iter = otherSet.iterator();
+            boolean changed = false;
+            while (iter.hasNext()) {
+                if (this.add(iter.next()) && !changed) {
+                    changed = true;
+                }
             }
+            return changed;
         }
-        return changed;
     }
 
     /**
      * Make this set empty.
      * <br>pre: none
      * <br>post: size() = 0
-     * O(TODO)
+     * O(1)
      */
     @Override
     public void clear() {
@@ -180,7 +230,7 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      * @param item element whose presence is being tested. 
      * Item may not equal null.
      * @return true if this set contains the specified item, false otherwise.
-     * O(TODO)
+     * O(logN)
      */
     @Override
     public boolean contains(E item) {
@@ -197,14 +247,63 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      * @param otherSet != null
      * @return true if this set contains all of the elements in otherSet, 
      * false otherwise.
-     * O(TODO)
+     * O(N)
      */
     @Override
     public boolean containsAll(ISet<E> otherSet) {
         if (otherSet == null) {
             throw new IllegalArgumentException("containsAll");
         }
-        //TODO
+        
+        if (otherSet instanceof SortedSet) {
+            return containsAllSorted(otherSet);
+        }
+        return containsAllUnsorted(otherSet);
+    }
+
+    /*
+     * private helper for containsAll
+     */
+    private boolean containsAllUnsorted(ISet<E> otherSet) {
+        for (E item : otherSet) {
+            if (!this.contains(item)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /*
+     * private helper for containsALl
+     */
+    private boolean containsAllSorted(ISet<E> otherSet) {
+        if (otherSet.size() == 0) {
+            return true;  
+        } else if (this.size() == 0) {
+            return false; 
+        }
+        //modified merge in order to find containsALl
+        Iterator<E> iterThis = this.iterator();
+        Iterator<E> iterOther = otherSet.iterator();
+        E thisData = iterThis.next();
+        E otherData = iterOther.next();
+        while (true) {
+            if (thisData.compareTo(otherData) < 0) {
+                if (iterThis.hasNext()) {
+                    thisData = iterThis.next();
+                } else {
+                    return false;
+                }
+            } else if (thisData.compareTo(otherData) == 0) {
+                if (iterOther.hasNext()) {
+                    otherData = iterOther.next();
+                } else {
+                    return true;
+                }
+            } else {
+                return false;
+            }
+        }
     }
 
     /**
@@ -215,17 +314,22 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      * <br> pre: otherSet != null
      * @param otherSet != null
      * @return a set that is the difference of this set and otherSet
-     * O(TODO)
+     * O(N^2)
      */
     @Override
     public ISet<E> difference(ISet<E> otherSet) {
-        if (otherSet == null) [
+        if (otherSet == null) {
             throw new IllegalArgumentException("difference");
-        ]
-        //TODO
-    }
+        }
 
-    //equals
+        SortedSet<E> result = new SortedSet<>();
+        for (E item : this) {
+            if (!otherSet.contains(item)) {
+                result.add(item);
+            }
+        }
+        return result;
+    }
 
     /**
      * create a new set that is the intersection of this set and otherSet.
@@ -236,21 +340,29 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      * <br> pre: otherSet != null
      * @param otherSet != null
      * @return a set that is the intersection of this set and otherSet
-     * O(TODO)
+     * O(N^2)
      */
     @Override
     public ISet<E> intersection(ISet<E> otherSet) {
         if (otherSet == null) {
             throw new IllegalArgumentException("intersection");
         }
-        //TODO
+        
+        ISet<E> result = new UnsortedSet<>();
+        for (E item : this) {
+            if (otherSet.contains(item)) {
+                result.add(item);
+            }
+        }
+        return result;
     }
+
 
     /**
      * Return an Iterator object for the elements of this set.
      * pre: none
      * @return an Iterator object for the elements of this set
-     * O(TODO)
+     * O(1)
      */
     @Override 
     public Iterator<E> iterator() {
@@ -263,7 +375,7 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      * @param item the item to remove from the set. item may not equal null.
      * @return true if this set changed as a result of this operation, 
      * false otherwise
-     * O(TODO)
+     * O(N)
      */
     @Override
     public boolean remove(E item) {
@@ -283,7 +395,7 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      * Return the number of elements of this set.
      * pre: none
      * @return the number of items in this set
-     * O(TODO)
+     * O(1)
      */
     @Override
     public int size() {
@@ -298,20 +410,49 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      * <br> pre: otherSet != null
      * @param otherSet != null
      * @return a set that is the union of this set and otherSet
+     * O(N^2)
      */
     @Override
     public ISet<E> union(ISet<E> otherSet) {
         if (otherSet == null) {
             throw new IllegalArgumentException("union");
         }
-        //TODO
+        
+        if (otherSet instanceof SortedSet) {
+            return unionSorted(otherSet);
+        }
+        ISet<E> result = new UnsortedSet<>();
+        for (E item : this) {
+            result.add(item);
+        }
+        for (E item : otherSet) {
+            result.add(item);
+        }
+        return result;
+    }
+
+    /*
+     * private helper for union method
+     */
+    private ISet<E> unionSorted(ISet<E> otherSet) {
+        ArrayList<E> data = new ArrayList<>();
+        ArrayList<E> temp = new ArrayList<>();
+        data.addAll(myCon);
+        combine(data, otherSet);
+        merge(data, temp, 0, myCon.size(), data.size() - 1);
+        //merge data as an ISet
+        SortedSet<E> result = new SortedSet<>();
+        for (E arrData : temp) {
+            result.add(arrData);
+        }
+        return result;
     }
 
     /**
      * Return the smallest element in this SortedSet.
      * <br> pre: size() != 0
      * @return the smallest element in this SortedSet.
-     * O(TODO)
+     * O(1)
      */
     public E min() {
         if (myCon.size() == 0) {
@@ -325,7 +466,7 @@ public class SortedSet<E extends Comparable<? super E>> extends AbstractSet<E> {
      * Return the largest element in this SortedSet.
      * <br> pre: size() != 0
      * @return the largest element in this SortedSet.
-     * O(TODO)
+     * O(1)
      */
     public E max() {
         if (myCon.size() == 0) {

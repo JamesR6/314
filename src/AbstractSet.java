@@ -4,7 +4,7 @@
  *  this programming assignment is MY own work
  *  and I have not provided this code to any other student.
  *
- *  Number of slip days used: 0
+ *  Number of slip days used: 2
  *
  *  Student 1 (Student whose Canvas account is being used)
  *  UTEID: jsr3699
@@ -27,6 +27,7 @@ public abstract class AbstractSet<E> implements ISet<E> {
      * Make this set empty.
      * <br>pre: none
      * <br>post: size() = 0
+     * O(N)
      */
     @Override
     public void clear() {
@@ -43,6 +44,7 @@ public abstract class AbstractSet<E> implements ISet<E> {
      * @param item element whose presence is being tested. 
      * Item may not equal null.
      * @return true if this set contains the specified item, false otherwise.
+     * O(N)
      */
     @Override
     public boolean contains(E obj) {
@@ -59,11 +61,30 @@ public abstract class AbstractSet<E> implements ISet<E> {
     }
 
     /**
+      * A union operation. Add all items of otherSet that 
+      * are not already present in this set to this set.
+      * @param otherSet != null
+      * @return true if this set changed as a result of this operation, 
+      * false otherwise.
+      * O(N^2)
+      */
+      public boolean addAll(ISet<E> otherSet) {
+        boolean changed = false;
+        for (E item : otherSet) {
+            if (this.add(item) && !changed) {
+                changed = true;
+            }
+        }
+        return changed;
+      }
+
+    /**
      * Determine if all of the elements of otherSet are in this set.
      * <br> pre: otherSet != null
      * @param otherSet != null
      * @return true if this set contains all of the elements in otherSet, 
      * false otherwise.
+     * O(N^2)
      */
     @Override
     public boolean containsAll(ISet<E> otherSet) {
@@ -85,6 +106,7 @@ public abstract class AbstractSet<E> implements ISet<E> {
      * @param item the item to remove from the set. item may not equal null.
      * @return true if this set changed as a result of this operation, 
      * false otherwise
+     * O(N)
      */
     @Override
     public boolean remove(E val) {
@@ -106,6 +128,7 @@ public abstract class AbstractSet<E> implements ISet<E> {
      * Return the number of elements of this set.
      * pre: none
      * @return the number of items in this set
+     * O(N)
      */
     @Override
     public int size() {
@@ -137,29 +160,21 @@ public abstract class AbstractSet<E> implements ISet<E> {
         if (size() != o.size()) {
             return false;
         }
-        Iterator<E> iter = this.iterator();
-        while(iter.hasNext()) {
-            if (!o.contains(iter.next())) {
-                return false;
-            }
+        if (size() == 0) {
+            return true;
         }
-        return true;
+        Iterator<E> iterThis = this.iterator();
+        Iterator<E> iterOther = o.iterator();
+        E thisData = iterThis.next();
+        E otherData = iterOther.next();
+        if (!thisData.getClass().equals(otherData.getClass())) {
+            return false;
+        }
+        
+        return this.containsAll(o);
     }
 
-    //TODO ask what all the stuff means
-    /**
-     * Create a new set that is the union of this set and otherSet.
-     * <br>pre: otherSet != null
-     * <br>post: returns a set that is the union of this set and otherSet.
-     * Neither this set or otherSet are altered as a result of this operation.
-     * <br> pre: otherSet != null
-     * @param otherSet != null
-     * @return a set that is the union of this set and otherSet
-     */
-    @Override
-    public ISet<E> union(ISet<E> otherSet) {
-        return this.union(otherSet);
-    }
+    
 
     /**
      * Return a String version of this set. 
@@ -183,5 +198,34 @@ public abstract class AbstractSet<E> implements ISet<E> {
 
         result.append(")");
         return result.toString();
+    }
+
+    /**
+     * Create a new set that is the difference of this set and otherSet. 
+     * Return an ISet of elements that are in this Set but not in otherSet. 
+     * Also called the relative complement. 
+     * <br>Example: If ISet A contains [X, Y, Z] and ISet B contains [W, Z] 
+     * then A.difference(B) would return an ISet with elements [X, Y] while
+     * B.difference(A) would return an ISet with elements [W]. 
+     * <br>pre: otherSet != null
+     * <br>post: returns a set that is the difference of this set and otherSet.
+     * Neither this set or otherSet are altered as a result of this operation.
+     * <br> pre: otherSet != null
+     * @param otherSet != null
+     * @return a set that is the difference of this set and otherSet
+     * O(depends on class)
+     */
+    public ISet<E> difference(ISet<E> otherSet) {
+        if (otherSet == null) {
+            throw new IllegalArgumentException("difference");
+        }
+        ISet<E> union = this.union(otherSet);
+        ISet<E> inter = this.intersection(otherSet);
+        for (E data : union) {
+            if (inter.contains(data)) {
+                union.remove(data);
+            }
+        }
+        return union;
     }
 }

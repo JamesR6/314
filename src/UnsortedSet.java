@@ -4,7 +4,7 @@
  *  this programming assignment is MY own work
  *  and I have not provided this code to any other student.
  *
- *  Number of slip days used: 0
+ *  Number of slip days used: 2
  *
  *  Student 1 (Student whose Canvas account is being used)
  *  UTEID: jsr3699
@@ -31,7 +31,7 @@ public class UnsortedSet<E> extends AbstractSet<E> {
     /*
      * create a new empty Unsorted Set
      * pre: none
-     * O(TODO)
+     * O(1)
      */
     public UnsortedSet() {
         myCon = new ArrayList<>();
@@ -43,7 +43,7 @@ public class UnsortedSet<E> extends AbstractSet<E> {
      * @param item the item to be added to this set. item may not equal null.
      * @return true if this set changed as a result of this operation, 
      * false otherwise.
-     * O(TODO)
+     * O(N)
      */
     @Override
     public boolean add(E item) {
@@ -59,27 +59,16 @@ public class UnsortedSet<E> extends AbstractSet<E> {
     }
 
     /**
-      * A union operation. Add all items of otherSet that 
-      * are not already present in this set to this set.
-      * @param otherSet != null
-      * @return true if this set changed as a result of this operation, 
-      * false otherwise.
-      * O(TODO) 
-      */
+     * Make this set empty.
+     * <br>pre: none
+     * <br>post: size() = 0
+     * O(1)
+     */
     @Override
-    public boolean addAll(ISet<E> otherSet) {
-        if (otherSet == null) {
-            throw new IllegalArgumentException("addAll");
-        }
-        
-        boolean changed = false;
-        for (E item : otherSet) {
-            if (add(item) && !changed) {
-                changed = true;
-            }
-        }
-        return changed;
+    public void clear() {
+        myCon = new ArrayList<>();
     }
+
     
     /**
      * Create a new set that is the difference of this set and otherSet. 
@@ -88,7 +77,7 @@ public class UnsortedSet<E> extends AbstractSet<E> {
      * <br> pre: otherSet != null
      * @param otherSet != null
      * @return a set that is the difference of this set and otherSet
-     * O(TODO)
+     * O(N^2)
      */
     @Override
     public ISet<E> difference(ISet<E> otherSet) {
@@ -114,7 +103,7 @@ public class UnsortedSet<E> extends AbstractSet<E> {
      * <br> pre: otherSet != null
      * @param otherSet != null
      * @return a set that is the intersection of this set and otherSet
-     * O(TODO)
+     * O(N^2)
      */
     @Override
     public ISet<E> intersection(ISet<E> otherSet) {
@@ -135,7 +124,7 @@ public class UnsortedSet<E> extends AbstractSet<E> {
      * Return an Iterator object for the elements of this set.
      * pre: none
      * @return an Iterator object for the elements of this set
-     * O(TODO)
+     * O(1)
      */
     @Override
     public Iterator<E> iterator() {
@@ -146,7 +135,7 @@ public class UnsortedSet<E> extends AbstractSet<E> {
      * Return the number of elements of this set.
      * pre: none
      * @return the number of items in this set
-     * O(TODO)
+     * O(1)
      */
     @Override
     public int size() {
@@ -161,7 +150,7 @@ public class UnsortedSet<E> extends AbstractSet<E> {
      * <br> pre: otherSet != null
      * @param otherSet != null
      * @return a set that is the union of this set and otherSet
-     * O(TODO)
+     * O(N^2)
      */
     @Override
     public ISet<E> union(ISet<E> otherSet) {
@@ -169,7 +158,6 @@ public class UnsortedSet<E> extends AbstractSet<E> {
             throw new IllegalArgumentException("addAll");
         }
 
-        //TODO why is this goal n squared
         ISet<E> result = new UnsortedSet<>();
         for (E item : this) {
             result.add(item);

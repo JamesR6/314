@@ -93,47 +93,59 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
             throw new IllegalArgumentException("remove");
         }
 
-        if (N == 0) {
-            return false;
-        }
-        if (N == 1) {
-            root = null;
-            N--;
-            return true;
-        }
-        
-        //find node to remove
-        ArrayList<BSTNode<E>> toRemove = findNode(value, root, root);
-        return removeCases(toRemove);
-        
+        //remove method from lecutre 11/01/2024
+        int oldSize = N;
+        root = removeHelp(value, root, false);
+        return oldSize != N;
     }
 
-    private boolean removeCases(ArrayList<BSTNode<E>> toRemove) {
-        if (toRemove == null) {
-            return false;
-        } 
-        BSTNode<E> parent = toRemove.get(0);
-        BSTNode<E> child = toRemove.get(1);
-        if (child.isLeaf()) {
-            if (child.data.compareTo(parent.data) < 0) {
-                parent.left = null;
-            } else {
-                parent.right = null;
-            } 
-        } else if (child.left == null && child.right != null || 
-                   child.left != null && child.right == null) {
-            BSTNode<E> baby = (child.left != null) ? child.left : child.right;
-            if (parent.left.equals(child)) {
-                parent.left = baby;
-            } else {
-                parent.right = baby;
-            }
-        } else {
-            //node has 2 children
+    /*
+     * remove method helper from lecture 11/01/2024
+     */
+    private BSTNode<E> removeHelp(E val, BSTNode<E> node, boolean duplicate) {
+        //Base case, value does not exist
+        if (node == null) {
+            return null;
         }
-        N--;
-        return true;
+        int dir = val.compareTo(node.data);
+        if (dir < 0) {
+            //value is in the left subtree
+            node.left = removeHelp(val, node.left, false);
+        } else if (dir > 0) {
+            //value is in the right subtree
+            node.right = removeHelp(val, node.right, false);
+        } else {
+            //node is found
+            if (!duplicate) {
+                N--;
+            }
+            if (node.isLeaf()) {
+                //leaf node
+                return null;
+            } else if (node.left == null) {
+                //only right child
+                return node.right;
+            } else if (node.right == null) {
+                //only left child
+                return node.left;
+            } else {
+                //two children
+                node.data = maxHelp(node.left);
+
+                //remove duplicate
+                node.left = removeHelp(node.data, node.left, true);
+            }
+        }
+        return node;
     }
+
+    private E maxHelp(BSTNode<E> node) {
+        while (node.right != null) {
+            node = node.right;
+        }
+        return node.data;
+    }
+    
 
     /*
      * recursive for remove and isPresent
@@ -205,7 +217,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
     public int height() {
         //if tree is empty
         if (N == 0) {
-            return 0;
+            return -1;
         }
         
         return heightRecur(root);

@@ -8,6 +8,7 @@ public class test {
         tree.add(2);
         tree.add(6);
         tree.add(8);
+        tree.remove(4);
 
         tree.printTree();
         System.out.println(tree.getAllGreaterThan(239405).toString());

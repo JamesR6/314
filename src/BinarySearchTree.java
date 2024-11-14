@@ -2,15 +2,16 @@
  *
  * Student information for assignment:
  *
- *  On my honor, <NAME>, this programming assignment is my own work
+ *  On my honor, JP Reeves, this programming assignment is my own work
  *  and I have not provided this code to any other student.
  *
- *  UTEID:
- *  email address:
- *  TA name:
- *  Number of slip days I am using:
+ *  UTEID: jsr3699
+ *  email address: jpascualsr06@gmail.com
+ *  TA name: Eliza
+ *  Number of slip days I am using: 0
  */
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,10 +25,8 @@ import java.util.List;
 public class BinarySearchTree<E extends Comparable<? super E>> {
 
     private BSTNode<E> root;
-    // CS314 students. Add any other instance variables you want here
-
-    // CS314 students. Add a default constructor here if you feel it is necessary.
-
+    private int N;
+ 
     /**
      *  Add the specified item to this Binary Search Tree if it is not already present.
      *  <br>
@@ -39,7 +38,44 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      *  in the tree, return true if value is added to the tree and size() = old size() + 1
      */
     public boolean add(E value) {
-        return true;
+        if (value == null) {
+            throw new IllegalArgumentException("add");
+        }
+
+        //if this is a new tree, make root node
+        if (root == null) {
+            root = new BSTNode<>(value);
+            N++;
+            return true;
+        }
+
+        return addRecur(value, root, root);
+    }
+
+    /*
+     * recursive helper for add
+     */
+    private boolean addRecur(E value, BSTNode<E> here, BSTNode<E> prev) {
+        //base cases
+        if (here == null) {
+            //insert new node left or right of previous
+            if (prev.data.compareTo(value) > 0) {
+                prev.left = new BSTNode<>(value);
+            } else {
+                prev.right = new BSTNode<>(value);
+            }
+            N++;
+            return true;
+        }
+        if (here.data.equals(value)) {
+            return false;
+        }
+
+        //recursive step
+        if (here.data.compareTo(value) > 0) {
+            return addRecur(value, here.left, here);
+        }
+        return addRecur(value, here.right, here);
     }
 
     /**
@@ -53,6 +89,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      *  returns true if value was present and size() = old size() - 1
      */
     public boolean remove(E value) {
+        //TODO
         return true;
     }
 
@@ -66,7 +103,35 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      *  @return true if value is present in this tree, false otherwise
      */
     public boolean isPresent(E value) {
-        return true;
+        if (value == null) {
+            throw new IllegalArgumentException("isPresent");
+        }
+
+        //if empty tree, can not exist
+        if (N == 0) {
+            return false;
+        }
+        return isPresentRecur(value, root);
+    }
+
+    /*
+     * Recursive helper for isPresent
+     */
+    private boolean isPresentRecur(E value, BSTNode<E> here) {
+        //base cases
+        if (here == null) {
+            return false;
+        }
+        if (here.data.equals(value)) {
+            return true;
+        }
+        
+        //recursive step
+        if (here.data.compareTo(value) > 0) {
+            return isPresentRecur(value, here.left);
+        } else {
+            return isPresentRecur(value, here.right);
+        }
     }
 
 
@@ -78,7 +143,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      *  @return the number of items in this Binary Search Tree
      */
     public int size() {
-        return -1;
+        return N;
     }
 
     /**
@@ -91,7 +156,22 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      *  @return the height of this tree or -1 if the tree is empty
      */
     public int height() {
-        return -2;
+        //if tree is empty
+        if (N == 0) {
+            return 0;
+        }
+        
+        return heightRecur(root);
+    }
+
+    private int heightRecur(BSTNode<E> here) {
+        //base cases
+        if (here == null || here.right == null && here.left == null ) {
+            return 0;
+        }
+
+        //recursive step
+        return 1 + Math.max(heightRecur(here.right), heightRecur(here.left));
     }
 
     /**
@@ -104,9 +184,22 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      *  if the tree is empty return an empty List
      */
     public List<E> getAll() {
-        return null;
+        ArrayList<E> result = new ArrayList<>();
+        return getAllRecur(result, root);
     }
 
+    /*
+     * recursive helper for getAll
+     */
+    private List<E> getAllRecur(ArrayList<E> result, BSTNode<E> here) {
+        //inOrder modification
+        if (here != null) {
+            getAllRecur(result, here.left);
+            result.add(here.data);
+            getAllRecur(result, here.right);
+        }
+        return result;
+    }
 
 
     /**
@@ -117,7 +210,15 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the maximum value in this tree
      */
     public E max() {
-        return null;
+        if (N == 0) {
+            throw new IllegalStateException("no size");
+        }
+
+        BSTNode<E> finder = root;
+        while (finder.right != null) {
+            finder = finder.right;
+        }
+        return finder.data;
     }
 
     /**
@@ -128,7 +229,15 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the minimum value in this tree
      */
     public E min() {
-        return null;
+        if (N == 0) {
+            throw new IllegalStateException("no size");
+        }
+
+        BSTNode<E> finder = root;
+        while(finder.left != null) {
+            finder = finder.left;
+        }
+        return finder.data;
     }
 
     /**
@@ -142,7 +251,51 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * false otherwise.
      */
     public boolean iterativeAdd(E data) {
-        return false;
+        if (data == null) {
+            throw new IllegalArgumentException("add");
+        }
+
+        //if this is a new tree, make root node
+        if (root == null) {
+            root = new BSTNode<>(data);
+            N++;
+            return true;
+        }
+
+        BSTNode<E> finder = root;
+        while (true) {
+            //faux base case
+            if (finder.data.compareTo(data) == 0) {
+                return false;
+            }
+            //if place to insert is found, insert new node, otherwise travel in that direction
+            if (finder.data.compareTo(data) > 0) {
+                if (finder.left == null) {
+                    connect(finder, new BSTNode<>(data), false);
+                    return true;
+                }
+                finder = finder.left;
+            } else {
+                if (finder.right == null) {
+                    connect(finder, new BSTNode<>(data), true);
+                    return true;
+                }
+                finder = finder.right;
+            }
+        }
+    }
+
+    /*
+     * helper method for iterative add
+     * connects first node to second node with given direction
+     */
+    private void connect(BSTNode<E> first, BSTNode<E> second, boolean right) {
+        if (right) {
+            first.right = second;
+        } else {
+            first.left = second;
+        }
+        N++;
     }
 
 
@@ -155,9 +308,35 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * @return the kth value in this Binary Search Tree
      */
     public E get(int kth) {
-        return null;
+        if (kth < 0 || kth >= N) {
+            throw new IndexOutOfBoundsException("get");
+        }
+        return getRecur(kth, root, new int[]{0});
     }
 
+    /*
+     * recursive helper for get
+     */
+    private E getRecur(int kth, BSTNode<E> here, int[] counter) {
+        //heavily modified inOrder traversal
+        if (here != null) {
+            //left
+            E left = getRecur(kth, here.left, counter);
+            if (left != null) {
+                return left;
+            }
+
+            //check
+            if (counter[0] == kth) {
+                return here.data;
+            }
+            counter[0]++;
+
+            //right
+            return getRecur(kth, here.right, counter);
+        }
+        return null;
+    }
 
     /**
      * Return a List with all values in this Binary Search Tree 
@@ -170,7 +349,30 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * in ascending order.
      */
     public List<E> getAllLessThan(E value) {
-        return null;
+        ArrayList<E> result = new ArrayList<>();
+        return lessThanRecur(value, result, root);
+    }
+
+    /*
+     * recursive helper for getAllLessThan
+     */
+    private List<E> lessThanRecur(E value, ArrayList<E> result, BSTNode<E> here) {
+        //heavily modified inOrder traversal
+        if (here != null) {
+            //left
+            lessThanRecur(value, result, here.left);
+
+            //check
+            //once a larger value is hit, immediately return
+            if (here.data.compareTo(value) >= 0) {
+                return result;
+            }
+            result.add(here.data);
+
+            //right
+            return lessThanRecur(value, result, here.right);
+        }
+        return result;
     }
 
 
@@ -185,7 +387,28 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * The elements of the list are in ascending order.
      */
     public List<E> getAllGreaterThan(E value) {
-        return null;
+        ArrayList<E> result = new ArrayList<>();
+        return greaterThanRecur(value, result, root);
+    }
+
+    /*
+     * recursive helper for getAllGreaterThan
+     */
+    private List<E> greaterThanRecur(E value, ArrayList<E> result, BSTNode<E> here) {
+        //heavily modified inOrder traversal
+        if (here != null) {
+            //left
+            greaterThanRecur(value, result, here.left);
+            
+            //check
+            if (here.data.compareTo(value) > 0) {
+                result.add(here.data);
+            }
+
+            //right
+            return greaterThanRecur(value, result, here.right);
+        }
+        return result;
     }
 
 
@@ -198,7 +421,29 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      * the parameter d.
      */
     public int numNodesAtDepth(int d) {
-        return -1;
+        if (d > height()) {
+            return 0;
+        }
+
+        return nodesDepthRecur(d, 0, root);
+    }
+    
+    /*
+     * recursive helper for numNodesAtDepth
+     */
+    private int nodesDepthRecur(int target, int depth, BSTNode<E> here) {
+        //base cases
+        if (here == null) {
+            return 0;
+        }
+        if (depth == target) {
+            return 1;
+        }
+
+        //recursive step
+        return nodesDepthRecur(target, depth + 1, here.left) + 
+               nodesDepthRecur(target, depth + 1, here.right);
+
     }
 
     /**

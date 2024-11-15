@@ -95,14 +95,17 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
 
         //remove method from lecutre 11/01/2024
         int oldSize = N;
-        root = removeHelp(value, root, false);
+        if (isPresent(value)) {
+            N--;
+        }
+        root = removeHelp(value, root);
         return oldSize != N;
     }
 
     /*
      * remove method helper from lecture 11/01/2024
      */
-    private BSTNode<E> removeHelp(E val, BSTNode<E> node, boolean duplicate) {
+    private BSTNode<E> removeHelp(E val, BSTNode<E> node) {
         //Base case, value does not exist
         if (node == null) {
             return null;
@@ -110,15 +113,12 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
         int dir = val.compareTo(node.data);
         if (dir < 0) {
             //value is in the left subtree
-            node.left = removeHelp(val, node.left, false);
+            node.left = removeHelp(val, node.left);
         } else if (dir > 0) {
             //value is in the right subtree
-            node.right = removeHelp(val, node.right, false);
+            node.right = removeHelp(val, node.right);
         } else {
             //node is found
-            if (!duplicate) {
-                N--;
-            }
             if (node.isLeaf()) {
                 //leaf node
                 return null;
@@ -133,7 +133,7 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
                 node.data = maxHelp(node.left);
 
                 //remove duplicate
-                node.left = removeHelp(node.data, node.left, true);
+                node.left = removeHelp(node.data, node.left);
             }
         }
         return node;
@@ -144,32 +144,6 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
             node = node.right;
         }
         return node.data;
-    }
-    
-
-    /*
-     * recursive for remove and isPresent
-     * return an arraylist of length 2 containing the found node and it's parent
-     * null if not found
-     */
-    private ArrayList<BSTNode<E>> findNode(E value, BSTNode<E> here, BSTNode<E> prev) {
-        //base cases
-        if (here == null) {
-            return null;
-        }
-        if (here.data.equals(value)) {
-            ArrayList<BSTNode<E>> result = new ArrayList<>();
-            result.add(here);
-            result.add(prev);
-            return result;
-        }
-        
-        //recursive step
-        if (here.data.compareTo(value) > 0) {
-            return findNode(value, here.left, here);
-        } else {
-            return findNode(value, here.right, here);
-        }
     }
 
 
@@ -183,14 +157,29 @@ public class BinarySearchTree<E extends Comparable<? super E>> {
      */
     public boolean isPresent(E value) {
         if (value == null) {
-            throw new IllegalArgumentException("isPresent");
+            throw new IllegalArgumentException("ispresent");
         }
+        return isPresentRecur(value, root);
+    }
 
-        //if empty tree, can not exist
-        if (N == 0) {
+     /*
+     * recursive helper for isPresent
+     */
+    private boolean isPresentRecur(E value, BSTNode<E> here) {
+        //base cases
+        if (here == null) {
             return false;
         }
-        return findNode(value, root, root) != null;
+        if (here.data.equals(value)) {
+            return true;
+        }
+        
+        //recursive step
+        if (here.data.compareTo(value) > 0) {
+            return isPresentRecur(value, here.left);
+        } else {
+            return isPresentRecur(value, here.right);
+        }
     }
 
 

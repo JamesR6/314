@@ -1,3 +1,17 @@
+/*  Student information for assignment:
+ *
+ *  On MY honor, JP Reeves, this programming assignment is MY own work
+ *  and I have not provided this code to any other student.
+ *
+ *  Number of slip days used: 2
+ *
+ *  Student 1 (Student whose Canvas account is being used)
+ *  UTEID: jsr3699
+ *  email address: jpascualsr06@gmail.com
+ *  Grader name: Eliza
+ *
+ */
+
 import java.util.ArrayList;
 
 public class PQueue314 {
